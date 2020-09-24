@@ -6,9 +6,11 @@ import { AppComponent } from './app.component';
 import { DefaultModule } from '../app/layouts/default/default.module';
 
 
+
 @NgModule({
   declarations: [
     AppComponent
+   
   ],
   imports: [
     BrowserModule,

@@ -1,324 +1,62 @@
 
+
+
+
+	<!-- Main Sidebar Container -->
 	<aside class="main-sidebar sidebar-dark-primary elevation-4">
-		<a href="/" class="brand-link logo-switch">
-			JumpQ Dashboard
+			
+		<!-- Brand Logo -->
+		<a href="../../index3.html" class="brand-link">
+			<img src="assets/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+			<span class="brand-text font-weight-light">JumpQ DashBoard</span>
 		</a>
+
+		<!-- Sidebar -->
 		<div class="sidebar">
+			<!-- Sidebar user (optional) -->
+			<div class="user-panel mt-3 pb-3 mb-3 d-flex">
+				<div class="info">
+					<a href="/" class="d-block">MAPFRE Seguros</a>
+				</div>
+			</div>
+
+			<!-- Sidebar Menu -->
 			<nav class="mt-2">
-				<ul class="nav nav-pills nav-sidebar nav-child-indent flex-column" data-widget="treeview" role="menu">
 
-					<li class="nav-item  ">
-						<a href="index.html" class="nav-link active">
-							<i class="nav-icon fas fa-microchip"></i>
-							<p> Installation </p>
+				<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+					
+					<li class="nav-item">
+
+						<a href="/" class="nav-link" [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+							<p> Home <i class="right fas fa-angle-left"></i></p>
 						</a>
 					</li>
 
-					<li class="nav-item  ">
-
-						<a href="dependencies.html" class="nav-link ">
-							<i class="nav-icon fas fa-handshake"></i>
-							<p>Dependencies & Plugins</p>
+					<li class="nav-item">
+						<a class="nav-link" [routerLink]="['/branchoffice']" routerLinkActive="active">
+							<p> Sucursales<i class="fas fa-angle-left right"></i></p>
 						</a>
-
 					</li>
 
-
-
-
-					<li class="nav-item  ">
-
-
-						<a href="layout.html" class="nav-link ">
-							<i class="nav-icon fas fa-copy"></i>
-							<p>
-								Layout
-
-							</p>
+					<li class="nav-item">
+						<a class="nav-link" [routerLink]="['/customers']" routerLinkActive="active">
+							<p> Clientes<i class="fas fa-angle-left right"></i></p>
 						</a>
-
-
 					</li>
 
-
-
-
-					<li class="nav-item has-treeview ">
-
-
-						<a href="components" class="nav-link ">
-							<i class="nav-icon fas fa-th"></i>
-							<p>
-								Components
-								<i class="right fas fa-angle-left"></i>
-							</p>
+					<li class="nav-item">
+						<a class="nav-link" [routerLink]="['/staff']" routerLinkActive="active">
+							<p> Staff<i class="fas fa-angle-left right"></i></p>
 						</a>
-
-
-						<ul class="nav nav-treeview">
-
-
-							<li class="nav-item">
-								<a href="components/main-header.html" class="nav-link ">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Main Header</p>
-								</a>
-							</li>
-
-
-							<li class="nav-item">
-								<a href="components/main-sidebar.html" class="nav-link ">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Main Sidebar</p>
-								</a>
-							</li>
-
-
-							<li class="nav-item">
-								<a href="components/control-sidebar.html" class="nav-link ">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Control Sidebar</p>
-								</a>
-							</li>
-
-
-							<li class="nav-item">
-								<a href="components/cards.html" class="nav-link ">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Card</p>
-								</a>
-							</li>
-
-
-							<li class="nav-item">
-								<a href="components/boxes.html" class="nav-link ">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Small-/ Info-Box</p>
-								</a>
-							</li>
-
-
-							<li class="nav-item">
-								<a href="components/direct-chat.html" class="nav-link ">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Direct Chat</p>
-								</a>
-							</li>
-
-
-							<li class="nav-item">
-								<a href="components/timeline.html" class="nav-link ">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Timeline</p>
-								</a>
-							</li>
-
-
-							<li class="nav-item">
-								<a href="components/ribbons.html" class="nav-link ">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Ribbons</p>
-								</a>
-							</li>
-
-
-							<li class="nav-item">
-								<a href="components/miscellaneous.html" class="nav-link ">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Miscellaneous</p>
-								</a>
-							</li>
-
-
-							<li class="nav-item">
-								<a href="components/plugins.html" class="nav-link ">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Plugins</p>
-								</a>
-							</li>
-
-						</ul>
-
 					</li>
-
-
-
-
-					<li class="nav-item has-treeview ">
-
-
-						<a href="javascript" class="nav-link ">
-							<i class="nav-icon fas fa-code"></i>
-							<p>
-								JavaScript
-								<i class="right fas fa-angle-left"></i>
-							</p>
-						</a>
-
-
-						<ul class="nav nav-treeview">
-
-
-							<li class="nav-item">
-								<a href="javascript/layout.html" class="nav-link ">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Layout</p>
-								</a>
-							</li>
-
-
-							<li class="nav-item">
-								<a href="javascript/push-menu.html" class="nav-link ">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Push Menu</p>
-								</a>
-							</li>
-
-
-							<li class="nav-item">
-								<a href="javascript/treeview.html" class="nav-link ">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Treeview</p>
-								</a>
-							</li>
-
-
-							<li class="nav-item">
-								<a href="javascript/card-widget.html" class="nav-link ">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Card Widget</p>
-								</a>
-							</li>
-
-
-							<li class="nav-item">
-								<a href="javascript/card-refresh.html" class="nav-link ">
-									<i class="far fa-circle nav-icon"></i>
-									<p>CardRefresh</p>
-								</a>
-							</li>
-
-
-							<li class="nav-item">
-								<a href="javascript/control-sidebar.html" class="nav-link ">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Control Sidebar</p>
-								</a>
-							</li>
-
-
-							<li class="nav-item">
-								<a href="javascript/direct-chat.html" class="nav-link ">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Direct Chat</p>
-								</a>
-							</li>
-
-
-							<li class="nav-item">
-								<a href="javascript/todo-list.html" class="nav-link ">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Todo List</p>
-								</a>
-							</li>
-
-
-							<li class="nav-item">
-								<a href="javascript/toasts.html" class="nav-link ">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Toasts</p>
-								</a>
-							</li>
-
-						</ul>
-
-					</li>
-
-
-
-
-					<li class="nav-item  ">
-
-
-						<a href="browser-support.html" class="nav-link ">
-							<i class="nav-icon fab fa-chrome"></i>
-							<p>
-								Browser Support
-
-							</p>
-						</a>
-
-
-					</li>
-
-
-
-
-					<li class="nav-item  ">
-
-
-						<a href="upgrade-guide.html" class="nav-link ">
-							<i class="nav-icon fas fa-hand-point-up"></i>
-							<p>
-								Upgrade Guide
-
-							</p>
-						</a>
-
-
-					</li>
-
-
-
-
-					<li class="nav-item  ">
-
-
-						<a href="implementations.html" class="nav-link ">
-							<i class="nav-icon fas fa-bookmark"></i>
-							<p>
-								Implementations
-
-							</p>
-						</a>
-
-
-					</li>
-
-
-
-
-					<li class="nav-item  ">
-
-
-						<a href="faq.html" class="nav-link ">
-							<i class="nav-icon fas fa-question-circle"></i>
-							<p>
-								FAQ
-
-							</p>
-						</a>
-
-
-					</li>
-
-
-
-
-					<li class="nav-item  ">
-
-
-						<a href="license.html" class="nav-link ">
-							<i class="nav-icon fas fa-file-alt"></i>
-							<p>
-								License
-							</p>
-						</a>
-
-
-					</li>
-
+					
 				</ul>
+
 			</nav>
+			<!-- /.sidebar-menu -->
+
+
 		</div>
+		<!-- /.sidebar -->
+
 	</aside>

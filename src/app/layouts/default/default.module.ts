@@ -7,6 +7,10 @@ import { DefaultComponent } from './default.component';
 import { DashboardComponent } from '../../modules/dashboard/dashboard.component';
 import { PostsComponent } from 'src/app/modules/posts/posts.component';
 
+import { CustomersComponent } from 'src/app/modules/customers/customers.component';
+import { BranchOfficeComponent } from 'src/app/modules/branch-office/branch-office.component';
+import { StaffComponent } from 'src/app/modules/staff/staff.component';
+
 
 @NgModule({
 
@@ -14,7 +18,10 @@ import { PostsComponent } from 'src/app/modules/posts/posts.component';
 
     DefaultComponent,
     DashboardComponent,
-    PostsComponent
+    PostsComponent,
+    CustomersComponent,
+    BranchOfficeComponent,
+    StaffComponent
 
   ],
   imports: [
