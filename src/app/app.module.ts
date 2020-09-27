@@ -36,7 +36,8 @@ import{TokenInterceptorService}from'src/app/services/token-interceptor.service';
     AuthGuard,
     {
       provide:HTTP_INTERCEPTORS,
-      useClass:TokenInterceptorService
+      useClass:TokenInterceptorService,
+      multi:true
     }
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
