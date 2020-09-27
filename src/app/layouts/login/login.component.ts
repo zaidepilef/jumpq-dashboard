@@ -49,6 +49,7 @@ export class LoginComponent implements OnInit {
 				
 				console.log("status : ", res.status);
 				if (res.status =='OK') {
+					this.auth.SaveToken(res.jwt);
 					this.router.navigate(['/']);
 				} else {
 					this.Message = res.message
