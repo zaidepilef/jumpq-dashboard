@@ -10,6 +10,7 @@ import { PostsComponent } from 'src/app/modules/posts/posts.component';
 import { CustomersComponent } from 'src/app/modules/customers/customers.component';
 import { BranchOfficeComponent } from 'src/app/modules/branch-office/branch-office.component';
 import { StaffComponent } from 'src/app/modules/staff/staff.component';
+import { ProfileComponent } from 'src/app/modules/profile/profile.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { StaffComponent } from 'src/app/modules/staff/staff.component';
     PostsComponent,
     CustomersComponent,
     BranchOfficeComponent,
-    StaffComponent
+    StaffComponent,
+    ProfileComponent
 
   ],
   imports: [

@@ -8,6 +8,7 @@ import { CustomersComponent } from './modules/customers/customers.component';
 import { DashboardComponent } from './modules/dashboard/dashboard.component';
 import { StaffComponent } from './modules/staff/staff.component';
 import { AuthGuard } from 'src/app/auth.guard';
+import { ProfileComponent } from './modules/profile/profile.component';
 
 const routes: Routes =
 	[
@@ -18,6 +19,10 @@ const routes: Routes =
 				{
 					path: '',
 					component: DashboardComponent
+				},
+				{
+					path: 'profile',
+					component: ProfileComponent
 				},
 				{
 					path: 'branchoffice',

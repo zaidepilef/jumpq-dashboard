@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { User, UserResponse } from '../models/user.interface';
 import { catchError, map } from 'rxjs/operators'
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Router } from '@angular/router';
 
 const helper = new JwtHelperService();
 @Injectable({
@@ -17,7 +18,7 @@ export class AuthService {
 
 	private loggedIn = new BehaviorSubject<boolean>(false);
 
-	constructor(private httpClient: HttpClient) { }
+	constructor(private httpClient: HttpClient,private router:Router) { }
 
 	get isLogged(): Observable<boolean> {
 		return this.loggedIn.asObservable();
@@ -31,12 +32,18 @@ export class AuthService {
 		return !!localStorage.getItem('token')
 	}
 
-
+	GetToken(){
+		return localStorage.getItem('token');
+	}
 
 	Logout(): void {
 		localStorage.removeItem('token');
+		this.router.navigate(['/logout']);
 		this.loggedIn.next(false);
 	}
+
+
+
 
 	private ReadToken(): void {
 		const userToken = localStorage.getItem('token');
