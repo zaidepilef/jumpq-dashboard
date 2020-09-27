@@ -5,6 +5,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DefaultModule } from '../app/layouts/default/default.module';
 import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+
 import { LoginComponent } from './layouts/login/login.component';
 
 
@@ -18,7 +20,8 @@ import { LoginComponent } from './layouts/login/login.component';
     BrowserModule,
     AppRoutingModule,
     DefaultModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
