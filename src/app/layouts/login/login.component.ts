@@ -12,17 +12,25 @@ import { AuthService } from 'src/app/services/auth.service'
 
 export class LoginComponent implements OnInit {
 
+  LoginForm:FormGroup;
+  UserData:User;
+  
+  
+  constructor(private auth: AuthService) {
+    this.LoginForm = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required]),
+    });
+    
+    this.UserData={
+      username:'',
+      email:'',
+      password:''
+    };
 
 
-  LoginForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required]),
-  });
+   }
 
-  constructor(private auth: AuthService) { }
-
-  UserData: User;
-  an_response: any = {};
 
 
   ngOnInit(): void {
@@ -31,11 +39,14 @@ export class LoginComponent implements OnInit {
 
 
   onSubmit() {
+
     console.log('LoginForm : ', this.LoginForm.value)
 
-    this.UserData.email = "felipe.diaz@gmail.com";
+    this.UserData.email = this.LoginForm.value.email;
 
-    this.UserData.password = "qwerty202122";
+    this.UserData.password = this.LoginForm.value.password;
+
+    console.log('UserData : ', this.UserData)
 
     this.auth.Login(this.UserData).subscribe(
       res => {

@@ -24,6 +24,9 @@ export class AuthService {
 	}
 
 	Login(authData: User): Observable<UserResponse | void> {
+
+		console.log('authData : ',authData);
+		
 		return this.httpClient.post<UserResponse>(`${environment.API_URL}/authenticate/login/`, authData)
 			.pipe(
 				map((res: UserResponse) => {
