@@ -23,27 +23,15 @@ export class AuthService {
 		return this.loggedIn.asObservable();
 	}
 
-	SignIn(authData: User){
-
+	SignIn(authData: User) {
 		return this.httpClient.post<any>(`${environment.API_URL}/authenticate/login/`, authData);
 	}
-	
-	Login(authData: User): Observable<UserResponse | void> {
 
-		console.log('authData : ',authData);
-		
-		return this.httpClient.post<UserResponse>(`${environment.API_URL}/authenticate/login/`, authData)
-			.pipe(
-				map((res: UserResponse) => {
-					if(res.status=='OK'){
-						this.SaveToken(res.jwt);
-						this.loggedIn.next(true);
-					}
-					return res;
-				}),
-				catchError((err) => this.HandleError(err))
-			);
+	LoggedIn(): boolean {
+		return !!localStorage.getItem('token')
 	}
+
+
 
 	Logout(): void {
 		localStorage.removeItem('token');
@@ -53,10 +41,10 @@ export class AuthService {
 	private ReadToken(): void {
 		const userToken = localStorage.getItem('token');
 		const isExpired = helper.isTokenExpired(userToken);
-		console.log("isExpired : ",isExpired);
-		if(isExpired){
+		console.log("isExpired : ", isExpired);
+		if (isExpired) {
 			this.Logout();
-		}else{
+		} else {
 			this.loggedIn.next(true);
 		}
 	}
