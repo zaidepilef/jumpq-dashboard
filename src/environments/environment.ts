@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  API_URL:"https://jumpnodeapi.azurewebsites.net/api"
+  API_URL: 'https://jumpnodeapi.azurewebsites.net/api'
 };
 
 /*

@@ -34,7 +34,8 @@ const routes: Routes =
 		},
 		{
 			path: 'login',
-			component: LoginComponent
+			component: LoginComponent,
+			pathMatch: 'full'
 		}
 	];
 

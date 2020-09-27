@@ -8,19 +8,19 @@ import { RouterModule } from '@angular/router';
 
 
 @NgModule({
-  declarations: [
-    FooterComponent,
-    HeaderComponent,
-    SidebarComponent
-  ],
-  imports: [
-    CommonModule,
-    RouterModule 
-  ],
-  exports:[
-    FooterComponent,
-    HeaderComponent,
-    SidebarComponent
-  ]
+	declarations: [
+		FooterComponent,
+		HeaderComponent,
+		SidebarComponent
+	],
+	imports: [
+		CommonModule,
+		RouterModule
+	],
+	exports: [
+		FooterComponent,
+		HeaderComponent,
+		SidebarComponent
+	]
 })
 export class SharedModule { }

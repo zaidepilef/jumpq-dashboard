@@ -21,6 +21,7 @@
     "@angular/router": "~10.0.3",
     "@auth0/angular-jwt": "^5.0.1",
     "admin-lte": "^3.0.5",
+    "ngx-spinner": "^10.0.1",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.3"

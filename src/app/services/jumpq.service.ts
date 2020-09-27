@@ -11,9 +11,5 @@ export class JumpqService {
 
 	constructor(private httpClient: HttpClient) { }
 
-	public otro(data: User) {
-
-		return this.httpClient.post(`${environment.API_URL}/authenticate/login/`, data);
-
-	}
+	
 }
