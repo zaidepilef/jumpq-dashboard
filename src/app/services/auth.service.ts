@@ -30,9 +30,11 @@ export class AuthService {
 		return this.httpClient.post<UserResponse>(`${environment.API_URL}/authenticate/login/`, authData)
 			.pipe(
 				map((res: UserResponse) => {
-					this.SaveToken(res.jwt);
 					console.log("res : ", res);
-					this.loggedIn.next(true);
+					if(res.status=='OK'){
+						this.SaveToken(res.jwt);
+						this.loggedIn.next(true);
+					}
 					return res;
 				}),
 				catchError((err) => this.HandleError(err))
