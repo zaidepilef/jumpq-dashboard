@@ -7,62 +7,60 @@ import { User, UserResponse } from 'src/app/models/user.interface';
 import { AuthService } from 'src/app/services/auth.service'
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.sass']
+	selector: 'app-login',
+	templateUrl: './login.component.html',
+	styleUrls: ['./login.component.sass']
 })
 
 export class LoginComponent implements OnInit {
 
-  LoginForm: FormGroup;
-  UserData: User;
-  UserResponse: UserResponse;
+	LoginForm: FormGroup;
+	UserData: User;
+	UserResponse: UserResponse;
+	Message:string;
 
 
-  constructor(private auth: AuthService, private spinner: NgxSpinnerService, private router: Router) {
+	constructor(private auth: AuthService, private spinner: NgxSpinnerService, private router: Router) {
 
-    this.LoginForm = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required]),
-    });
+		this.LoginForm = new FormGroup({
+			email: new FormControl('', [Validators.required, Validators.email]),
+			password: new FormControl('', [Validators.required]),
+		});
 
-    this.UserData = {
-      username: '',
-      email: '',
-      password: ''
-    };
-
-
-  }
+		this.UserData = {
+			username: '',
+			email: '',
+			password: ''
+		};
 
 
+	}
 
-  ngOnInit(): void {
+	ngOnInit(): void {
 
-  }
+	}
 
+	onSubmit() {
+		this.spinner.show();
+		this.UserData.email = this.LoginForm.value.email;
+		this.UserData.password = this.LoginForm.value.password;
+		this.auth.SignIn(this.UserData).subscribe(
+			res => {
+				console.log(res);
+				console.log("res : ", res);
+				console.log("status : ", res.status);
+				if (res.status =='OK') {
+					this.router.navigate(['/']);
+				} else {
+					this.Message = res.message
+				}
+				
 
-  onSubmit() {
-
-    this.spinner.show();
-    this.UserData.email = this.LoginForm.value.email;
-    this.UserData.password = this.LoginForm.value.password;
-
-
-
-    this.auth.Login(this.UserData).subscribe(
-      res => {
-        console.log(res);
-        this.spinner.hide();
-        if (res.status.toString() == 'OK') {
-          this.router.navigate(['/']);
-        }
-
-      },
-      err => console.warn('err : ', err)
-    );
-
-  }
+				this.spinner.hide();
+			},
+			err => console.warn('err : ', err)
+		);
+	}
 
 
 

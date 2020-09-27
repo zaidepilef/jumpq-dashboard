@@ -23,6 +23,11 @@ export class AuthService {
 		return this.loggedIn.asObservable();
 	}
 
+	SignIn(authData: User){
+
+		return this.httpClient.post<any>(`${environment.API_URL}/authenticate/login/`, authData);
+	}
+	
 	Login(authData: User): Observable<UserResponse | void> {
 
 		console.log('authData : ',authData);
@@ -30,7 +35,6 @@ export class AuthService {
 		return this.httpClient.post<UserResponse>(`${environment.API_URL}/authenticate/login/`, authData)
 			.pipe(
 				map((res: UserResponse) => {
-					console.log("res : ", res);
 					if(res.status=='OK'){
 						this.SaveToken(res.jwt);
 						this.loggedIn.next(true);
