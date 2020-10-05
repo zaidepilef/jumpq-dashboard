@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
 	UserData: User;
 	UserResponse: UserResponse;
 	Message:string;
-
+	a_response: any;
 
 	constructor(private auth: AuthService, private spinner: NgxSpinnerService, private router: Router) {
 
@@ -46,13 +46,13 @@ export class LoginComponent implements OnInit {
 		this.UserData.password = this.LoginForm.value.password;
 		this.auth.SignIn(this.UserData).subscribe(
 			res => {
-				
-				console.log("status : ", res.status);
-				if (res.status =='OK') {
-					this.auth.SaveToken(res.jwt);
+				this.a_response = res;
+				console.log("status : ", this.a_response.status);
+				if (this.a_response.status =='OK') {
+					this.auth.SaveToken(this.a_response.jwt);
 					this.router.navigate(['/']);
 				} else {
-					this.Message = res.message
+					this.Message = this.a_response.message
 				}
 				
 
