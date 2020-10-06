@@ -6,7 +6,7 @@
 	<aside class="main-sidebar sidebar-dark-primary elevation-4">
 			
 		<!-- Brand Logo -->
-		<a href="../../index3.html" class="brand-link">
+		<a href="/" class="brand-link">
 			<img src="assets/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
 			<span class="brand-text font-weight-light">JumpQ DashBoard</span>
 		</a>
@@ -28,28 +28,32 @@
 					<li class="nav-item">
 
 						<a href="/" class="nav-link" [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-							<p> Home <i class="right fas fa-angle-left"></i></p>
+							<p>Cuenta y parametrización <i class="right fas fa-angle-left"></i></p>
 						</a>
 					</li>
 
 					<li class="nav-item">
 						<a class="nav-link" [routerLink]="['/branchoffice']" routerLinkActive="active">
-							<p> Sucursales<i class="fas fa-angle-left right"></i></p>
+							<p>Configuración de locales<i class="fas fa-angle-left right"></i></p>
 						</a>
 					</li>
 
 					<li class="nav-item">
-						<a class="nav-link" [routerLink]="['/customers']" routerLinkActive="active">
-							<p> Clientes<i class="fas fa-angle-left right"></i></p>
+						<a class="nav-link" [routerLink]="['/virtualcall']" routerLinkActive="active">
+							<p>Configuración de virtual-call<i class="fas fa-angle-left right"></i></p>
 						</a>
 					</li>
 
 					<li class="nav-item">
-						<a class="nav-link" [routerLink]="['/staff']" routerLinkActive="active">
-							<p> Staff<i class="fas fa-angle-left right"></i></p>
+						<a class="nav-link" [routerLink]="['/branch-charts']" routerLinkActive="active">
+							<p>Visualizador de actividad<i class="fas fa-angle-left right"></i></p>
 						</a>
 					</li>
-					
+					<li class="nav-item">
+						<a class="nav-link" [routerLink]="['/Suscripcion']" routerLinkActive="active">
+							<p>Facturación y pago<i class="fas fa-angle-left right"></i></p>
+						</a>
+					</li>
 				</ul>
 
 			</nav>

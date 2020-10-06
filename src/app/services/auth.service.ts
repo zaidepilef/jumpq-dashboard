@@ -19,15 +19,17 @@ export class AuthService {
 	private loggedIn = new BehaviorSubject<boolean>(false);
 
 	constructor(private httpClient: HttpClient,private router:Router) { }
-
+	private SERVER_URL = "http://localhost:8080/api";
 	get isLogged(): Observable<boolean> {
 		return this.loggedIn.asObservable();
 	}
 
 	SignIn(authData: User) {
 		return this.httpClient.post<any>(`${environment.API_URL}/authenticate/login/`, authData);
+		//return this.httpClient.post(`${this.SERVER_URL}/authenticate/login/`, authData);
 	}
 
+	
 	LoggedIn(): boolean {
 		return !!localStorage.getItem('token')
 	}

@@ -9,11 +9,19 @@ import { DashboardComponent } from './modules/dashboard/dashboard.component';
 import { StaffComponent } from './modules/staff/staff.component';
 import { AuthGuard } from 'src/app/auth.guard';
 import { ProfileComponent } from './modules/profile/profile.component';
+<<<<<<< HEAD
 import { RegisterComponent } from './layouts/register/register.component';
 import { TermsComponent } from './layouts/terms/terms.component';
 import { ForgotComponent } from './layouts/forgot/forgot.component';
 
 const routes: Routes = [
+=======
+import {BranchChartsComponent} from './modules/branch-charts/branch-charts.component'
+import {SuscripcionComponent} from './modules/suscripcion/suscripcion.component'
+import {VirtualcallComponent} from './modules/virtualcall/virtualcall.component'
+const routes: Routes =
+	[
+>>>>>>> ee55d8ae92977ed46d9419fb4605d028ff0d4ef8
 		{
 			path: '',
 			component: DefaultComponent,
@@ -31,12 +39,16 @@ const routes: Routes = [
 					component: BranchOfficeComponent
 				},
 				{
-					path: 'customers',
-					component: CustomersComponent
+					path: 'branch-charts',
+					component: BranchChartsComponent
 				},
 				{
-					path: 'staff',
-					component: StaffComponent
+					path: 'virtualcall',
+					component: VirtualcallComponent
+				},
+				{
+					path: 'Suscripcion',
+					component: SuscripcionComponent
 				}
 			],
 			canActivate: [AuthGuard]

@@ -1,0 +1,94 @@
+<section class="content-header">
+    <h1> Dashboard <small>Vista General</small>
+    </h1>
+
+</section>
+<div class="content">
+
+    <div class="container-fluid">
+
+        <div class="row"*ngIf="graficos">
+
+            <div class="col-3">
+                <b>Horas solicitadas por sucursal <button class="btn btn-info" (click)="test()"><i
+                            class="fas fa-search"></i></button></b>
+                <canvas id="sucursal" width="100" height="100"></canvas>
+            </div>
+
+            <div class="col-3">
+                <b>Cantidad de visitas Completadas/Pendientes <button class="btn btn-info"><i
+                            class="fas fa-search"></i></button></b>
+                <canvas id="horasAgendadas" width="100" height="100"></canvas>
+            </div>
+
+            <div class="col-3">
+                <b>horas tomadas por ejecutivos <button class="btn btn-info"><i class="fas fa-search"></i></button></b>
+                <canvas id="conteoejecutivo" width="100" height="100"></canvas>
+            </div>
+        </div>
+
+        <div class="row" *ngIf="ConsultaSucursal">
+         
+            <div class="col">
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-striped table-valign-middle" id="sucursalexcel">
+                        <thead>
+                            <tr>
+                                <th>Nombre Sucursal</th>
+                                <th>Cantidad de horas pedidas</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr *ngFor="let item of surcusal.sucursal">
+                                <td>{{item.sucursal}}</td>
+                                <td>{{item.conteo}}</td>
+                                <td> <button class="btn btn-info" (click)="detallegridone(item)"><i
+                                            class="fas fa-search"></i></button></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn btn-info" (click)="exportExcelTablesucursal()">Generar Excel</button>
+            </div>
+        </div>
+        <div class="row" *ngIf="ConsultaSucursaldetalle">
+            <div class="col-12">
+                <button class="btn btn-info" (click)="volver()">Volver</button>
+            </div>
+            <div class="col">
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-striped table-valign-middle" id="sucursaldetalle">
+                        <thead>
+                            <tr>
+                                <th>Nombre Sucursal</th>
+                                <th>Nombre Completo</th>
+                                <th>RUT</th>
+                                <th>fecha de la solicitud</th>
+                                <th>hora</th>
+                                <th>correo del solicitante</th>
+                                <th>estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr *ngFor="let detalle of detalles.detalle">
+                                <td>{{detalle.sucursal}}</td>
+                                <td>{{detalle.nombre}}</td>
+                                <td>{{detalle.rut}}</td>
+                                <td>{{detalle.fecha}}</td>
+                                <td>{{detalle.hora}}</td>
+                                <td>{{detalle.email}}</td>
+                                <td>{{detalle.estado}}</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn btn-info" (click)="exportExcelTablesucursaldetalle()">Generar Excel</button>
+            </div>
+        </div>
+
+</div>
