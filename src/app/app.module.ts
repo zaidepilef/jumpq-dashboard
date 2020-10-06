@@ -10,7 +10,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { AuthGuard } from './auth.guard';
-import { TokenInterceptorService } from 'src/app/services/token-interceptor.service';
+import { TokenInterceptorService } from 'src/app/interceptors/token-interceptor.service';
+import { XPermittedInterceptorService } from 'src/app/interceptors/x-permitted-interceptor.service';
+import { ReferrerPolicyInterceptorService } from 'src/app/interceptors/referrer-policy-interceptor.service';
 
 import { LoginComponent } from './layouts/login/login.component';
 import { RegisterComponent } from './layouts/register/register.component';
@@ -37,12 +39,22 @@ import { TermsComponent } from './layouts/terms/terms.component';
   ],
   exports: [NgxSpinnerModule],
   providers: [
-    AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ReferrerPolicyInterceptorService,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: XPermittedInterceptorService,
+      multi: true
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptorService,
       multi: true
-    }
+    },
+    AuthGuard,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]
