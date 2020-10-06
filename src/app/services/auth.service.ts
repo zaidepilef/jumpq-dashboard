@@ -42,6 +42,10 @@ export class AuthService {
 		this.loggedIn.next(false);
 	}
 
+	ForgotPassword(authData: User) {
+		return this.httpClient.post<any>(`${environment.API_URL}/authenticate/forgot/`, authData);
+	}
+
 
 
 
