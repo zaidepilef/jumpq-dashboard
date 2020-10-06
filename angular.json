@@ -36,15 +36,10 @@
               "node_modules/admin-lte/docs_html/assets/css/adminlte.min.css"
             ],
             "scripts": [
-
-
               "node_modules/admin-lte/docs_html/assets/plugins/jquery/jquery.min.js",
               "node_modules/admin-lte/docs_html/assets/plugins/bootstrap/js/bootstrap.bundle.min.js",
               "node_modules/admin-lte/docs_html/assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js",
               "node_modules/admin-lte/docs_html/assets/js/adminlte.min.js"
-
-
-
             ]
           },
           "configurations": {

@@ -1,0 +1,7 @@
+{
+    "/api/*": {
+        "target": "https://jumpnodeapi.azurewebsites.net",
+        "secure": false,
+        "logLevel": "debug"
+    }
+}
