@@ -28,12 +28,14 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.sass",
-              "node_modules/admin-lte/docs_html/assets/plugins/fontawesome-free/css/all.min.css",
-              "node_modules/admin-lte/docs_html/assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css",
-              "node_modules/admin-lte/docs_html/assets/css/docs.css",
-              "node_modules/admin-lte/docs_html/assets/css/highlighter.css",
-              "node_modules/admin-lte/docs_html/assets/css/adminlte.min.css"
+              "node_modules/admin-lte/plugins/fontawesome-free/css/all.min.css",
+              "node_modules/admin-lte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css",
+              "node_modules/admin-lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css",
+              "node_modules/admin-lte/plugins/jqvmap/jqvmap.min.css",
+              "node_modules/admin-lte/dist/css/adminlte.min.css",
+              "node_modules/admin-lte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css",
+              "node_modules/admin-lte/plugins/daterangepicker/daterangepicker.css",
+              "node_modules/admin-lte/plugins/summernote/summernote-bs4.css"
             ],
             "scripts": [
               "node_modules/admin-lte/docs_html/assets/plugins/jquery/jquery.min.js",
