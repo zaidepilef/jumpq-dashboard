@@ -7,6 +7,8 @@ import { User, UserResponse } from '../models/user.interface';
 import { catchError, map } from 'rxjs/operators'
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Router } from '@angular/router';
+import jwt_decode from 'jwt-decode';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 const helper = new JwtHelperService();
 @Injectable({
@@ -17,9 +19,7 @@ const helper = new JwtHelperService();
 export class AuthService {
 
 	private loggedIn = new BehaviorSubject<boolean>(false);
-
-	constructor(private httpClient: HttpClient,private router:Router) { }
-
+	constructor(private httpClient: HttpClient, private router: Router,private spinner: NgxSpinnerService) { }
 
 	get isLogged(): Observable<boolean> {
 		return this.loggedIn.asObservable();
@@ -30,27 +30,25 @@ export class AuthService {
 		//return this.httpClient.post(`${this.SERVER_URL}/authenticate/login/`, authData);
 	}
 
-	
 	LoggedIn(): boolean {
 		return !!localStorage.getItem('token')
 	}
 
-	GetToken(){
+	GetToken() {
 		return localStorage.getItem('token');
 	}
 
 	Logout(): void {
 		localStorage.removeItem('token');
-		this.router.navigate(['/logout']);
+		this.router.navigate(['/login']);
 		this.loggedIn.next(false);
+		this.spinner.hide();
+
 	}
 
 	ForgotPassword(authData: User) {
 		return this.httpClient.post<any>(`${environment.API_URL}/authenticate/forgot/`, authData);
 	}
-
-
-
 
 	private ReadToken(): void {
 		const userToken = localStorage.getItem('token');
@@ -65,6 +63,12 @@ export class AuthService {
 
 	SaveToken(token: string): void {
 		localStorage.setItem('token', token);
+		var decoded = jwt_decode(token);
+
+		console.log('token token : ',decoded);
+		//const usrioa = this.httpClient.post<any>(`${environment.API_URL}/dashboard/userdata/`);
+		//console.log(usrioa):
+		//const payload = jwt.verify(token, "LosPollosHermanos");
 	}
 
 	private HandleError(err): Observable<never> {
