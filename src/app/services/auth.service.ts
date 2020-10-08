@@ -25,7 +25,7 @@ export class AuthService {
 		return this.loggedIn.asObservable();
 	}
 
-	SignIn(authData: User) {
+	SignIn(authData: any) {
 		return this.httpClient.post<any>(`${environment.API_URL}/authenticate/login/`, authData);
 		//return this.httpClient.post(`${this.SERVER_URL}/authenticate/login/`, authData);
 	}
@@ -46,7 +46,7 @@ export class AuthService {
 
 	}
 
-	ForgotPassword(authData: User) {
+	ForgotPassword(authData: any) {
 		return this.httpClient.post<any>(`${environment.API_URL}/authenticate/forgot/`, authData);
 	}
 

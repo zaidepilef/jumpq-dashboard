@@ -13,42 +13,38 @@ import { AuthService } from 'src/app/services/auth.service';
 export class ForgotComponent implements OnInit {
 
   ForgotForm: FormGroup;
-  UserData: User;
   UserResponse: UserResponse;
   Message: string;
 
+  UserData = {
+    email: ''
+  }
   constructor(private auth: AuthService, private spinner: NgxSpinnerService, private router: Router) {
-    
+
     this.ForgotForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email])
     });
 
-    this.UserData = {
-      username: '',
-      email: '',
-      password: ''
-    };
-    
   }
 
   ngOnInit(): void {
-  
+
   }
 
   onSubmit() {
 
-		this.spinner.show();
-		this.UserData.email = this.ForgotForm.value.email;
-  
-		this.auth.ForgotPassword(this.UserData).subscribe(
-			res => {
+    this.spinner.show();
+    this.UserData.email = this.ForgotForm.value.email;
+
+    this.auth.ForgotPassword(this.UserData).subscribe(
+      res => {
         console.log("status : ", res.status);
-				this.spinner.hide();
-			},
-			err => console.warn('err : ', err)
+        this.spinner.hide();
+      },
+      err => console.warn('err : ', err)
     );
-    
-	}
+
+  }
 
 
 }

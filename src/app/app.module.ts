@@ -18,6 +18,7 @@ import { LoginComponent } from './layouts/login/login.component';
 import { RegisterComponent } from './layouts/register/register.component';
 import { ForgotComponent } from './layouts/forgot/forgot.component';
 import { TermsComponent } from './layouts/terms/terms.component';
+import { VerifyEmailComponent } from './layouts/verify-email/verify-email.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { TermsComponent } from './layouts/terms/terms.component';
     LoginComponent,
     TermsComponent,
     RegisterComponent,
-    ForgotComponent
+    ForgotComponent,
+    VerifyEmailComponent
   ],
   imports: [
     BrowserModule,
