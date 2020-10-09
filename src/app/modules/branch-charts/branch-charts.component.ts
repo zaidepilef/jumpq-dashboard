@@ -19,19 +19,28 @@ export class BranchChartsComponent implements OnInit {
     sucursalcount: Array<any>;
     horaspendientes : any;
     horascompletadas :any;
+    completadas :any;
+    pendientes :any;
     horas : Array<any> =[{
         pendientes : "",
         completadas : ""
     }];
+    monstrarop1:boolean = true;
     detalles : any;
     prueba:boolean;
     ConsultaSucursal: boolean;
     ConsultaSucursaldetalle : boolean;
     graficos : boolean;
+    cantidadUsuarios: Array<any>;
+    mostrarEstados : boolean = false;
+    mostrarEstadosDetalle : boolean = false;
+
+    
     ngOnInit(): void {
         this.cargarSucursal();
         this.horasCount();
         this.cargaEjecutivos();
+        this.cantidadusuarios();
         this.graficos = true; 
     }
 
@@ -89,7 +98,7 @@ export class BranchChartsComponent implements OnInit {
     };
 
     detallegridone(data : any){
-    
+    console.info("linea 99");
     this.an_request = {
         id: 8,
         name:data.sucursal
@@ -119,6 +128,7 @@ export class BranchChartsComponent implements OnInit {
                 this.an_response = res;
                 console.info(res);
                 this.horas[0].completadas = this.an_response.Completadas.conteoC;
+                this.completadas = this.an_response.Completadas.conteoC;
             } 
 
             , err => console.error(err)
@@ -129,15 +139,107 @@ export class BranchChartsComponent implements OnInit {
                 this.an_response = res;
                 console.info(res);
             this.horas[0].pendientes = this.an_response.Pendientes.conteoP;
+            this.pendientes = this.an_response.Pendientes.conteoP;
             this.horasConteo();
             }
 
             , err => console.error(err)
+        ); 
+    }
+
+    cantidadusuarios() {
+        this.an_request = {
+            id: 8
+        };
+
+        this.jumpservice.cantidadusuarios(this.an_request).subscribe(
+            res => {
+                this.an_response = res;
+                console.info(res);
+                this.cantidadUsuarios = this.an_response.usuarios; 
+                this.cantidadusuarioschart();             
+            } 
+
+            , err => console.error(err)
         );
-        
+
 
         
     }
+    cantidadusuarioschart(){
+
+        console.info(this.cantidadUsuarios);
+        var cantidad : Array<any> = [];
+        var fecha : Array<any> = [];
+        var primera : boolean = false;
+        for (var i = 0; i < this.cantidadUsuarios.length; i++) {
+            if(primera == false){
+                console.info(this.cantidadUsuarios[i].dias);
+                fecha.push(this.cantidadUsuarios[i].dias);
+                cantidad.push(this.cantidadUsuarios[i].conteo);
+                primera = true;
+            }else{
+                fecha.push(this.cantidadUsuarios[i].dias);
+                cantidad.push(this.cantidadUsuarios[i].conteo);
+                console.info(fecha);
+                console.info(cantidad);
+            }
+            
+         }
+
+
+        var datasets2 = this.cantidadUsuarios.map(item => {
+            return {
+                label: `${item.dias}`,
+                data: [item.conteo],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }
+        });
+
+        var ctx = document.getElementById('cantidadUsuarios');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: fecha,
+                datasets: [{
+                    label: fecha,
+                    data: cantidad,
+                    backgroundColor: [
+                        'rgba(255, 100, 132, 0.2)',
+                              ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                          ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        })};
+        
     cargaEjecutivos() {
         this.an_request = {
             id: 8
@@ -287,5 +389,39 @@ export class BranchChartsComponent implements OnInit {
 
  
     }
+
+showdetallehoraspendientes(ops:any){
+    console.info("entro");
+    
+    if(ops == 1 && this.monstrarop1 == true){
+        this.mostrarEstados = true
+        this.monstrarop1 = false;
+    }else{
+        this.mostrarEstados = false
+        this.monstrarop1 = true;
+    }
+    
+}
+
+detallehoraspendientes(opt :any){
+    console.info("entro22");
+    this.an_request = {
+        company: 8,
+        id: opt
+    };
+
+    this.jumpservice.estadohoraSolicitadas(this.an_request).subscribe(
+        res => {
+            this.an_response = res;
+            console.info(res);
+        } 
+
+        , err => console.error(err)
+    );
+
+   
+}
+
+
 
 }
