@@ -9,9 +9,12 @@ import { DashboardComponent } from './modules/dashboard/dashboard.component';
 import { StaffComponent } from './modules/staff/staff.component';
 import { AuthGuard } from 'src/app/auth.guard';
 import { ProfileComponent } from './modules/profile/profile.component';
-import {BranchChartsComponent} from './modules/branch-charts/branch-charts.component'
-import {SuscripcionComponent} from './modules/suscripcion/suscripcion.component'
-import {VirtualcallComponent} from './modules/virtualcall/virtualcall.component'
+import { BranchChartsComponent } from './modules/branch-charts/branch-charts.component'
+import { SuscripcionComponent } from './modules/suscripcion/suscripcion.component'
+import { VirtualcallComponent } from './modules/virtualcall/virtualcall.component'
+import { RegisterComponent } from './layouts/register/register.component';
+import { ForgotComponent } from './layouts/forgot/forgot.component';
+import { TermsComponent } from './layouts/terms/terms.component';
 const routes: Routes =
 	[
 		{
@@ -47,8 +50,19 @@ const routes: Routes =
 		},
 		{
 			path: 'login',
-			component: LoginComponent,
-			pathMatch: 'full'
+			component: LoginComponent
+		},
+		{
+			path: 'register',
+			component: RegisterComponent
+		},
+		{
+			path: 'forgot',
+			component: ForgotComponent
+		},
+		{
+			path: 'terms',
+			component: TermsComponent
 		}
 	];
 
@@ -56,4 +70,5 @@ const routes: Routes =
 	imports: [RouterModule.forRoot(routes)],
 	exports: [RouterModule]
 })
+
 export class AppRoutingModule { }

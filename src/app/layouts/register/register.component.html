@@ -1,0 +1,77 @@
+<div class="login-page">
+
+    <div class="login-box">
+
+        <div class="login-logo">
+            <a href="/login"><b>DashBoard</b>JumpQ</a>
+        </div>
+
+        <div class="card">
+            <div class="card-body login-card-body">
+
+                <p class="login-box-msg">Crea una nueva cuenta en jumpQ</p>
+                <form [formGroup]="RegisterForm" (ngSubmit)="onSubmit()">
+
+                    <p class="login-box-msg">{{Message}}</p>
+
+
+                    <div class="input-group mb-3">
+                        <input formControlName="nombre" type="text" class="form-control" placeholder="nombre">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <input formControlName="apellido" type="text" class="form-control" placeholder="apellido">
+                    </div>
+
+
+                    <div class="input-group mb-3">
+                        <input formControlName="email" type="email" class="form-control"
+                            placeholder="correo electrónico">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <input formControlName="password" type="password" class="form-control" placeholder="contraseña">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="icheck-primary">
+                                <input formControlName="acceptTerms" type="checkbox" id="agreeTerms" name="terms"
+                                    value="agree">
+                                <label for="agreeTerms">
+                                    He leído y conozco todos los <a [routerLink]="['/terms']">terminos y condiciones</a> de uso de este
+                                    servicio.
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <button type="submit" [disabled]="!RegisterForm.valid"
+                                class="btn btn-success btn-block">Registrar</button>
+                        </div>
+                    </div>
+
+                </form>
+                <p class="mb-1">
+                    <a [routerLink]="['/login']">Si tengo una cuenta jumpQ</a>
+                </p>
+
+
+            </div>
+
+        </div>
+    </div>
+
+</div>

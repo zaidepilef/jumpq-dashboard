@@ -1,0 +1,46 @@
+<div class="login-page">
+
+    <div class="login-box">
+
+        <div class="login-logo">
+            <a href="/login"><b>DashBoard</b>JumpQ</a>
+        </div>
+
+        <div class="card">
+            <div class="card-body login-card-body">
+
+                <p class="login-box-msg">Para recuperar la contraseña ingrese correo electronico</p>
+                <form [formGroup]="ForgotForm" (ngSubmit)="onSubmit()">
+                    <p>{{Message}}</p>
+                    <div class="input-group mb-3">
+                        <input formControlName="email" type="email" class="form-control" placeholder="Email">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col">
+                            <button type="submit" [disabled]="!ForgotForm.valid"
+                                class="btn btn-primary btn-block">Recuperar</button>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+
+                </form>
+
+                <p class="mb-1">
+                    <a [routerLink]="['/login']">Si tengo una cuenta jumpQ</a>
+                </p>
+                <!-- /.social-auth-links -->
+
+
+            </div>
+
+        </div>
+    </div>
+
+</div>

@@ -6,6 +6,8 @@ import { AuthService } from './services/auth.service';
 @Injectable({
   providedIn: 'root'
 })
+
+// este debe tener logica para validar el JTW ya solo evalua si existe
 export class AuthGuard implements CanActivate {
   
   constructor(private authService:AuthService,
