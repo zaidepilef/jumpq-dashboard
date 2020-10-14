@@ -17,7 +17,7 @@ const helper = new JwtHelperService();
 
 
 export class AuthService {
-
+	private SERVER_URL = "http://localhost:8080/api";
 	private loggedIn = new BehaviorSubject<boolean>(false);
 	constructor(private httpClient: HttpClient, private router: Router,private spinner: NgxSpinnerService) { }
 
