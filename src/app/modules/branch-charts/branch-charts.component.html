@@ -1,13 +1,29 @@
 <section class="content-header">
-    <h1> Dashboard <small>Vista General</small>
-    </h1>
-
-</section>
+    <h1> Dashboard <small>Actividades</small></h1>
+    <div class="row">
+        <div class="col-3">
+            Fecha de inicio<input type="date" class="form-control" id="fechainicio">
+   
+        </div>
+        <div class="col-3">
+            Fecha de termino<input type="date" class="form-control" id="fechatermino">
+  
+        </div>
+        <div class="col-3">
+        <br>
+            <button class="btn btn-info" (click)="busquedaRango()">Buscar</button>
+         
+        </div>
+        <div class="col-12" class="alert alert-danger" *ngIf="validarfecha">
+            <label>la fecha de termino tiene que ser mayor a la fecha de inicio</label>
+        </div>
+    </div>
+   </section>
 <div class="content">
 
     <div class="container-fluid">
 
-        <div class="row"*ngIf="graficos">
+        <div class="row" *ngIf="graficos">
 
             <div class="col-3">
                 <b>Horas solicitadas por sucursal <button class="btn btn-info" (click)="test()"><i
@@ -16,19 +32,87 @@
             </div>
 
             <div class="col-3">
-                <b>Cantidad de visitas Completadas/Pendientes <button class="btn btn-info"><i
+                <b>Cantidad de visitas Completadas/Pendientes <button class="btn btn-info" (click)="showdetallehoraspendientes(1)"><i
                             class="fas fa-search"></i></button></b>
                 <canvas id="horasAgendadas" width="100" height="100"></canvas>
             </div>
 
             <div class="col-3">
-                <b>horas tomadas por ejecutivos <button class="btn btn-info"><i class="fas fa-search"></i></button></b>
+                <b>horas tomadas por ejecutivos <button class="btn btn-info" (click)="mostrarejecutivos()"><i class="fas fa-search"></i></button></b>
                 <canvas id="conteoejecutivo" width="100" height="100"></canvas>
             </div>
-        </div>
 
+            <div class="col-3">
+                <b>Cantidad de Clientes <button class="btn btn-info" (click)="mostrarcantidadusuarios()"><i class="fas fa-search" (click)="mostrarcantidadUsuarios()"></i></button></b>
+                <canvas id="cantidadUsuarios" width="100" height="100"></canvas>
+            </div>
+        </div>
+        <div class="row" *ngIf="mostrarEstados">
+            <div class="col">
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-striped table-valign-middle" id="estados">
+                        <thead>
+                            <tr>
+                                <th>Estado de la solicitud</th>
+                                <th>Cantidad</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Horas Completadas</td>
+                                <td>{{completadas}}</td>
+                                <td> <button class="btn btn-info" (click)="detallehoraspendientes(2)"><i
+                                    class="fas fa-search"></i></button></td>
+                            </tr>
+                            <tr>
+                                <td>Horas Pendientes</td>
+                                <td>{{pendientes}}</td>
+                                <td> <button class="btn btn-info" (click)="detallehoraspendientes(1)"><i
+                                    class="fas fa-search"></i></button></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn btn-success" (click)="exportExcelestados()">Generar Excel</button>
+                <button class="btn btn-info" (click)="cerrar()">Cerrar tabla</button>
+           
+            </div>
+        </div>
+        <div class="row" *ngIf="mostrarEstadosDetalle">
+            <div class="col">
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-striped table-valign-middle" id="estadoDetalle">
+                        <thead>
+                            <tr>
+                                <th>Nombre cliente</th>
+                                <th>RUT</th>
+                                <th>correo electronico</th>
+                                <th>fecha</th>
+                                <th>hora</th>
+                                <th>estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of detallePendientes">
+                                <td>{{item.nombre}}</td>
+                                <td>{{item.rut}}</td>
+                                <td>{{item.email}}</td>
+                                <td>{{item.fecha}}</td>
+                                <td>{{item.hora}}</td>
+                                <td>{{item.estado}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn btn-success" (click)="exportExcelEstadosDetalle()">Generar Excel</button>
+                <button class="btn btn-info" (click)="cerrar()">Cerrar tabla</button>
+            </div>
+        </div>
+        
         <div class="row" *ngIf="ConsultaSucursal">
-         
+
             <div class="col">
                 <div class="card-body table-responsive p-0">
                     <table class="table table-striped table-valign-middle" id="sucursalexcel">
@@ -41,7 +125,7 @@
                         </thead>
                         <tbody>
 
-                            <tr *ngFor="let item of surcusal.sucursal">
+                            <tr *ngFor="let item of surcusal">
                                 <td>{{item.sucursal}}</td>
                                 <td>{{item.conteo}}</td>
                                 <td> <button class="btn btn-info" (click)="detallegridone(item)"><i
@@ -51,20 +135,23 @@
                         </tbody>
                     </table>
                 </div>
-                <button class="btn btn-info" (click)="exportExcelTablesucursal()">Generar Excel</button>
+                <button class="btn btn-success" (click)="exportExcelTablesucursal()">Generar Excel</button>
+                <button class="btn btn-info" (click)="cerrar()">Cerrar</button>
+               
+            
             </div>
         </div>
+        
         <div class="row" *ngIf="ConsultaSucursaldetalle">
             <div class="col-12">
-                <button class="btn btn-info" (click)="volver()">Volver</button>
-            </div>
+                </div>
             <div class="col">
                 <div class="card-body table-responsive p-0">
                     <table class="table table-striped table-valign-middle" id="sucursaldetalle">
                         <thead>
                             <tr>
                                 <th>Nombre Sucursal</th>
-                                <th>Nombre Completo</th>
+                                <th>Nombre Cliente</th>
                                 <th>RUT</th>
                                 <th>fecha de la solicitud</th>
                                 <th>hora</th>
@@ -74,7 +161,7 @@
                         </thead>
                         <tbody>
 
-                            <tr *ngFor="let detalle of detalles.detalle">
+                            <tr *ngFor="let detalle of detalles">
                                 <td>{{detalle.sucursal}}</td>
                                 <td>{{detalle.nombre}}</td>
                                 <td>{{detalle.rut}}</td>
@@ -87,8 +174,232 @@
                         </tbody>
                     </table>
                 </div>
-                <button class="btn btn-info" (click)="exportExcelTablesucursaldetalle()">Generar Excel</button>
+                <button class="btn btn-success" (click)="exportExcelTablesucursaldetalle()">Generar Excel</button>
+                <button class="btn btn-info" (click)="cerrar()">Cerrar</button>
+            
+            </div>
+            
+
+            
+        </div>
+
+        
+        <div class="row" *ngIf="Consultaejecutivos">
+
+            <div class="col">
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-striped table-valign-middle" id="ejecutivosexcel">
+                        <thead>
+                            <tr>
+                                <th>Nombre Ejecutivo</th>
+                                <th>Cantidad de horas pedidas</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr *ngFor="let items of ejecutivo">
+                                <td>{{items.Nombre}}</td>
+                                <td>{{items.conteo}}</td>
+                                <td> <button class="btn btn-info" (click)="detalleejecutivos(items)"><i
+                                            class="fas fa-search"></i></button></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn btn-success" (click)="exportExcelejecutivo()">Generar Excel</button>
+                <button class="btn btn-info" (click)="cerrar()">cerrar tabla</button>
+               
+            
             </div>
         </div>
 
-</div>
+         
+        <div class="row" *ngIf="Consultadetalleejecutivos">
+
+            <div class="col">
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-striped table-valign-middle" id="detalleEjecutivos">
+                        <thead>
+                            <tr>
+                                <th>correo electronico ejecutivo</th>
+                                <th>Nombre cliente</th>
+                                <th>identificacion</th>
+                                <th>Correo electronico</th>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Medio de contacto</th>
+                                <th>estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr *ngFor="let items of detalleEjecutivo">
+                                <td>{{items.ejecutivo}}</td>
+                                <td>{{items.nombre}}</td>
+                                <td>{{items.rut}}</td>
+                                <td>{{items.email}}</td>
+                                <td>{{items.fecha}}</td>
+                                <td>{{items.hora}}</td>
+                                <td>{{items.tipo}}</td>
+                                <td>{{items.estado}}</td>
+                              
+                            </tr>  
+
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn btn-success" (click)="exportExceldetalleEjecutivos()">Generar Excel</button>
+                <button class="btn btn-info" (click)="cerrar()">volver</button>
+               
+            
+            </div>
+        </div>
+
+         
+        <div class="row" *ngIf="ConsultaCantidadHoras">
+
+            <div class="col">
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-striped table-valign-middle" id="cantidadhoras">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>cantidad horas</th>   
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let items of cantidadUsuarios">
+                                <td>{{items.dias}}</td>
+                                <td>{{items.conteo}}</td>
+                                <td> <button class="btn btn-info" (click)="detalleCantidad(items)"><i
+                                    class="fas fa-search"></i></button></td>
+                                
+                            </tr>  
+
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn btn-success" (click)="exportExcelCantidaHoras()">Generar Excel</button>
+                <button class="btn btn-info" (click)="cerrar()">volver</button>
+               
+            
+            </div>
+        </div>
+
+         
+        <div class="row" *ngIf="ConsultadetalleCantidadHoras">
+
+            <div class="col">
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-striped table-valign-middle" id="detalleEjecutivos">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>identificacion</th>
+                                <th>Correo electronico</th>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Medio de contacto</th>
+                                <th>estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr *ngFor="let items of detalleEjecutivo">
+                                <td>{{items.nombre}}</td>
+                                <td>{{items.rut}}</td>
+                                <td>{{items.email}}</td>
+                                <td>{{items.fecha}}</td>
+                                <td>{{items.hora}}</td>
+                                <td>{{items.tipo}}</td>
+                                <td>{{items.estado}}</td>
+                              
+                            </tr>  
+
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn btn-success" (click)="exportExceldetalleEjecutivos()">Generar Excel</button>
+                <button class="btn btn-info" (click)="cerrar()">volver</button>
+               
+            
+            </div>
+        </div>
+
+        <div class="row" *ngIf="Consultacantidadusuarios">
+
+            <div class="col">
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-striped table-valign-middle" id="cantidadClientes">
+                        <thead>
+                            <tr>
+                                <th>Mes</th>
+                                <th>Cantidad de clientes</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr *ngFor="let items of cantidadUsuarios">
+                                <td>{{items.dias}}</td>
+                                <td>{{items.conteo}}</td>
+                                <td> <button class="btn btn-info" (click)="detalleCantidadclientes(items)"><i
+                                    class="fas fa-search"></i></button></td>
+                                
+                              
+                            </tr>  
+
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn btn-success" (click)="exportExcelcantidadUsuarios()">Generar Excel</button>
+                <button class="btn btn-info" (click)="cerrar()">volver</button>
+               
+            
+            </div>
+        </div>
+
+        <div class="row" *ngIf="Consultacantidadusuariosdetalle">
+
+            <div class="col">
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-striped table-valign-middle" id="detalleCantidadClientes">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>identificacion</th>
+                                <th>Correo electronico</th>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Medio de contacto</th>
+                                <th>estado</th>
+                                <th>mes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr *ngFor="let items of detallecantidadclientes">
+
+                                <td>{{items.sucursal}}</td>
+                                <td>{{items.nombre}}</td>
+                                <td>{{items.rut}}</td>
+                                <td>{{items.fecha}}</td>
+                                <td>{{items.hora}}</td>
+                                <td>{{items.email}}</td>
+                                <td>{{items.estado}}</td>
+                                <td>{{items.mes}}</td>
+                            </tr>  
+
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn btn-success" (click)="exportExceldetallecantidadUsuarios()">Generar Excel</button>
+                <button class="btn btn-info" (click)="cerrar()">volver</button>
+               
+            
+            </div>
+        </div>
+    </div>

@@ -7,7 +7,7 @@ import { DefaultModule } from '../app/layouts/default/default.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { FormsModule } from '@angular/forms';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { AuthGuard } from './auth.guard';
 import { TokenInterceptorService } from 'src/app/interceptors/token-interceptor.service';
@@ -37,7 +37,8 @@ import { VerifyEmailComponent } from './layouts/verify-email/verify-email.compon
     ReactiveFormsModule,
     NgxSpinnerModule,
     BrowserAnimationsModule,
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
   exports: [NgxSpinnerModule],
   providers: [
