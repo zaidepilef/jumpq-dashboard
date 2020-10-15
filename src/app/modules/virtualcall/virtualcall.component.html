@@ -1,18 +1,191 @@
 <section class="content-header">
-	<h1> Dashboard <small>Vista General</small>
-	</h1>
-	
+	<h1>Agendamiento virtual </h1>
 </section>
-<div class="content">
+ 
 
-	<div class="container-fluid">
+<div class="container-fluid">
 
-		<div class="row">	
-		<div class="col-4">Modificar información de la empresa</div>
-		<div class="col-8"><button type="button" class="btn btn-primary">Configurar virtual-call</button>	<br></div>
-		<div class="col-4">Modificar logos y colores</div>
-		<div class="col-8"><button type="button" class="btn btn-primary">Agregar/modificar ejecutivos</button>	<br></div>
-		<div>
+	<div class="row" *ngIf="panelPrincipal">
+		<div class="col-12">
+			<br>
+			<label (click)="modificarEmpresa()">
+				<h4>Configurar medios de contacto</h4>
+			</label>
+		</div>
+		<div class="col-12">
+			<br>
+			<label (click)="configurarEjecutivo()">
+				<h4>Agregar nuevo ejecutivo</h4>
+			</label>
+		</div>
+		<div class="col-12">
+			<br>
+			<label (click)="CrearUsuario()">
+				<h4>Modificar Ejecutivo</h4>
+			</label>
+		</div>
+ 
 	</div>
+
+
+
+
+	<div *ngIf="PanelEjecutivo">
+		<div class="row">
+			<div class="col">
+				<div class="card-body table-responsive p-0">
+					<table class="table table-striped table-valign-middle" id="modificarusuario">
+						<thead>
+							<tr>
+								<th>Nombre</th>
+								<th>Apellido</th>
+								<th>Identificacion</th>
+								<th>tipo de usuario</th> 
+								<th>correo electronico</th> 
+								<th>Opciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let items of ejecutivos">
+								<td>{{items.name}}</td>
+								<td>{{items.last_name}}</td>
+								<td>{{items.identification_card}}</td>
+								<td>{{items.type_user}}</td>
+								<td>{{items.email}}</td>
+ 
+								<td> <button class="btn btn-info" (click)="ConfigurarAgendamiento(items)"><i
+											class="fas fa-search"></i></button></td>
+
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+				<button class="btn btn-success" (click)="exportExcelCantidaHoras()">Generar Excel</button>
+				<button class="btn btn-info" (click)="salir()">Salir</button>
+ 
+			</div>
+		</div>
+	</div>
+
+
+	<div *ngIf="panelconfE">
+		<form [formGroup]="registroEForm" (ngSubmit)="RegistrarUsuario()">
+			<div class="row">
+				 <div class="col-12"><br><b>Nombre del ejecutivo : </b> {{ejecutivoSeleccionado}}</div>
+				 
+				<div class="form-group col-sm-12 col-md-4">
+					<br>
+				 
+					<label for="provincia" class="col-form-label" >Modalidad turnos</label>
+					<select name="provincia"  class="form-control" (change)="BuscarProvincia($event)">
+					<option value = "0">Seleccionar	</option>
+					<option *ngFor="let prov of regiones.provincia" value="{{prov.COD_ESTADO}}">{{prov.NOM_ESTADO}}</option>
+					</select>
+				</div>
+				<div class="form-group col-sm-12 col-md-4" >
+					<br>
+					<label for="provincia" class="col-form-label" >Hora de atención en la mañana inicio.</label>
+					<select name="provincia" class="form-control" (change)="cargarComuna($event)">
+					<option value="0">Seleccionar</option>
+				
+					<option *ngFor="let ciudad of provincia.ciudad" value="{{ciudad.COD_PROV}}">{{ciudad.NOM_PROV}}</option>
+				
+				</select>
+				</div>
+
+				<div class="form-group col-sm-12 col-md-4">
+					<br>
+					<label for="comunas" class="col-form-label" >Hora de atención en la mañana termino</label>
+					<select name="comunas" class="form-control" (change)="BuscarSucursales($event)">
+					<option value="0">Seleccionar</option>
+					<option *ngFor="let parroquia of Comunas.parroquia " value="{{parroquia.COD_LOCALIDAD}}">{{parroquia.NOM_LOCALIDAD}}</option>
+					
+				</select>
+				</div>
+				<div class="form-group col-sm-12 col-md-4" >
+					<br>
+					<label for="provincia" class="col-form-label" >Hora de atención en la tarde inicio.</label>
+					<select name="provincia" class="form-control" (change)="cargarComuna($event)">
+					<option value="0">Seleccionar</option>
+				
+					<option *ngFor="let ciudad of provincia.ciudad" value="{{ciudad.COD_PROV}}">{{ciudad.NOM_PROV}}</option>
+				
+				</select>
+				</div>
+
+				<div class="form-group col-sm-12 col-md-4">
+					<br>
+					<label for="comunas" class="col-form-label" >Hora de atención en la tarde termino</label>
+					<select name="comunas" class="form-control" (change)="BuscarSucursales($event)">
+					<option value="0">Seleccionar</option>
+					<option *ngFor="let parroquia of Comunas.parroquia " value="{{parroquia.COD_LOCALIDAD}}">{{parroquia.NOM_LOCALIDAD}}</option>
+					
+				</select>
+				</div>
+				<div class="col-4"></div>
+ 
+				<div class="col-4">
+					<label for="comunas" class="col-form-label" >Cantidad de turnos en la misma hora</label>
+				
+					<input type="text" class="form-control">
+					<br>
+				</div>
+				<div class="col-12">
+					<label for="comunas" class="col-form-label" >Dias de trabajo</label><br><br>
+				
+					<input type="checkbox" class="col-form-label" id="dias1" name="dias1" value="0">
+					lunes
+					<input type="checkbox" id="dias2" name="dias2" value="1">
+					 martes
+					<input type="checkbox" id="dias3" name="dias3" value="2">
+					 miercoles
+					<input type="checkbox" id="dias4" name="dias4" value="3">
+					 jueves
+					<input type="checkbox" id="dias5" name="dias5" value="4">
+					 viernes
+					<input type="checkbox" id="dias6" name="dias6" value="5">
+					 sabado
+					<input type="checkbox" id="dias7" name="dias7" value="6">
+					 domingo
+				</div>
+
+				<div class="col-12"></div>
+
+				<div class="col-4">
+					<button type="submit" class="btn btn-primary btn-block"
+						[disabled]="!registroEForm.valid">Registrar</button>
+				</div>
+				<div class="col-4">
+					<button type="button" (click)="salir()" class="btn btn-primary btn-block">Salir sin
+						crear</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </div>

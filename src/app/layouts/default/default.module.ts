@@ -30,7 +30,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ProfileComponent,
     VirtualcallComponent,
     SuscripcionComponent,
-    BranchChartsComponent
+    BranchChartsComponent,
+    BranchOfficeComponent
 
   ],
   imports: [

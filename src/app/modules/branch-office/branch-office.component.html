@@ -1,16 +1,271 @@
 <section class="content-header">
 	<h1>Sucursales </h1>
 </section>
- 
+
 
 <div class="container-fluid">
 
-	<div class="row">
-		
-	<div class="col-4">Agregar nueva sucursal</div>
-	<div class="col-8"><button type="button" class="btn btn-primary">Seleccionar</button>	<br></div>
-	<div class="col-4">Ver Sucursales</div>
-	<div class="col-8"><button type="button" class="btn btn-primary">Seleccionar</button>	<br></div>
-</div>
+	<div class="row" *ngIf="panelPrincipal">
+		<div class="col-12">
+			<br>
+			<label (click)="panelsucursal()">
+				<h4>Agregar Nueva sucursal</h4>
+			</label>
+		</div>
+		<div class="col-12">
+			<br>
+			<label (click)="panelsucursalE()">
+				<h4>Agregar Nueva sucursal ecuador</h4>
+			</label>
+		</div>
+		<div class="col-12">
+			<br>
+			<label (click)="panelConfSucursal()">
+				<h4>Configurar sucursales</h4>
+			</label>
+		</div>
+		<div class="col-12">
+			<br>
+			<label (click)="panelModfSucursal()">
+				<h4>Modificar sucursales</h4>
+			</label>
+		</div>
+	</div>
+
+	<div *ngIf="panelcrearsucursal">
+		<form [formGroup]="registroEForm" (ngSubmit)="RegistrarUsuario()">
+			<div class="row">
+				<div class="form-group col-4">
+					<label for="nombre" class="col-form-label">Nombre sucursal</label>
+					<input type="text" class="form-control" placeholder="Oficinas xxxx" formControlName="nombre"
+						[(ngModel)]="registro.nombre">
+				</div>
+
+
+				<div class="form-group col-4">
+					<label for="nombre" class="col-form-label">Direccion</label>
+					<input type="text" class="form-control" placeholder="Edificio 340 xxxx" formControlName="direccion"
+					[(ngModel)]="registro.direccion">
+
+				</div>
+				<div class="form-group col-4">
+					<label for="name" class="col-form-label">Direccion auxiliar</label>
+					<input type="text" class="form-control" placeholder="Calle xx" formControlName="direccion2" [(ngModel)]="registro.direccion2">
+			 
+				</div>
+
+				<div class="form-group col-4">
+					<label for="name" class="col-form-label">Google maps</label>
+					<input type="text" class="form-control" placeholder="" formControlName="urlmap"
+						[(ngModel)]="registro.urlmap">
+					 
+				</div>
+				<div class="col-8"></div>
+				<div class="form-group col-sm-12 col-md-4">
+					<label for="regiones" class="col-form-label">Región</label>
+					<select name="regiones" class="form-control" (change)="BuscarProvincia($event)">
+						<option value="0">Seleccionar región</option>
+						<option *ngFor="let reg of regiones.region" value="{{reg.region_id}}">{{reg.region_name}}
+						</option>
+					</select>
+				</div>
+				<div class="form-group col-sm-12 col-md-4">
+
+					<label for="provincia" class="col-form-label">Provincia</label>
+					<select name="provincia" class="form-control" (change)="cargarComuna($event)">
+						<option value="0">Seleccionar provincia</option>
+
+						<option *ngFor="let provi of provincia.provincia" value="{{provi.provincia_id}}">
+							{{provi.provincia_name}}</option>
+
+					</select>
+				</div>
+				<div class="form-group col-sm-12 col-md-4">
+					<label for="comunas" class="col-form-label">Comuna</label>
+					<select name="comunas" class="form-control" (change)="BuscarSucursales($event)">
+						<option value="0">Seleccionar Comunas</option>
+						<option *ngFor="let comuna of Comunas.comuna " value="{{comuna.comuna_id}}">
+							{{comuna.comuna_name}}</option>
+
+					</select>
+				</div>
+				<div class="col-12"></div>
+
+				<div class="col-4">
+					<button type="submit" class="btn btn-primary btn-block"
+						[disabled]="!registroEForm.valid">Registrar</button>
+				</div>
+				<div class="col-4">
+					<button type="button" (click)="salir()" class="btn btn-primary btn-block">Salir sin
+						crear</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<div *ngIf="panelcrearsucursalE">
+		<form [formGroup]="registroEForm" (ngSubmit)="RegistrarUsuario()">
+			<div class="row">
+				<div class="form-group col-4">
+					<label for="nombre" class="col-form-label">Nombre sucursal</label>
+					<input type="text" class="form-control" placeholder="Oficinas xxxx" formControlName="nombre"
+						[(ngModel)]="registro.nombre">
+				</div>
+
+
+				<div class="form-group col-4">
+					<label for="nombre" class="col-form-label">Direccion</label>
+					<input type="text" class="form-control" placeholder="Edificio 340 xxxx" formControlName="direccion"
+					[(ngModel)]="registro.direccion">
+
+				</div>
+				<div class="form-group col-4">
+					<label for="name" class="col-form-label">Direccion auxiliar</label>
+					<input type="text" class="form-control" placeholder="Calle xx" formControlName="direccion2" [(ngModel)]="registro.direccion2">
+			 
+				</div>
+
+				<div class="form-group col-4">
+					<label for="name" class="col-form-label">Google maps</label>
+					<input type="text" class="form-control" placeholder="" formControlName="urlmap"
+						[(ngModel)]="registro.urlmap">
+					 
+				</div>
+				<div class="col-8"></div>
+				<div class="form-group col-sm-12 col-md-4">
+					<label for="provincia" class="col-form-label" >Provincia</label>
+					<select name="provincia"  class="form-control" (change)="BuscarProvincia($event)">
+					<option value = "0">Seleccionar la provincia</option>
+					<option *ngFor="let prov of regiones.provincia" value="{{prov.COD_ESTADO}}">{{prov.NOM_ESTADO}}</option>
+					</select>
+				</div>
+				<div class="form-group col-sm-12 col-md-4" >
+               
+					<label for="provincia" class="col-form-label" >Ciudad</label>
+					<select name="provincia" class="form-control" (change)="cargarComuna($event)">
+					<option value="0">Seleccionar la ciudad</option>
+				
+					<option *ngFor="let ciudad of provincia.ciudad" value="{{ciudad.COD_PROV}}">{{ciudad.NOM_PROV}}</option>
+				
+				</select>
+				</div>
+
+				<div class="form-group col-sm-12 col-md-4">
+					<label for="comunas" class="col-form-label" >Parroquia</label>
+					<select name="comunas" class="form-control" (change)="BuscarSucursales($event)">
+					<option value="0">Seleccionar la parroquia</option>
+					<option *ngFor="let parroquia of Comunas.parroquia " value="{{parroquia.COD_LOCALIDAD}}">{{parroquia.NOM_LOCALIDAD}}</option>
+					
+				</select>
+				</div>
+			 
+				<div class="col-12"></div>
+
+				<div class="col-4">
+					<button type="submit" class="btn btn-primary btn-block"
+						[disabled]="!registroEForm.valid">Registrar</button>
+				</div>
+				<div class="col-4">
+					<button type="button" (click)="salir()" class="btn btn-primary btn-block">Salir sin
+						crear</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+
+	<div *ngIf="paneltablaconfigurarSucursal">
+		<div class="row">
+			<div class="col">
+				<div class="card-body table-responsive p-0">
+					<table class="table table-striped table-valign-middle" id="modificarusuario">
+						<thead>
+							<tr>
+								<th>nombre</th>
+								<th>direccion</th>
+								<th>direccion auxiliar</th>
+								<th>comuna</th>
+
+								<th>Opciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let items of tablachile">
+								<td>{{items.nombre}}</td>
+								<td>{{items.direccion}}</td>
+								<td>{{items.direccion2}}</td>
+								<td>{{items.comuna}}</td>
+ 
+								<td> <button class="btn btn-info" (click)="modificarUserform(items)"><i
+											class="fas fa-search"></i></button></td>
+
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+				<button class="btn btn-success" (click)="exportExcelCantidaHoras()">Generar Excel</button>
+				<button class="btn btn-info" (click)="salir()">Salir</button>
+
+
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<div *ngIf="paneltablamodificarSucursal">
+		<div class="row">
+			<div class="col">
+				<div class="card-body table-responsive p-0">
+					<table class="table table-striped table-valign-middle" id="modificarusuario">
+						<thead>
+							<tr>
+								<th>nombre</th>
+								<th>direccion</th>
+								<th>direccion auxiliar</th>
+								<th>comuna</th>
+
+								<th>Opciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let items of tablachile">
+								<td>{{items.nombre}}</td>
+								<td>{{items.direccion}}</td>
+								<td>{{items.direccion2}}</td>
+								<td>{{items.comuna}}</td>
+ 
+								<td> <button class="btn btn-info" (click)="modificarUserform(items)"><i
+											class="fas fa-search"></i></button></td>
+
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+				<button class="btn btn-success" (click)="exportExcelCantidaHoras()">Generar Excel</button>
+				<button class="btn btn-info" (click)="salir()">Salir</button>
+
+
+			</div>
+		</div>
+	</div>
+
+
 
 </div>

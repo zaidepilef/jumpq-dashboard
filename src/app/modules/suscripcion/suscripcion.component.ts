@@ -6,10 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./suscripcion.component.sass']
 })
 export class SuscripcionComponent implements OnInit {
-
+  panelPrincipal:boolean;
   constructor() { }
 
   ngOnInit(): void {
+    this.panelPrincipal = true;
   }
 
 }

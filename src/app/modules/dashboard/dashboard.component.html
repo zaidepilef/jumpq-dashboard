@@ -36,6 +36,12 @@
 					<h4>Modificar Usuario</h4>
 				</label>
 			</div>
+			<div class="col-12">
+				<br>
+				<label (click)="ModificarUsuario()">
+					<h4>Modificar Contraseña</h4>
+				</label>
+			</div>
 		</div>
 		<div class="row" *ngIf="modificarEmp">
 			<div class="col-12">
@@ -63,9 +69,10 @@
 				Rubro empresa
 			</div>
 			<div class="col-9">
-				<select name="Rubro" class="form-control">
+				<select name="areatrabajo"  class="form-control" >
 					<option value="0">Seleccionar</option>
-				</select>
+					<option *ngFor="let trabajo of areatrabajo" value="{{trabajo.business_item_id}}">{{trabajo.business_item_name}}</option>
+					</select>
 			</div>
 			<div class="col-3">
 				Cantidad de trabajadores:
@@ -73,14 +80,18 @@
 			<div class="col-9">
 				<select name="cantidad" class="form-control">
 					<option value="0">Seleccionar</option>
+					<option value="1">0-10</option>
+					<option value="2">10-30</option>
+					<option value="3">30-60</option>
+					<option value="4">+60</option>
 				</select>
 			</div>
 			<div class="col-4">
-				<button type="button"  class="btn btn-primary btn-block">Modificar Usuario</button> 
-				 
+				<button type="button" class="btn btn-primary btn-block">Modificar Usuario</button>
+
 			</div>
 			<div class="col-4">
-				<button type="button"  (click)="salir()" class="btn btn-primary btn-block">Salir sin modificar</button>
+				<button type="button" (click)="salir()" class="btn btn-primary btn-block">Salir sin modificar</button>
 			</div>
 		</div>
 
@@ -108,196 +119,253 @@
 				<input type="file">
 				<br>
 			</div>
-			
+
 			<div class="col-4"><br>
-				<button type="button"  class="btn btn-primary btn-block">Guardar Cambios</button> 
+				<button type="button" class="btn btn-primary btn-block">Guardar Cambios</button>
 			</div>
 			<div class="col-4"><br>
-				<button type="button"  (click)="salir()" class="btn btn-primary btn-block">Salir sin modificar</button>
+				<button type="button" (click)="salir()" class="btn btn-primary btn-block">Salir sin modificar</button>
 			</div>
 		</div>
-
+ 
 		<div *ngIf="panelcrearUsuario">
-		<form [formGroup]="registroEForm" (ngSubmit)="RegistrarUsuario()">
-			<div class="row">
-			<div class="form-group col-4">
-				<label for="name" class="col-form-label">Nombres</label>
-				<input type="text" class="form-control" placeholder="nombres" formControlName="name" [(ngModel)]="registro.nombre">
-				<div *ngIf="name_feed.invalid && (name_feed.dirty || name_feed.touched)" class="alert alert-danger">
-					<div *ngIf="name_feed.errors.required" class="email-feedback">Necesitamos tu nombre</div>
-					<div *ngIf="name_feed.errors.pattern" class="email-feedback">Un nombre extraño</div>
-					<div *ngIf="name_feed.errors?.minlength" class="email-feedback">Nombre demasiado corto</div>
-					<div *ngIf="name_feed.errors?.maxlength" class="email-feedback">Nombre demasiado largo</div>
+			<form [formGroup]="registroEForm" (ngSubmit)="RegistrarUsuario()">
+				<div class="row">
+					<div class="form-group col-4">
+						<label for="name" class="col-form-label">Nombres</label>
+						<input type="text" class="form-control" placeholder="nombres" formControlName="name"
+							[(ngModel)]="registro.nombre">
+						<div *ngIf="name_feed.invalid && (name_feed.dirty || name_feed.touched)"
+							class="alert alert-danger">
+							<div *ngIf="name_feed.errors.required" class="email-feedback">Necesitamos tu nombre</div>
+							<div *ngIf="name_feed.errors.pattern" class="email-feedback">Un nombre extraño</div>
+							<div *ngIf="name_feed.errors?.minlength" class="email-feedback">Nombre demasiado corto</div>
+							<div *ngIf="name_feed.errors?.maxlength" class="email-feedback">Nombre demasiado largo</div>
+						</div>
+					</div>
+					<div class="form-group col-4">
+						<label for="name" class="col-form-label">Apellidos</label>
+						<input type="text" class="form-control" placeholder="Paterno y materno"
+							formControlName="lastname" [(ngModel)]="registro.apellidos">
+						<div *ngIf="lastname_feed.invalid && (lastname_feed.dirty || lastname_feed.touched)"
+							class="alert alert-danger">
+							<div *ngIf="lastname_feed.errors.required" class="email-feedback">Necesitamos tus apellidos
+							</div>
+							<div *ngIf="lastname_feed.errors.pattern" class="email-feedback">Un apellido extraño</div>
+							<div *ngIf="lastname_feed.errors?.minlength" class="email-feedback">Apellido demasiado corto
+							</div>
+							<div *ngIf="lastname_feed.errors?.maxlength" class="email-feedback">Apellido demasiado largo
+							</div>
+						</div>
+					</div>
+					<div class="form-group col-4">
+						<label for="name" class="col-form-label">Identificacion</label>
+						<input type="text" class="form-control" placeholder="rut" formControlName="rut"
+							[(ngModel)]="registro.rut">
+						<div *ngIf="rut_feed.invalid && (rut_feed.dirty || rut_feed.touched)"
+							class="alert alert-danger">
+							<div *ngIf="rut_feed.errors.rut" class="rut-feedback">Identificacion requerida</div>
+						</div>
+					</div>
+					<div class="form-group col-4">
+						<label for="name" class="col-form-label">Correo Electronico</label>
+						<input type="text" class="form-control" placeholder="example@gmail.com" formControlName="email"
+							(blur)="checkmail($event)">
+						<div *ngIf="email_feed.invalid && (email_feed.dirty || email_feed.touched)"
+							class="alert alert-danger">
+							<div *ngIf="email_feed.errors.required" class="email-feedback">Necesitamos tu email</div>
+							<div *ngIf="email_feed.errors.email" class="email-feedback">Direccion de email no es valido
+							</div>
+						</div>
+						<div *ngIf="newemail" class="alert alert-danger">
+							El email ya se encuentra registrado
+						</div>
+					</div>
+					<div class="form-group col-4">
+						<label for="name" class="col-form-label">Contraseña</label>
+						<input type="password" class="form-control" placeholder="Contraseña" formControlName="password"
+							[(ngModel)]="registro.pwd">
+						<div *ngIf="password_feed.invalid && (password_feed.dirty || password_feed.touched)"
+							class="alert alert-danger">
+							<div *ngIf="password_feed.errors.required" class="email-feedback">Ingrese una contraseña
+							</div>
+							<div *ngIf="password_feed.errors?.minlength" class="email-feedback">Ingrese una contraseña
+								mas larga</div>
+							<div *ngIf="password_feed.errors?.maxlength" class="email-feedback">Su contraseña es muy
+								larga</div>
+						</div>
+					</div>
+					<div class="form-group col-4">
+						<label for="name" class="col-form-label">Reingresar Contraseña</label>
+						<input type="password" class="form-control" placeholder="Contraseña"
+							formControlName="password2">
+						<div *ngIf="password2_feed.invalid && (password2_feed.dirty || password2_feed.touched)"
+							class="alert alert-danger">
+							<div *ngIf="password2_feed.errors.required" class="email-feedback">Ingrese una contraseña
+							</div>
+							<div *ngIf="password2_feed.errors?.minlength" class="email-feedback">Ingrese una contraseña
+								mas larga</div>
+							<div *ngIf="password2_feed.errors?.maxlength" class="email-feedback">Su contraseña es muy
+								larga</div>
+						</div>
+					</div>
+					<div class="col-4">
+						<label for="tipo" class="col-form-label" >Modalidad turnos</label>
+						<select name="tipo"  class="form-control" (change)="tipo($event)">
+						<option value = "0">Seleccionar	</option>
+						<option value="2">Ejecutivo</option>
+						<option value="3">Guardia</option>
+					</select>
+					</div>
+					<div class="col-12"></div>
+					<div class="col-4">
+						<button type="submit" class="btn btn-primary btn-block"
+							[disabled]="!registroEForm.valid">Registrar</button>
+					</div>
+					<div class="col-4">
+						<button type="button" (click)="salir()" class="btn btn-primary btn-block">Salir sin
+							crear</button>
+					</div>
 				</div>
-			</div>
-			<div class="form-group col-4">
-				<label for="name" class="col-form-label">Apellidos</label>
-				<input type="text" class="form-control" placeholder="Paterno y materno" formControlName="lastname" [(ngModel)]="registro.apellidos">
-				<div *ngIf="lastname_feed.invalid && (lastname_feed.dirty || lastname_feed.touched)" class="alert alert-danger">
-					<div *ngIf="lastname_feed.errors.required" class="email-feedback">Necesitamos tus apellidos</div>
-					<div *ngIf="lastname_feed.errors.pattern" class="email-feedback">Un apellido extraño</div>
-					<div *ngIf="lastname_feed.errors?.minlength" class="email-feedback">Apellido demasiado corto</div>
-					<div *ngIf="lastname_feed.errors?.maxlength" class="email-feedback">Apellido demasiado largo</div>
-				</div>
-			</div>
-			<div class="form-group col-4">
-				<label for="name" class="col-form-label">Rut Completo</label>
-				<input type="text" class="form-control" placeholder="rut" formControlName="rut" [(ngModel)]="registro.rut">
-				<div *ngIf="rut_feed.invalid && (rut_feed.dirty || rut_feed.touched)" class="alert alert-danger">   
-					<div *ngIf="rut_feed.errors.rut" class="rut-feedback">Ingrese un rut valido</div>
-				</div>
-			</div>
-			<div class="form-group col-4">
-				<label for="name" class="col-form-label">Correo Electronico</label>
-				<input type="text" class="form-control" placeholder="example@gmail.com" formControlName="email" (blur)="checkmail($event)">
-				<div *ngIf="email_feed.invalid && (email_feed.dirty || email_feed.touched)" class="alert alert-danger">
-					<div *ngIf="email_feed.errors.required" class="email-feedback">Necesitamos tu email</div>
-					<div *ngIf="email_feed.errors.email" class="email-feedback">Direccion de email no es valido</div>
-				</div>
-				<div *ngIf="newemail" class="alert alert-danger"> 
-					El email ya se encuentra registrado
-				</div>
-			</div>
-			<div class="form-group col-4">
-				<label for="name" class="col-form-label">Contraseña</label>
-				<input type="password" class="form-control" placeholder="Contraseña" formControlName="password" [(ngModel)]="registro.pwd">
-				<div *ngIf="password_feed.invalid && (password_feed.dirty || password_feed.touched)" class="alert alert-danger">
-					<div *ngIf="password_feed.errors.required" class="email-feedback">Ingrese una contraseña</div>
-					<div *ngIf="password_feed.errors?.minlength" class="email-feedback">Ingrese una contraseña mas larga</div>
-					<div *ngIf="password_feed.errors?.maxlength" class="email-feedback">Su contraseña es muy larga</div>
-				</div>
-			</div>
-			<div class="form-group col-4">
-				<label for="name" class="col-form-label">Reingresar Contraseña</label>
-				<input type="password" class="form-control" placeholder="Contraseña" formControlName="password2">
-				<div *ngIf="password2_feed.invalid && (password2_feed.dirty || password2_feed.touched)" class="alert alert-danger">
-					<div *ngIf="password2_feed.errors.required" class="email-feedback">Ingrese una contraseña</div>
-					<div *ngIf="password2_feed.errors?.minlength" class="email-feedback">Ingrese una contraseña mas larga</div>
-					<div *ngIf="password2_feed.errors?.maxlength" class="email-feedback">Su contraseña es muy larga</div>
-				</div>
-			</div>
-			
-			<div class="col-4">
-				<button type="submit" class="btn btn-primary btn-block"
-					[disabled]="!registroEForm.valid">Registrar</button>
-			</div>
-			<div class="col-4">
-				<button type="button"  (click)="salir()" class="btn btn-primary btn-block">Salir sin crear</button>
-			</div>
-				</div>
-		</form>
-	</div>
-	<div *ngIf="paneltablaModificarUsuario">
-	<div class="row">
-		<div class="col">
-			<div class="card-body table-responsive p-0">
-				<table class="table table-striped table-valign-middle" id="modificarusuario">
-					<thead>
-						<tr>
-							<th>nombre</th>
-							<th>apellido</th>
-							<th>identificacion</th>   
-							<th>email</th>
-							<th>tipo de cuenta</th>
-							<th>estado cuenta</th>
-							<th>Opciones</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr *ngFor="let items of Modificarlist">
-							<td>{{items.nombre}}</td>
-							<td>{{items.apellido}}</td>
-							<td>{{items.identification}}</td>
-							<td>{{items.email}}</td>
-							<td>{{items.tipo}}</td>
-							<td>{{items.estado}}</td>
-							<td> <button class="btn btn-info" (click)="modificarUserform(items)"><i
-								class="fas fa-search"></i></button></td>
-							
-						</tr>  
-
-					</tbody>
-				</table>
-			</div>
-			<button class="btn btn-success" (click)="exportExcelCantidaHoras()">Generar Excel</button>
-			<button class="btn btn-info" (click)="salir()">Salir</button>
-		   
-		
+			</form>
 		</div>
-	</div>
-	</div>
-
-
-	<div *ngIf="panelModificarUsuario">
-		<form [formGroup]="registroEForm" (ngSubmit)="ModificarUsuario()">
+		<div *ngIf="paneltablaModificarUsuario">
 			<div class="row">
-			<div class="form-group col-4">
-				<label for="name" class="col-form-label">Nombres</label>
-				<input type="text" class="form-control" placeholder="nombres" formControlName="name" [(ngModel)]="registro.nombre">
-				<div *ngIf="name_feed.invalid && (name_feed.dirty || name_feed.touched)" class="alert alert-danger">
-					<div *ngIf="name_feed.errors.required" class="email-feedback">Necesitamos tu nombre</div>
-					<div *ngIf="name_feed.errors.pattern" class="email-feedback">Un nombre extraño</div>
-					<div *ngIf="name_feed.errors?.minlength" class="email-feedback">Nombre demasiado corto</div>
-					<div *ngIf="name_feed.errors?.maxlength" class="email-feedback">Nombre demasiado largo</div>
+				<div class="col">
+					<div class="card-body table-responsive p-0">
+						<table class="table table-striped table-valign-middle" id="modificarusuario">
+							<thead>
+								<tr>
+									<th>nombre</th>
+									<th>apellido</th>
+									<th>identificacion</th>
+									<th>email</th>
+									<th>tipo de cuenta</th>
+									<th>estado cuenta</th>
+									<th>Opciones</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let items of Modificarlist">
+									<td>{{items.nombre}}</td>
+									<td>{{items.apellido}}</td>
+									<td>{{items.identification}}</td>
+									<td>{{items.email}}</td>
+									<td>{{items.tipo}}</td>
+									<td>{{items.estado}}</td>
+									<td> <button class="btn btn-info" (click)="modificarUserform(items)"><i
+												class="fas fa-search"></i></button></td>
+
+								</tr>
+
+							</tbody>
+						</table>
+					</div>
+					<button class="btn btn-success" (click)="exportExcelCantidaHoras()">Generar Excel</button>
+					<button class="btn btn-info" (click)="salir()">Salir</button>
+
+
 				</div>
 			</div>
-			<div class="form-group col-4">
-				<label for="name" class="col-form-label">Apellidos</label>
-				<input type="text" class="form-control" placeholder="Paterno y materno" formControlName="lastname" [(ngModel)]="registro.apellidos">
-				<div *ngIf="lastname_feed.invalid && (lastname_feed.dirty || lastname_feed.touched)" class="alert alert-danger">
-					<div *ngIf="lastname_feed.errors.required" class="email-feedback">Necesitamos tus apellidos</div>
-					<div *ngIf="lastname_feed.errors.pattern" class="email-feedback">Un apellido extraño</div>
-					<div *ngIf="lastname_feed.errors?.minlength" class="email-feedback">Apellido demasiado corto</div>
-					<div *ngIf="lastname_feed.errors?.maxlength" class="email-feedback">Apellido demasiado largo</div>
+		</div>
+
+		
+
+		<div *ngIf="panelModificarUsuario">
+			<form [formGroup]="registroEForm" (ngSubmit)="ModificarUsuario()">
+				<div class="row">
+					<div class="form-group col-4">
+						<label for="name" class="col-form-label">Nombres</label>
+						<input type="text" class="form-control" placeholder="nombres" formControlName="name"
+							[(ngModel)]="registro.nombre">
+						<div *ngIf="name_feed.invalid && (name_feed.dirty || name_feed.touched)"
+							class="alert alert-danger">
+							<div *ngIf="name_feed.errors.required" class="email-feedback">Necesitamos tu nombre</div>
+							<div *ngIf="name_feed.errors.pattern" class="email-feedback">Un nombre extraño</div>
+							<div *ngIf="name_feed.errors?.minlength" class="email-feedback">Nombre demasiado corto</div>
+							<div *ngIf="name_feed.errors?.maxlength" class="email-feedback">Nombre demasiado largo</div>
+						</div>
+					</div>
+					<div class="form-group col-4">
+						<label for="name" class="col-form-label">Apellidos</label>
+						<input type="text" class="form-control" placeholder="Paterno y materno"
+							formControlName="lastname" [(ngModel)]="registro.apellidos">
+						<div *ngIf="lastname_feed.invalid && (lastname_feed.dirty || lastname_feed.touched)"
+							class="alert alert-danger">
+							<div *ngIf="lastname_feed.errors.required" class="email-feedback">Necesitamos tus apellidos
+							</div>
+							<div *ngIf="lastname_feed.errors.pattern" class="email-feedback">Un apellido extraño</div>
+							<div *ngIf="lastname_feed.errors?.minlength" class="email-feedback">Apellido demasiado corto
+							</div>
+							<div *ngIf="lastname_feed.errors?.maxlength" class="email-feedback">Apellido demasiado largo
+							</div>
+						</div>
+					</div>
+					<div class="form-group col-4">
+						<label for="name" class="col-form-label">Rut Completo</label>
+						<input type="text" class="form-control" placeholder="rut" formControlName="rut"
+							[(ngModel)]="registro.rut">
+						<div *ngIf="rut_feed.invalid && (rut_feed.dirty || rut_feed.touched)"
+							class="alert alert-danger">
+							<div *ngIf="rut_feed.errors.rut" class="rut-feedback">Ingrese un rut valido</div>
+						</div>
+					</div>
+					<div class="form-group col-4">
+						<label for="name" class="col-form-label">Correo Electronico</label>
+						<input type="text" class="form-control" placeholder="example@gmail.com" formControlName="email"
+							(blur)="checkmail($event)">
+						<div *ngIf="email_feed.invalid && (email_feed.dirty || email_feed.touched)"
+							class="alert alert-danger">
+							<div *ngIf="email_feed.errors.required" class="email-feedback">Necesitamos tu email</div>
+							<div *ngIf="email_feed.errors.email" class="email-feedback">Direccion de email no es valido
+							</div>
+						</div>
+						<div *ngIf="newemail" class="alert alert-danger">
+							El email ya se encuentra registrado
+						</div>
+					</div>
+					<div class="form-group col-4">
+						<label for="name" class="col-form-label">Contraseña</label>
+						<input type="password" class="form-control" placeholder="Contraseña" formControlName="password"
+							[(ngModel)]="registro.pwd">
+						<div *ngIf="password_feed.invalid && (password_feed.dirty || password_feed.touched)"
+							class="alert alert-danger">
+							<div *ngIf="password_feed.errors.required" class="email-feedback">Ingrese una contraseña
+							</div>
+							<div *ngIf="password_feed.errors?.minlength" class="email-feedback">Ingrese una contraseña
+								mas larga</div>
+							<div *ngIf="password_feed.errors?.maxlength" class="email-feedback">Su contraseña es muy
+								larga</div>
+						</div>
+					</div>
+					<div class="form-group col-4">
+						<label for="name" class="col-form-label">Reingresar Contraseña</label>
+						<input type="password" class="form-control" placeholder="Contraseña"
+							formControlName="password2">
+						<div *ngIf="password2_feed.invalid && (password2_feed.dirty || password2_feed.touched)"
+							class="alert alert-danger">
+							<div *ngIf="password2_feed.errors.required" class="email-feedback">Ingrese una contraseña
+							</div>
+							<div *ngIf="password2_feed.errors?.minlength" class="email-feedback">Ingrese una contraseña
+								mas larga</div>
+							<div *ngIf="password2_feed.errors?.maxlength" class="email-feedback">Su contraseña es muy
+								larga</div>
+						</div>
+					</div>
+
+					<div class="col-4">
+						<button type="submit" class="btn btn-primary btn-block"
+							[disabled]="!registroEForm.valid">Registrar</button>
+					</div>
+					<div class="col-4">
+						<button type="button" (click)="salir()" class="btn btn-primary btn-block">Salir sin
+							crear</button>
+					</div>
 				</div>
-			</div>
-			<div class="form-group col-4">
-				<label for="name" class="col-form-label">Rut Completo</label>
-				<input type="text" class="form-control" placeholder="rut" formControlName="rut" [(ngModel)]="registro.rut">
-				<div *ngIf="rut_feed.invalid && (rut_feed.dirty || rut_feed.touched)" class="alert alert-danger">   
-					<div *ngIf="rut_feed.errors.rut" class="rut-feedback">Ingrese un rut valido</div>
-				</div>
-			</div>
-			<div class="form-group col-4">
-				<label for="name" class="col-form-label">Correo Electronico</label>
-				<input type="text" class="form-control" placeholder="example@gmail.com" formControlName="email" (blur)="checkmail($event)">
-				<div *ngIf="email_feed.invalid && (email_feed.dirty || email_feed.touched)" class="alert alert-danger">
-					<div *ngIf="email_feed.errors.required" class="email-feedback">Necesitamos tu email</div>
-					<div *ngIf="email_feed.errors.email" class="email-feedback">Direccion de email no es valido</div>
-				</div>
-				<div *ngIf="newemail" class="alert alert-danger"> 
-					El email ya se encuentra registrado
-				</div>
-			</div>
-			<div class="form-group col-4">
-				<label for="name" class="col-form-label">Contraseña</label>
-				<input type="password" class="form-control" placeholder="Contraseña" formControlName="password" [(ngModel)]="registro.pwd">
-				<div *ngIf="password_feed.invalid && (password_feed.dirty || password_feed.touched)" class="alert alert-danger">
-					<div *ngIf="password_feed.errors.required" class="email-feedback">Ingrese una contraseña</div>
-					<div *ngIf="password_feed.errors?.minlength" class="email-feedback">Ingrese una contraseña mas larga</div>
-					<div *ngIf="password_feed.errors?.maxlength" class="email-feedback">Su contraseña es muy larga</div>
-				</div>
-			</div>
-			<div class="form-group col-4">
-				<label for="name" class="col-form-label">Reingresar Contraseña</label>
-				<input type="password" class="form-control" placeholder="Contraseña" formControlName="password2">
-				<div *ngIf="password2_feed.invalid && (password2_feed.dirty || password2_feed.touched)" class="alert alert-danger">
-					<div *ngIf="password2_feed.errors.required" class="email-feedback">Ingrese una contraseña</div>
-					<div *ngIf="password2_feed.errors?.minlength" class="email-feedback">Ingrese una contraseña mas larga</div>
-					<div *ngIf="password2_feed.errors?.maxlength" class="email-feedback">Su contraseña es muy larga</div>
-				</div>
-			</div>
-			
-			<div class="col-4">
-				<button type="submit" class="btn btn-primary btn-block"
-					[disabled]="!registroEForm.valid">Registrar</button>
-			</div>
-			<div class="col-4">
-				<button type="button"  (click)="salir()" class="btn btn-primary btn-block">Salir sin crear</button>
-			</div>
-				</div>
-		</form>
-	</div>
+			</form>
+		</div>
+
+
 
 	</div>
 </section>

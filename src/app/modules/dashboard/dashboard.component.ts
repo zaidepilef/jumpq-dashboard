@@ -14,6 +14,7 @@ export class DashboardComponent implements OnInit {
   newemail:boolean;
   panelModificarUsuario:boolean;
   paneltablaModificarUsuario:boolean
+  ModificarContraseña:boolean;
 panelcrearUsuario:boolean;
   registro: any = {
     nombre: "",
@@ -39,6 +40,7 @@ panelcrearUsuario:boolean;
     an_request:any;
     an_response:any;
     Modificarlist:Array<any>=[{}]
+    areatrabajo:any;
   constructor(private formBuilder: FormBuilder,private jumpservice: JumpqService,private loggin:AuthService) { }
   
   ngOnInit(): void {
@@ -82,15 +84,19 @@ panelcrearUsuario:boolean;
   modificarEmpresa(){
     this.panelPrincipal = false;
     this.modificarEmp=true;
-    
+    this.cargardroplist();
   }
-
+  ModificarContraseñaUsuario(){
+    this.ModificarContraseña=true;
+    this.panelPrincipal = false;
+  }
   modificarUserform(data:any){
     console.info(data);
   }
   CrearUsuario(){
     this.panelPrincipal = false;
     this.panelcrearUsuario = true;
+   
   }
   
   RegistrarUsuario(){
@@ -121,11 +127,29 @@ this.jumpservice.modificarlist(this.an_request).subscribe(
   }
 
 
+  cargardroplist(){
+    this.jumpservice.getBusinnes().subscribe(
+      res => {
+          this.an_response = res;
+          this.areatrabajo = this.an_response.businessItem
+          console.info("Contiene",this.areatrabajo);
+         
+       
+        
+      }
+  
+      , err => console.error(err)
+  );  
+  }
+
+
+
   salir(){
     this.panelPrincipal = true;
     this.modificarEstilos=false;
     this.modificarEmp = false;
     this.panelcrearUsuario = false;
     this.paneltablaModificarUsuario = false;
+    this.ModificarContraseña=false;
   }
 }

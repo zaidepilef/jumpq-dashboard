@@ -8,7 +8,7 @@ import { User } from 'src/app/models/user.interface';
 })
 
 export class JumpqService {
-	
+
 	constructor(private httpClient: HttpClient) { }
 
 	public getUserData() {
@@ -63,4 +63,25 @@ export class JumpqService {
 		return this.httpClient.post(`${environment.API_URL}/user/modificarlist/`, data);
 	}
 
+
+	public getmail() {
+		return this.httpClient.get(`${environment.API_URL}/dashboard/userdata`);
+	}
+
+
+	public getsucursalchile(data :any) {
+		return this.httpClient.post(`${environment.API_URL}/branchs/sucursalChile/`,data);
+	}
+
+	public getsucursalecuador(data :any) {
+		return this.httpClient.post(`${environment.API_URL}/branchs/sucursalEcuador`,data);
+	}
+
+	public getejecutivoslist(data :any) {
+		return this.httpClient.post(`${environment.API_URL}/user/ejecutivoslist`,data);
+	}
+
+	public getBusinnes() {
+		return this.httpClient.get(`${environment.API_URL}/business/`);
+	  }
 }
