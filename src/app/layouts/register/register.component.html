@@ -1,32 +1,50 @@
 <div class="login-page">
 
-    <div class="login-box">
+    <div class="col-md-5">
 
         <div class="login-logo">
             <a href="/login"><b>DashBoard</b>JumpQ</a>
         </div>
 
-        <div class="card">
+        <div *ngIf="ShowAlertPrimary" class="alert alert-primary alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h5><i class="icon fas fa-check"></i>{{AlertPrimaryTitle}}</h5>
+            {{AlertPrimaryMessage}}
+        </div>
+
+        <div *ngIf="ShowAlertSuccess" class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h5><i class="icon fas fa-check"></i>{{AlertSuccessTitle}}</h5>
+            {{AlertSuccessMessage}}
+        </div>
+
+        <div *ngIf="ShowAlertWarning" class="alert alert-warning alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h5><i class="icon fas fa-check"></i>{{AlertWarningTitle}}</h5>
+            {{AlertWarningMessage}}
+        </div>
+
+        <div *ngIf="ShowFormRrgister" class="card">
             <div class="card-body login-card-body">
 
-                <p class="login-box-msg">Crea una nueva cuenta en jumpQ</p>
+                <h2 class="login-box-msg">Crea una nueva cuenta en jumpQ</h2>
                 <form [formGroup]="RegisterForm" (ngSubmit)="onSubmit()">
 
                     <p class="login-box-msg">{{Message}}</p>
 
 
                     <div class="input-group mb-3">
-                        <input formControlName="nombre" type="text" class="form-control" placeholder="nombre">
+                        <input formControlName="nombre" type="text" class="form-control" placeholder="Nombre">
                     </div>
 
                     <div class="input-group mb-3">
-                        <input formControlName="apellido" type="text" class="form-control" placeholder="apellido">
+                        <input formControlName="apellido" type="text" class="form-control" placeholder="Apellido">
                     </div>
 
 
                     <div class="input-group mb-3">
                         <input formControlName="email" type="email" class="form-control"
-                            placeholder="correo electrónico">
+                            placeholder="Correo electrónico">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
@@ -35,7 +53,17 @@
                     </div>
 
                     <div class="input-group mb-3">
-                        <input formControlName="password" type="password" class="form-control" placeholder="contraseña">
+                        <input formControlName="password" type="password" class="form-control" placeholder="Contraseña">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <input formControlName="passwordRepeat" type="password" class="form-control"
+                            placeholder="Repite contraseña">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
@@ -49,7 +77,8 @@
                                 <input formControlName="acceptTerms" type="checkbox" id="agreeTerms" name="terms"
                                     value="agree">
                                 <label for="agreeTerms">
-                                    He leído y conozco todos los <a [routerLink]="['/terms']">terminos y condiciones</a> de uso de este
+                                    He leído y conozco todos los <a [routerLink]="['/terms']">terminos y condiciones</a>
+                                    de uso de este
                                     servicio.
                                 </label>
                             </div>

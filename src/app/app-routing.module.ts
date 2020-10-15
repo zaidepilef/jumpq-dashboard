@@ -15,6 +15,7 @@ import { VirtualcallComponent } from './modules/virtualcall/virtualcall.componen
 import { RegisterComponent } from './layouts/register/register.component';
 import { ForgotComponent } from './layouts/forgot/forgot.component';
 import { TermsComponent } from './layouts/terms/terms.component';
+import { VerifyEmailComponent } from './layouts/verify-email/verify-email.component';
 const routes: Routes =
 	[
 		{
@@ -47,6 +48,10 @@ const routes: Routes =
 				}
 			],
 			canActivate: [AuthGuard]
+		},
+		{
+			path: 'verifyemail/:rare', 
+			component: VerifyEmailComponent
 		},
 		{
 			path: 'login',
