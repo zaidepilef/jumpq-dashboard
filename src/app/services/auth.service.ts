@@ -37,15 +37,17 @@ export class AuthService {
 	GetToken() {
 		return localStorage.getItem('token');
 	}
+
 	GetMail() {
 		return localStorage.getItem('mail');
 	}
+
+	//logOut
 	Logout(): void {
 		localStorage.removeItem('token');
 		this.router.navigate(['/login']);
 		this.loggedIn.next(false);
 		this.spinner.hide();
-
 	}
 
 	ForgotPassword(authData: any) {
@@ -76,6 +78,7 @@ export class AuthService {
 	saveMail(data :any){
 		localStorage.setItem('mail', data);
 	}
+	
 	private HandleError(err): Observable<never> {
 		let errorMessage = 'Adasd asdasd';
 		if (err) {

@@ -44,7 +44,8 @@ export class LoginComponent implements OnInit {
 		this.auth.SignIn(this.UserData).subscribe(
 			res => {
 				this.a_response = res;
-				console.log("status : ", this.a_response.status);
+				console.log("a_response : ", this.a_response);
+				
 				if (this.a_response.status == 'OK') {
 					this.auth.SaveToken(this.a_response.jwt);
 					this.router.navigate(['/']);
