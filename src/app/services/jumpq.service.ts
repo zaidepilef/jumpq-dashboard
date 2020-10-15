@@ -48,4 +48,11 @@ export class JumpqService {
 	  public detalleejecutivo(data: any) {
 		return this.httpClient.post(`${environment.API_URL}/branchSettings/detalleejecutivo/`,data);
 	  }
+	  public userdata(data: any) {
+		return this.httpClient.post(`${environment.API_URL}/companies/userdata/`,data);
+	  }
+	  public modificarlist(data: any) {
+		return this.httpClient.post(`${environment.API_URL}/user/modificarlist/`,data);
+	  }
+	
 }

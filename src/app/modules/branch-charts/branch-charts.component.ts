@@ -5,6 +5,7 @@ import { from } from 'rxjs';
 import { JumpqService } from '../../services/jumpq.service'
 import * as XLSX from 'xlsx';
 import { FormsModule } from '@angular/forms';
+import {AuthService} from '../../services/auth.service'
 @Component({
     selector: 'app-branch-charts',
     templateUrl: './branch-charts.component.html',
@@ -12,7 +13,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class BranchChartsComponent implements OnInit {
 
-    constructor(private jumpservice: JumpqService) { }
+    constructor(private jumpservice: JumpqService,private loggin:AuthService) { }
     an_request: any;
     an_response: any;
     surcusal: Array<any>;
@@ -48,6 +49,7 @@ export class BranchChartsComponent implements OnInit {
     fecha1: any;
     validarfecha: boolean;
     ngOnInit(): void {
+        console.info(this.loggin.GetMail());
         this.cargarSucursal();
         this.horasCount();
         this.cargaEjecutivos();

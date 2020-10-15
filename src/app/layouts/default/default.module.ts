@@ -14,6 +14,7 @@ import { ProfileComponent } from 'src/app/modules/profile/profile.component';
 import { VirtualcallComponent } from 'src/app/modules/virtualcall/virtualcall.component';
 import { BranchChartsComponent } from 'src/app/modules/branch-charts/branch-charts.component';
 import { SuscripcionComponent } from 'src/app/modules/suscripcion/suscripcion.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -36,7 +37,9 @@ import { SuscripcionComponent } from 'src/app/modules/suscripcion/suscripcion.co
 
     CommonModule,
     RouterModule,
-    SharedModule
+    SharedModule,
+    FormsModule,
+    ReactiveFormsModule
     
   ]
 

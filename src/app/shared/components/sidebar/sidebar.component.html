@@ -15,9 +15,11 @@
 		<div class="sidebar">
 			<!-- Sidebar user (optional) -->
 			<div class="user-panel mt-3 pb-3 mb-3 d-flex">
-				<div class="info">
-					<a href="/" class="d-block">MAPFRE Seguros</a>
+				<div class="info" *ngIf="nameload">
+				<label style="color:white">Hola {{userdata.name}} </label>
+				<a (click)="onClickMe()" class="dropdown-item dropdown-footer text-danger">Cerrar sesión</a> 
 				</div>
+ 
 			</div>
 
 			<!-- Sidebar Menu -->

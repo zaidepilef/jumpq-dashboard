@@ -26,7 +26,7 @@ export class AuthService {
 	}
 
 	SignIn(authData: User) {
-		return this.httpClient.post<any>(`${environment.API_URL}/authenticate/login/`, authData);
+		return this.httpClient.post<any>(`${this.SERVER_URL}/authenticate/login/`, authData);
 		//return this.httpClient.post(`${this.SERVER_URL}/authenticate/login/`, authData);
 	}
 
@@ -37,7 +37,9 @@ export class AuthService {
 	GetToken() {
 		return localStorage.getItem('token');
 	}
-
+	GetMail() {
+		return localStorage.getItem('mail');
+	}
 	Logout(): void {
 		localStorage.removeItem('token');
 		this.router.navigate(['/login']);
@@ -65,12 +67,15 @@ export class AuthService {
 		localStorage.setItem('token', token);
 		var decoded = jwt_decode(token);
 
-		console.log('token token : ',decoded);
+		//console.log('token token : ',decoded);
 		//const usrioa = this.httpClient.post<any>(`${environment.API_URL}/dashboard/userdata/`);
 		//console.log(usrioa):
 		//const payload = jwt.verify(token, "LosPollosHermanos");
 	}
 
+	saveMail(data :any){
+		localStorage.setItem('mail', data);
+	}
 	private HandleError(err): Observable<never> {
 		let errorMessage = 'Adasd asdasd';
 		if (err) {

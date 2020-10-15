@@ -49,7 +49,8 @@ export class LoginComponent implements OnInit {
 				this.a_response = res;
 				console.log("status : ", this.a_response.status);
 				if (this.a_response.status =='OK') {
-					this.auth.SaveToken(this.a_response.jwt);
+					this.auth.SaveToken(this.a_response.jwt.token);
+					this.auth.saveMail(this.a_response.jwt.company);
 					this.router.navigate(['/']);
 				} else {
 					this.Message = this.a_response.message
