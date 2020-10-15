@@ -42,10 +42,9 @@ panelcrearUsuario:boolean;
   constructor(private formBuilder: FormBuilder,private jumpservice: JumpqService,private loggin:AuthService) { }
   
   ngOnInit(): void {
-    this.mailuser=this.loggin.GetMail();
-    this.panelPrincipal=true;
-
-    
+    this.mailuser=this.loggin.GetToken();
+    this.panelPrincipal=true; 
+    this.checkmail(this.mailuser);
     this.registroEForm = this.formBuilder.group(
       {
         name: ['', [Validators.pattern(/^[a-zA-Z ]+$/), Validators.required,Validators.maxLength(32),Validators.minLength(4)]],
@@ -60,16 +59,29 @@ panelcrearUsuario:boolean;
   }
 
   checkmail(data : any){
-
+     
+    this.an_request = {
+      email: this.mailuser
+  
+  };
+  
+  this.jumpservice.getmail().subscribe(
+      res => {
+          this.an_response = res;
+        console.info(this.an_response);
+      }
+  
+      , err => console.error(err)
+  );
   }
   modificarEst(){
   this.panelPrincipal = false;
-  this.modificarEmp = true;
+  this.modificarEstilos = true;
  
   }
   modificarEmpresa(){
-    
-    this.modificarEstilos=true;
+    this.panelPrincipal = false;
+    this.modificarEmp=true;
     
   }
 
@@ -88,10 +100,9 @@ panelcrearUsuario:boolean;
   ModificarUsuario(){
     this.panelPrincipal = false;
   this.an_request = {
-    email: this.mailuser
+    email: 8
 
 };
-
 this.jumpservice.modificarlist(this.an_request).subscribe(
     res => {
         this.an_response = res;
@@ -107,13 +118,14 @@ this.jumpservice.modificarlist(this.an_request).subscribe(
     , err => console.error(err)
 );
 
-
-
   }
+
+
   salir(){
     this.panelPrincipal = true;
     this.modificarEstilos=false;
     this.modificarEmp = false;
     this.panelcrearUsuario = false;
+    this.paneltablaModificarUsuario = false;
   }
 }

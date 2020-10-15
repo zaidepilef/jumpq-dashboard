@@ -13,21 +13,25 @@
 		<!-- Small boxes (Stat box) -->
 		<div class="row" *ngIf="panelPrincipal">
 			<div class="col-12">
+				<br>
 				<label (click)="modificarEmpresa()">
 					<h4>Modificar información de la empresa</h4>
 				</label>
 			</div>
 			<div class="col-12">
-				<label (click)="ModificarEst()">
+				<br>
+				<label (click)="modificarEst()">
 					<h4>Modificar logos y colores</h4>
 				</label>
 			</div>
 			<div class="col-12">
+				<br>
 				<label (click)="CrearUsuario()">
 					<h4>Crear Nuevo Usuario</h4>
 				</label>
 			</div>
 			<div class="col-12">
+				<br>
 				<label (click)="ModificarUsuario()">
 					<h4>Modificar Usuario</h4>
 				</label>
@@ -216,7 +220,7 @@
 				</table>
 			</div>
 			<button class="btn btn-success" (click)="exportExcelCantidaHoras()">Generar Excel</button>
-			<button class="btn btn-info" (click)="cerrar()">volver</button>
+			<button class="btn btn-info" (click)="salir()">Salir</button>
 		   
 		
 		</div>
