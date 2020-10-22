@@ -21,13 +21,9 @@ export class SidebarComponent implements OnInit {
   nameload: boolean;
   
   ngOnInit(): void {
-    this.loaduser();
+    //this.loaduser();
   }
-
-  onClickMe() {
-    console.log('logout');
-    this.auth.Logout()
-  }
+ 
 
   loaduser() {
     this.jumpqService.getUserData().subscribe(

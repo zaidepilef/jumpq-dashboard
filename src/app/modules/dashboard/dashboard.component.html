@@ -1,5 +1,5 @@
 <!-- Content Header (Page header) -->
-<div class="content-header">
+<div class="content-header" *ngIf="panelPrincipal">
 	<div class="container-fluid">
 		<h1>Menu de cuenta y parametrizacion</h1>
 
@@ -32,20 +32,20 @@
 			</div>
 			<div class="col-12">
 				<br>
-				<label (click)="ModificarUsuario()">
+				<label (click)="CargarModificarUsuario()">
 					<h4>Modificar Usuario</h4>
 				</label>
 			</div>
 			<div class="col-12">
 				<br>
-				<label (click)="ModificarUsuario()">
+				<label (click)="Modificarclave()">
 					<h4>Modificar Contraseña</h4>
 				</label>
 			</div>
 		</div>
 		<div class="row" *ngIf="modificarEmp">
 			<div class="col-12">
-				<b>información de la empresa</b><br>
+				<h2><b>información de la empresa</b></h2><br>
 			</div>
 			<div class="col-3">
 				Nombre empresa:
@@ -131,6 +131,7 @@
 		<div *ngIf="panelcrearUsuario">
 			<form [formGroup]="registroEForm" (ngSubmit)="RegistrarUsuario()">
 				<div class="row">
+					<div class="col-12"><h2>Crear Nuevo Usuario</h2></div>
 					<div class="form-group col-4">
 						<label for="name" class="col-form-label">Nombres</label>
 						<input type="text" class="form-control" placeholder="nombres" formControlName="name"
@@ -160,17 +161,17 @@
 					</div>
 					<div class="form-group col-4">
 						<label for="name" class="col-form-label">Identificacion</label>
-						<input type="text" class="form-control" placeholder="rut" formControlName="rut"
+						<input type="text" class="form-control" placeholder="999999999" formControlName="rut"
 							[(ngModel)]="registro.rut">
 						<div *ngIf="rut_feed.invalid && (rut_feed.dirty || rut_feed.touched)"
 							class="alert alert-danger">
-							<div *ngIf="rut_feed.errors.rut" class="rut-feedback">Identificacion requerida</div>
+							<div *ngIf="rut_feed.errors.required" class="rut-feedback">Identificacion requerida</div>
 						</div>
 					</div>
 					<div class="form-group col-4">
 						<label for="name" class="col-form-label">Correo Electronico</label>
 						<input type="text" class="form-control" placeholder="example@gmail.com" formControlName="email"
-							(blur)="checkmail($event)">
+						[(ngModel)]="registro.email">
 						<div *ngIf="email_feed.invalid && (email_feed.dirty || email_feed.touched)"
 							class="alert alert-danger">
 							<div *ngIf="email_feed.errors.required" class="email-feedback">Necesitamos tu email</div>
@@ -184,7 +185,7 @@
 					<div class="form-group col-4">
 						<label for="name" class="col-form-label">Contraseña</label>
 						<input type="password" class="form-control" placeholder="Contraseña" formControlName="password"
-							[(ngModel)]="registro.pwd">
+							[(ngModel)]="registro.pwd" (change)="checkpass()">
 						<div *ngIf="password_feed.invalid && (password_feed.dirty || password_feed.touched)"
 							class="alert alert-danger">
 							<div *ngIf="password_feed.errors.required" class="email-feedback">Ingrese una contraseña
@@ -197,8 +198,8 @@
 					</div>
 					<div class="form-group col-4">
 						<label for="name" class="col-form-label">Reingresar Contraseña</label>
-						<input type="password" class="form-control" placeholder="Contraseña"
-							formControlName="password2">
+						<input type="password" class="form-control" placeholder="Contraseña" formControlName="password2"
+						[(ngModel)]="registro.pwd2" (change)="checkpass()">
 						<div *ngIf="password2_feed.invalid && (password2_feed.dirty || password2_feed.touched)"
 							class="alert alert-danger">
 							<div *ngIf="password2_feed.errors.required" class="email-feedback">Ingrese una contraseña
@@ -209,29 +210,33 @@
 								larga</div>
 						</div>
 					</div>
+					<div *ngIf="badpassword" class="alert alert-danger col-12">verifique que las contraseñas sean inguales</div>
 					<div class="col-4">
-						<label for="tipo" class="col-form-label" >Modalidad turnos</label>
-						<select name="tipo"  class="form-control" (change)="tipo($event)">
+						<label for="tipo" class="col-form-label" >Tipo de cuenta</label>
+						<select name="tipo"  class="form-control" (change)="tipo($event.target.value)">
 						<option value = "0">Seleccionar	</option>
 						<option value="2">Ejecutivo</option>
 						<option value="3">Guardia</option>
 					</select>
 					</div>
+					<div *ngIf="resultado" class="alert alert-success col-12">el usuario fue creado correctamente!</div>
 					<div class="col-12"></div>
 					<div class="col-4">
 						<button type="submit" class="btn btn-primary btn-block"
-							[disabled]="!registroEForm.valid">Registrar</button>
+							[disabled]="!registroEForm.valid">Crear nuevo usuario</button>
 					</div>
 					<div class="col-4">
 						<button type="button" (click)="salir()" class="btn btn-primary btn-block">Salir sin
 							crear</button>
 					</div>
+					
 				</div>
 			</form>
 		</div>
 		<div *ngIf="paneltablaModificarUsuario">
 			<div class="row">
 				<div class="col">
+					<h2>Modificar Usuarios</h2>
 					<div class="card-body table-responsive p-0">
 						<table class="table table-striped table-valign-middle" id="modificarusuario">
 							<thead>
@@ -261,23 +266,20 @@
 							</tbody>
 						</table>
 					</div>
-					<button class="btn btn-success" (click)="exportExcelCantidaHoras()">Generar Excel</button>
 					<button class="btn btn-info" (click)="salir()">Salir</button>
-
-
 				</div>
 			</div>
 		</div>
-
 		
-
 		<div *ngIf="panelModificarUsuario">
 			<form [formGroup]="registroEForm" (ngSubmit)="ModificarUsuario()">
 				<div class="row">
+					<div class="col-12"><h2>Modificar Usuario</h2></div>
 					<div class="form-group col-4">
+						
 						<label for="name" class="col-form-label">Nombres</label>
 						<input type="text" class="form-control" placeholder="nombres" formControlName="name"
-							[(ngModel)]="registro.nombre">
+							[(ngModel)]="Mregistro.nombre">
 						<div *ngIf="name_feed.invalid && (name_feed.dirty || name_feed.touched)"
 							class="alert alert-danger">
 							<div *ngIf="name_feed.errors.required" class="email-feedback">Necesitamos tu nombre</div>
@@ -289,7 +291,7 @@
 					<div class="form-group col-4">
 						<label for="name" class="col-form-label">Apellidos</label>
 						<input type="text" class="form-control" placeholder="Paterno y materno"
-							formControlName="lastname" [(ngModel)]="registro.apellidos">
+							formControlName="lastname" [(ngModel)]="Mregistro.apellidos">
 						<div *ngIf="lastname_feed.invalid && (lastname_feed.dirty || lastname_feed.touched)"
 							class="alert alert-danger">
 							<div *ngIf="lastname_feed.errors.required" class="email-feedback">Necesitamos tus apellidos
@@ -304,7 +306,7 @@
 					<div class="form-group col-4">
 						<label for="name" class="col-form-label">Rut Completo</label>
 						<input type="text" class="form-control" placeholder="rut" formControlName="rut"
-							[(ngModel)]="registro.rut">
+							[(ngModel)]="Mregistro.rut">
 						<div *ngIf="rut_feed.invalid && (rut_feed.dirty || rut_feed.touched)"
 							class="alert alert-danger">
 							<div *ngIf="rut_feed.errors.rut" class="rut-feedback">Ingrese un rut valido</div>
@@ -313,7 +315,7 @@
 					<div class="form-group col-4">
 						<label for="name" class="col-form-label">Correo Electronico</label>
 						<input type="text" class="form-control" placeholder="example@gmail.com" formControlName="email"
-							(blur)="checkmail($event)">
+						[(ngModel)]="Mregistro.email">
 						<div *ngIf="email_feed.invalid && (email_feed.dirty || email_feed.touched)"
 							class="alert alert-danger">
 							<div *ngIf="email_feed.errors.required" class="email-feedback">Necesitamos tu email</div>
@@ -327,7 +329,7 @@
 					<div class="form-group col-4">
 						<label for="name" class="col-form-label">Contraseña</label>
 						<input type="password" class="form-control" placeholder="Contraseña" formControlName="password"
-							[(ngModel)]="registro.pwd">
+							[(ngModel)]="Mregistro.pwd">
 						<div *ngIf="password_feed.invalid && (password_feed.dirty || password_feed.touched)"
 							class="alert alert-danger">
 							<div *ngIf="password_feed.errors.required" class="email-feedback">Ingrese una contraseña
@@ -341,7 +343,7 @@
 					<div class="form-group col-4">
 						<label for="name" class="col-form-label">Reingresar Contraseña</label>
 						<input type="password" class="form-control" placeholder="Contraseña"
-							formControlName="password2">
+							formControlName="password2" [(ngModel)]="Mregistro.pwd2">
 						<div *ngIf="password2_feed.invalid && (password2_feed.dirty || password2_feed.touched)"
 							class="alert alert-danger">
 							<div *ngIf="password2_feed.errors.required" class="email-feedback">Ingrese una contraseña
@@ -352,14 +354,23 @@
 								larga</div>
 						</div>
 					</div>
-
+					<div class="col-4">
+						<label for="tipo" class="col-form-label" >Tipo de cuenta</label>
+						<select name="tipo"  class="form-control" (change)="tipo($event.target.value)">
+						<option value = "0" >Seleccionar	</option>
+						<option value="2" [selected]="2===Mregistro.tipo">Ejecutivo</option>
+						<option value="3"[selected]="3===Mregistro.tipo">Guardia</option>
+					</select>
+					</div>
+					<div *ngIf="resultado2" class="alert alert-success col-12">el usuario se modifico correctamente</div>
+					<div class="col-12"></div>
 					<div class="col-4">
 						<button type="submit" class="btn btn-primary btn-block"
-							[disabled]="!registroEForm.valid">Registrar</button>
+							[disabled]="!registroEForm.valid">Modificar Usuario</button>
 					</div>
 					<div class="col-4">
 						<button type="button" (click)="salir()" class="btn btn-primary btn-block">Salir sin
-							crear</button>
+							modificar</button>
 					</div>
 				</div>
 			</form>

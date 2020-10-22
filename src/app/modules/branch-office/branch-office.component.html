@@ -45,20 +45,21 @@
 				<div class="form-group col-4">
 					<label for="nombre" class="col-form-label">Direccion</label>
 					<input type="text" class="form-control" placeholder="Edificio 340 xxxx" formControlName="direccion"
-					[(ngModel)]="registro.direccion">
+						[(ngModel)]="registro.direccion">
 
 				</div>
 				<div class="form-group col-4">
 					<label for="name" class="col-form-label">Direccion auxiliar</label>
-					<input type="text" class="form-control" placeholder="Calle xx" formControlName="direccion2" [(ngModel)]="registro.direccion2">
-			 
+					<input type="text" class="form-control" placeholder="Calle xx" formControlName="direccion2"
+						[(ngModel)]="registro.direccion2">
+
 				</div>
 
 				<div class="form-group col-4">
 					<label for="name" class="col-form-label">Google maps</label>
 					<input type="text" class="form-control" placeholder="" formControlName="urlmap"
 						[(ngModel)]="registro.urlmap">
-					 
+
 				</div>
 				<div class="col-8"></div>
 				<div class="form-group col-sm-12 col-md-4">
@@ -81,7 +82,7 @@
 					</select>
 				</div>
 				<div class="form-group col-sm-12 col-md-4">
-					<label for="comunas" class="col-form-label">Comuna</label>
+					<label for="comunas" class="col-form-label">Parroquia</label>
 					<select name="comunas" class="form-control" (change)="BuscarSucursales($event)">
 						<option value="0">Seleccionar Comunas</option>
 						<option *ngFor="let comuna of Comunas.comuna " value="{{comuna.comuna_id}}">
@@ -104,70 +105,118 @@
 	</div>
 
 	<div *ngIf="panelcrearsucursalE">
-		<form [formGroup]="registroEForm" (ngSubmit)="RegistrarUsuario()">
+		<form [formGroup]="registroEForm" (ngSubmit)="crearnuevaSucursal()">
 			<div class="row">
 				<div class="form-group col-4">
 					<label for="nombre" class="col-form-label">Nombre sucursal</label>
 					<input type="text" class="form-control" placeholder="Oficinas xxxx" formControlName="nombre"
 						[(ngModel)]="registro.nombre">
+					<div *ngIf="nombre_feed.invalid && (nombre_feed.dirty || nombre_feed.touched)"
+						class="alert alert-danger">
+						<div *ngIf="nombre_feed.errors.required" class="email-feedback">Ingrese un nombre para la
+							sucursal
+						</div>
+						<div *ngIf="nombre_feed.errors?.minlength" class="email-feedback">Ingrese un nombre mas largo
+						</div>
+						<div *ngIf="nombre_feed.errors?.maxlength" class="email-feedback">Ingrese un nombre mas corto
+						</div>
+					</div>
 				</div>
 
 
 				<div class="form-group col-4">
 					<label for="nombre" class="col-form-label">Direccion</label>
 					<input type="text" class="form-control" placeholder="Edificio 340 xxxx" formControlName="direccion"
-					[(ngModel)]="registro.direccion">
-
+						[(ngModel)]="registro.direccion">
+					<div *ngIf="direccion_feed.invalid && (direccion_feed.dirty || direccion_feed.touched)"
+						class="alert alert-danger">
+						<div *ngIf="direccion_feed.errors.required" class="email-feedback">Ingrese una direccion
+						</div>
+						<div *ngIf="direccion_feed.errors?.minlength" class="email-feedback">Ingrese una direccion mas
+							larga
+						</div>
+						<div *ngIf="direccion_feed.errors?.maxlength" class="email-feedback">Ingrese una direccion mas
+							corta
+						</div>
+					</div>
 				</div>
 				<div class="form-group col-4">
 					<label for="name" class="col-form-label">Direccion auxiliar</label>
-					<input type="text" class="form-control" placeholder="Calle xx" formControlName="direccion2" [(ngModel)]="registro.direccion2">
-			 
+					<input type="text" class="form-control" placeholder="Calle xx" formControlName="direccion2"
+						[(ngModel)]="registro.direccion2">
+
+					<div *ngIf="direccion2_feed.invalid && (direccion2_feed.dirty || direccion2_feed.touched)"
+						class="alert alert-danger">
+						<div *ngIf="direccion2_feed.errors.required" class="email-feedback">Ingrese una direccion
+						</div>
+						<div *ngIf="direccion2_feed.errors?.minlength" class="email-feedback">Ingrese una direccion mas
+							larga
+						</div>
+						<div *ngIf="direccion2_feed.errors?.maxlength" class="email-feedback">Ingrese una direccion mas
+							corta
+						</div>
+					</div>
+
 				</div>
 
 				<div class="form-group col-4">
 					<label for="name" class="col-form-label">Google maps</label>
 					<input type="text" class="form-control" placeholder="" formControlName="urlmap"
 						[(ngModel)]="registro.urlmap">
-					 
+						
+					<div *ngIf="urlmap_feed.invalid && (urlmap_feed.dirty || urlmap_feed.touched)"
+					class="alert alert-danger">
+					<div *ngIf="urlmap_feed.errors.required" class="email-feedback">Ingrese el link del mapa
+					</div>
+					<div *ngIf="urlmap_feed.errors?.minlength" class="email-feedback">Ingrese una direccion mas
+						larga
+					</div>
+					<div *ngIf="urlmap_feed.errors?.maxlength" class="email-feedback">Ingrese una direccion mas
+						corta
+					</div>
+				</div>
+
 				</div>
 				<div class="col-8"></div>
 				<div class="form-group col-sm-12 col-md-4">
-					<label for="provincia" class="col-form-label" >Provincia</label>
-					<select name="provincia"  class="form-control" (change)="BuscarProvincia($event)">
-					<option value = "0">Seleccionar la provincia</option>
-					<option *ngFor="let prov of regiones.provincia" value="{{prov.COD_ESTADO}}">{{prov.NOM_ESTADO}}</option>
+					<label for="provincia" class="col-form-label">Provincia</label>
+					<select name="provincia" class="form-control" (change)="cargarCiudad($event.target.value)">
+						<option value="0">Seleccionar la provincia</option>
+						<option *ngFor="let prov of regiones.provincia" value="{{prov.COD_ESTADO}}">{{prov.NOM_ESTADO}}
+						</option>
 					</select>
 				</div>
-				<div class="form-group col-sm-12 col-md-4" >
-               
-					<label for="provincia" class="col-form-label" >Ciudad</label>
-					<select name="provincia" class="form-control" (change)="cargarComuna($event)">
-					<option value="0">Seleccionar la ciudad</option>
-				
-					<option *ngFor="let ciudad of provincia.ciudad" value="{{ciudad.COD_PROV}}">{{ciudad.NOM_PROV}}</option>
-				
-				</select>
+				<div class="form-group col-sm-12 col-md-4">
+
+					<label for="provincia" class="col-form-label">Ciudad</label>
+					<select name="provincia" class="form-control" (change)="cargarParroquia($event.target.value)">
+						<option value="0">Seleccionar la ciudad</option>
+
+						<option *ngFor="let ciudad of provincia.ciudad" value="{{ciudad.COD_PROV}}">{{ciudad.NOM_PROV}}
+						</option>
+
+					</select>
 				</div>
 
 				<div class="form-group col-sm-12 col-md-4">
-					<label for="comunas" class="col-form-label" >Parroquia</label>
-					<select name="comunas" class="form-control" (change)="BuscarSucursales($event)">
-					<option value="0">Seleccionar la parroquia</option>
-					<option *ngFor="let parroquia of Comunas.parroquia " value="{{parroquia.COD_LOCALIDAD}}">{{parroquia.NOM_LOCALIDAD}}</option>
-					
-				</select>
+					<label for="comunas" class="col-form-label">Parroquia</label>
+					<select name="comunas" class="form-control" (change)="guardarParroquia($event.target.value)">
+						<option value="0">Seleccionar la parroquia</option>
+						<option *ngFor="let parroquia of Comunas.parroquia " value="{{parroquia.COD_LOCALIDAD}}">
+							{{parroquia.NOM_LOCALIDAD}}</option>
+
+					</select>
 				</div>
-			 
-				<div class="col-12"></div>
+				
+				<div *ngIf="parroquiaerr" class="col-12 alert alert-danger">Seleccione una parroquia para continuar</div>
+				<div *ngIf="sucursalresult" class="col-12 alert alert-success">Se ha creado la sucursal {{surc_name}} Correctamente!</div>
 
 				<div class="col-4">
 					<button type="submit" class="btn btn-primary btn-block"
 						[disabled]="!registroEForm.valid">Registrar</button>
 				</div>
 				<div class="col-4">
-					<button type="button" (click)="salir()" class="btn btn-primary btn-block">Salir sin
-						crear</button>
+					<button type="button" (click)="salir()" class="btn btn-primary btn-block">Salir</button>
 				</div>
 			</div>
 		</form>
@@ -184,8 +233,6 @@
 								<th>nombre</th>
 								<th>direccion</th>
 								<th>direccion auxiliar</th>
-								<th>comuna</th>
-
 								<th>Opciones</th>
 							</tr>
 						</thead>
@@ -194,8 +241,6 @@
 								<td>{{items.nombre}}</td>
 								<td>{{items.direccion}}</td>
 								<td>{{items.direccion2}}</td>
-								<td>{{items.comuna}}</td>
- 
 								<td> <button class="btn btn-info" (click)="modificarUserform(items)"><i
 											class="fas fa-search"></i></button></td>
 
@@ -249,7 +294,7 @@
 								<td>{{items.direccion}}</td>
 								<td>{{items.direccion2}}</td>
 								<td>{{items.comuna}}</td>
- 
+
 								<td> <button class="btn btn-info" (click)="modificarUserform(items)"><i
 											class="fas fa-search"></i></button></td>
 
