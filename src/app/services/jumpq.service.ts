@@ -84,4 +84,35 @@ export class JumpqService {
 	public getBusinnes() {
 		return this.httpClient.get(`${environment.API_URL}/business/`);
 	  }
+
+
+
+
+	//para crear y modificar usuario
+	  public postNewUser(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/user/newUser`,data);
+	  }
+	  	
+	  public postmodificarUser(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/user/modificarUser`,data);
+	  }
+
+
+	  //cargar provincia 
+	  public cargarProvincia(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/regions/cargardashbProvincia`,data);
+	  }
+	  public cargarciudad(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/provincia/cargardashbciudades`,data);
+	  }
+	  public cargarparroquia(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/comunas/cargardashbparroquia`,data);
+	  }
+
+
+	  //crear sucursal
+	  public crearSucursal(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/branchs/crearSucursal`,data);
+	  }
+
 }

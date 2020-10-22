@@ -15,7 +15,7 @@ export class VirtualcallComponent implements OnInit {
   an_response:any;
   an_request:any;
   ejecutivos:Array<any>=[];
-  ejecutivoSeleccionado:any;
+  ejecutivoSeleccionado:any = "";
   constructor(private formBuilder: FormBuilder,private jumpservice: JumpqService,private loggin:AuthService) { }
 
   ngOnInit(): void {
@@ -53,7 +53,9 @@ export class VirtualcallComponent implements OnInit {
     ConfigurarAgendamiento(data : any){
       console.info(data);
       this.ejecutivoSeleccionado = data.name;
+      console.info(this.ejecutivoSeleccionado);
       this.panelconfE = true;
+      this.PanelEjecutivo = false;
       console.info(this.ejecutivoSeleccionado);
     }
   
