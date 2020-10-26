@@ -1,21 +1,21 @@
 <section class="content-header" *ngIf="panelPrincipal">
 	<h1>Agendamiento virtual </h1>
 </section>
- 
+
 
 <div class="container-fluid">
 
 	<div class="row" *ngIf="panelPrincipal">
 		<div class="col-12">
 			<br>
-			<label (click)="modificarEmpresa()">
+			<label (click)="configurarMedio()">
 				<h4>Configurar medios de contacto</h4>
 			</label>
 		</div>
 		<div class="col-12">
 			<br>
 			<label (click)="configurarEjecutivo()">
-				<h4>Agregar nuevo ejecutivo</h4>
+				<h4>Configurar ejecutivos</h4>
 			</label>
 		</div>
 		<div class="col-12">
@@ -24,15 +24,86 @@
 				<h4>Modificar Ejecutivo</h4>
 			</label>
 		</div>
- 
+
 	</div>
 
 
+	<div *ngIf="PanelMedio">
 
+		<div class="row">
+			<div class="col">
+				<h2>Medios de contacto</h2>
+				<div class="card-body table-responsive p-0">
+					<table class="table table-striped table-valign-middle" id="modificarusuario">
+						<thead>
+							<tr>
+								<th>nombre</th>
+								<th>Opciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let items of medios">
+								<td>{{items.meet_name}}</td>
+								<td> <button class="btn btn-info" (click)="ModificarMedio(items)"><i
+											class="fas fa-search"></i></button></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<button class="btn btn-info" (click)="salir()">Salir</button>
+			</div>
+		</div>
 
+	</div>
+
+	<div *ngIf="PanelMedioModificar">
+		<form [formGroup]="registroEForm" (ngSubmit)="generarMedio()">
+		<div class="row">
+			<div class="col-12">
+				<h2>Modificar Medio de contacto</h2>
+			</div>
+			<div class="form-group col-sm-12 col-md-4">
+
+				<label for="name" class="col-form-label">Nombre</label>
+				<input type="text" class="form-control" placeholder="nombres" formControlName="nombre"
+					[(ngModel)]="medioscontacto.nombre">
+				<div *ngIf="name_feed.invalid && (name_feed.dirty || name_feed.touched)" class="alert alert-danger">
+					<div *ngIf="name_feed.errors.required" class="email-feedback">Necesitamos tu nombre</div>
+					<div *ngIf="name_feed.errors.pattern" class="email-feedback">Un nombre extraño</div>
+					<div *ngIf="name_feed.errors?.minlength" class="email-feedback">Nombre demasiado corto</div>
+					<div *ngIf="name_feed.errors?.maxlength" class="email-feedback">Nombre demasiado largo</div>
+				</div>
+			</div>
+
+			<div class="form-group col-sm-12 col-md-4">
+				<label for="tipo" class="col-form-label">Tipo de cuenta</label>
+				<select name="tipo" class="form-control" (change)="tipo($event.target.value)">
+					<option value="0">Seleccionar</option>
+					<option value="2" [selected]="2==medioscontacto.estado">Activada</option>
+					<option value="3" [selected]="1==medioscontacto.estado">Desactivada</option>
+				</select>
+
+			</div>
+			<div *ngIf="resultadoMedio" class="alert alert-success col-12">Se ha modificado el medio de contacto correctamente!</div>
+			<div class="col-12"></div>
+			<div class="form-group col-sm-12 col-md-4">
+				<button type="submit" class="btn btn-primary btn-block"
+						[disabled]="!registroEForm.valid">Registrar</button>
+
+			</div>
+
+			<div class="form-group col-sm-12 col-md-4">
+				<button class="form-control btn btn-info" (click)="salir()">Salir</button>
+
+			</div>
+		</div>
+		</form>
+	</div>
 	<div *ngIf="PanelEjecutivo">
 		<div class="row">
-			<div class="col-12"><h2>Listado de ejecutivos</h2></div>
+			<div class="col-12">
+				<h2>Configurar Ejecutivos</h2>
+			</div>
 			<div class="col">
 				<div class="card-body table-responsive p-0">
 					<table class="table table-striped table-valign-middle" id="modificarusuario">
@@ -41,8 +112,8 @@
 								<th>Nombre</th>
 								<th>Apellido</th>
 								<th>Identificacion</th>
-								<th>tipo de usuario</th> 
-								<th>correo electronico</th> 
+								<th>tipo de usuario</th>
+								<th>correo electronico</th>
 								<th>Opciones</th>
 							</tr>
 						</thead>
@@ -53,7 +124,7 @@
 								<td>{{items.identification_card}}</td>
 								<td>{{items.type_user}}</td>
 								<td>{{items.email}}</td>
- 
+
 								<td> <button class="btn btn-info" (click)="ConfigurarAgendamiento(items)"><i
 											class="fas fa-search"></i></button></td>
 
@@ -64,7 +135,7 @@
 				</div>
 				<button class="btn btn-success" (click)="exportExcelCantidaHoras()">Generar Excel</button>
 				<button class="btn btn-info" (click)="salir()">Salir</button>
- 
+
 			</div>
 		</div>
 	</div>
@@ -73,83 +144,93 @@
 	<div *ngIf="panelconfE">
 		<form [formGroup]="registroEForm" (ngSubmit)="RegistrarUsuario()">
 			<div class="row">
-				<div class="col-12"><h2>Agregar un horario de agendamiento virtual</h2><br></div>
-				 <div class="col-12">Nombre del ejecutivo {{this.ejecutivoSeleccionado}}</div>
-				 
+				<div class="col-12">
+					<h2>Agregar un horario de agendamiento virtual</h2><br>
+				</div>
+				<div class="col-12">Nombre del ejecutivo {{this.ejecutivoSeleccionado}}</div>
+
 				<div class="form-group col-sm-12 col-md-4">
 					<br>
-				 
-					<label for="provincia" class="col-form-label" >Modalidad turnos</label>
-					<select name="provincia"  class="form-control" (change)="BuscarProvincia($event)">
-					<option value = "0">Seleccionar	</option>
-					<option *ngFor="let prov of regiones.provincia" value="{{prov.COD_ESTADO}}">{{prov.NOM_ESTADO}}</option>
+
+					<label for="provincia" class="col-form-label">Modalidad turnos</label>
+					<select name="provincia" class="form-control" (change)="BuscarProvincia($event)">
+						<option value="0">Seleccionar </option>
+						<option *ngFor="let prov of regiones.provincia" value="{{prov.COD_ESTADO}}">
+							{{prov.NOM_ESTADO}}
+						</option>
 					</select>
 				</div>
-				<div class="form-group col-sm-12 col-md-4" >
+				<div class="form-group col-sm-12 col-md-4">
 					<br>
-					<label for="provincia" class="col-form-label" >Hora de atención en la mañana inicio.</label>
+					<label for="provincia" class="col-form-label">Hora de atención en la mañana inicio.</label>
 					<select name="provincia" class="form-control" (change)="cargarComuna($event)">
-					<option value="0">Seleccionar</option>
-				
-					<option *ngFor="let ciudad of provincia.ciudad" value="{{ciudad.COD_PROV}}">{{ciudad.NOM_PROV}}</option>
-				
-				</select>
+						<option value="0">Seleccionar</option>
+
+						<option *ngFor="let ciudad of provincia.ciudad" value="{{ciudad.COD_PROV}}">
+							{{ciudad.NOM_PROV}}
+						</option>
+
+					</select>
 				</div>
 
 				<div class="form-group col-sm-12 col-md-4">
 					<br>
-					<label for="comunas" class="col-form-label" >Hora de atención en la mañana termino</label>
+					<label for="comunas" class="col-form-label">Hora de atención en la mañana termino</label>
 					<select name="comunas" class="form-control" (change)="BuscarSucursales($event)">
-					<option value="0">Seleccionar</option>
-					<option *ngFor="let parroquia of Comunas.parroquia " value="{{parroquia.COD_LOCALIDAD}}">{{parroquia.NOM_LOCALIDAD}}</option>
-					
-				</select>
+						<option value="0">Seleccionar</option>
+						<option *ngFor="let parroquia of Comunas.parroquia " value="{{parroquia.COD_LOCALIDAD}}">
+							{{parroquia.NOM_LOCALIDAD}}</option>
+
+					</select>
 				</div>
-				<div class="form-group col-sm-12 col-md-4" >
+				<div class="form-group col-sm-12 col-md-4">
 					<br>
-					<label for="provincia" class="col-form-label" >Hora de atención en la tarde inicio.</label>
+					<label for="provincia" class="col-form-label">Hora de atención en la tarde inicio.</label>
 					<select name="provincia" class="form-control" (change)="cargarComuna($event)">
-					<option value="0">Seleccionar</option>
-				
-					<option *ngFor="let ciudad of provincia.ciudad" value="{{ciudad.COD_PROV}}">{{ciudad.NOM_PROV}}</option>
-				
-				</select>
+						<option value="0">Seleccionar</option>
+
+						<option *ngFor="let ciudad of provincia.ciudad" value="{{ciudad.COD_PROV}}">
+							{{ciudad.NOM_PROV}}
+						</option>
+
+					</select>
 				</div>
 
 				<div class="form-group col-sm-12 col-md-4">
 					<br>
-					<label for="comunas" class="col-form-label" >Hora de atención en la tarde termino</label>
+					<label for="comunas" class="col-form-label">Hora de atención en la tarde termino</label>
 					<select name="comunas" class="form-control" (change)="BuscarSucursales($event)">
-					<option value="0">Seleccionar</option>
-					<option *ngFor="let parroquia of Comunas.parroquia " value="{{parroquia.COD_LOCALIDAD}}">{{parroquia.NOM_LOCALIDAD}}</option>
-					
-				</select>
+						<option value="0">Seleccionar</option>
+						<option *ngFor="let parroquia of Comunas.parroquia " value="{{parroquia.COD_LOCALIDAD}}">
+							{{parroquia.NOM_LOCALIDAD}}</option>
+
+					</select>
 				</div>
 				<div class="col-4"></div>
- 
+
 				<div class="col-4">
-					<label for="comunas" class="col-form-label" >Cantidad de turnos en la misma hora</label>
-				
+					<label for="comunas" class="col-form-label">Cantidad de turnos en la misma hora</label>
+
 					<input type="text" class="form-control">
 					<br>
 				</div>
 				<div class="col-12">
-					<label for="comunas" class="col-form-label" >Dias de trabajo</label><br><br>
-				
+					<label for="comunas" class="col-form-label">Dias de trabajo</label><br><br>
+
 					<input type="checkbox" class="col-form-label" id="dias1" name="dias1" value="0">
 					lunes
 					<input type="checkbox" id="dias2" name="dias2" value="1">
-					 martes
+					martes
 					<input type="checkbox" id="dias3" name="dias3" value="2">
-					 miercoles
+					miercoles
 					<input type="checkbox" id="dias4" name="dias4" value="3">
-					 jueves
+					jueves
 					<input type="checkbox" id="dias5" name="dias5" value="4">
-					 viernes
+					viernes
 					<input type="checkbox" id="dias6" name="dias6" value="5">
-					 sabado
+					sabado
 					<input type="checkbox" id="dias7" name="dias7" value="6">
-					 domingo
+					domingo
 				</div>
 
 				<div class="col-12"></div>
@@ -165,21 +246,6 @@
 			</div>
 		</form>
 	</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
