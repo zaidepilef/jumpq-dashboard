@@ -11,7 +11,7 @@ export class SidebarComponent implements OnInit {
 
   constructor(private auth: AuthService, private jumpqService: JumpqService) { }
 
-  User: any = this.auth.GetMail();
+  User: any = this.auth.GetToken();
   an_request: any;
   an_response: any;
   userdata: any = {
@@ -21,12 +21,15 @@ export class SidebarComponent implements OnInit {
   nameload: boolean;
   
   ngOnInit(): void {
-    //this.loaduser();
+   this.loaduser();
   }
  
 
   loaduser() {
-    this.jumpqService.getUserData().subscribe(
+    var usersend = {
+      data : this.User
+    }
+    this.jumpqService.getUserData(usersend).subscribe(
       res => {
         console.log("Contiene el usuario", res);
       }, err => console.error(err)

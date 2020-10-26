@@ -11,8 +11,8 @@ export class JumpqService {
 
 	constructor(private httpClient: HttpClient) { }
 
-	public getUserData() {
-		return this.httpClient.get(`${environment.API_URL}/dashboard/userdata/`);
+	public getUserData(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/dashboard/tempdata/`, data);
 	}
 
 	public getSucursal(id: any) {
@@ -70,7 +70,7 @@ export class JumpqService {
 
 
 	public getsucursalchile(data :any) {
-		return this.httpClient.post(`${environment.API_URL}/branchs/sucursalChile/`,data);
+		return this.httpClient.post(`${environment.API_URL}/branchs/sucursalChile`,data);
 	}
 
 	public getsucursalecuador(data :any) {
@@ -110,9 +110,67 @@ export class JumpqService {
 	  }
 
 
+	  public cargarRegion(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/regions/cargardashbregion`,data);
+	  }
+	  public cargarProvinciaC(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/provincia/cargardashbciudades`,data);
+	  }
+	  public cargarcomuna(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/comunas/cargardashbparroquia`,data);
+	  }
+
+
 	  //crear sucursal
 	  public crearSucursal(data : any) {
 		return this.httpClient.post(`${environment.API_URL}/branchs/crearSucursal`,data);
 	  }
 
+	  public modificarSucursal(data : any){
+		//return this.httpClient.post(`${environment.API_URL_LOCAL}/branchs/crearSucursal`,data);
+	  }
+
+
+	  //modificar sucursal
+	  public Buscarprovincia(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/regions/cargarMProvincia`,data);
+	  }
+
+	  	  //modificar sucursal
+	  public formatohora(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/formatohora`,data);
+	  }
+
+	  public Horario(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/horario`,data);
+	  }
+	  public cargarHorario(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/horariocargar`,data);
+	  }
+
+
+	  //sucursales
+	  public buscarConf(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/buscarConf`,data);
+	  }
+
+	  public ActualizarHorario(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/actualizarHorario`,data);
+	  }
+	  
+	  public crearHorario(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/crearHorarioSucursal`,data);
+	  }
+
+
+
+	  //medio de contacto
+
+	  	  
+	  public medios(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/medios`,data);
+	  }
+	  public modificarMedio(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/mediomodificar`,data);
+	  }
 }

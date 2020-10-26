@@ -72,7 +72,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.mailuser = this.loggin.GetToken();
     this.panelPrincipal = true;
-    this.checkmail(this.mailuser);
+    //this.checkmail(this.mailuser);
     this.registroEForm = this.formBuilder.group(
       {
         name: ['', [Validators.pattern(/^[a-zA-Z ]+$/), Validators.required, Validators.maxLength(32), Validators.minLength(4)]],
@@ -85,7 +85,7 @@ export class DashboardComponent implements OnInit {
     )
 
   }
-
+/*
   checkmail(data: any) {
 
     this.an_request = {
@@ -101,7 +101,7 @@ export class DashboardComponent implements OnInit {
 
       , err => console.error(err)
     );
-  }
+  }*/
 
   modificarEst() {
     this.panelPrincipal = false;
