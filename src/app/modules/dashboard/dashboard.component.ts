@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ɵConsole } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms'
 import { AuthService } from '../../services/auth.service'
 import { JumpqService } from '../../services/jumpq.service'
@@ -14,7 +14,7 @@ export class DashboardComponent implements OnInit {
   newemail: boolean;
   panelModificarUsuario: boolean;
   paneltablaModificarUsuario: boolean
-  ModificarContraseña: boolean;
+  modificarcontra: boolean;
   panelcrearUsuario: boolean;
   registro: any = {
     nombre: "",
@@ -47,10 +47,29 @@ export class DashboardComponent implements OnInit {
     registroEForm: {}
   }
   resultado: boolean;
-  
+
+  empresa = {
+    name:"",
+    razon:"",
+    codigo:"",
+    descripcion:"",
+    rubro:0,
+    cantidad:0
+  }
   resultado2: boolean;
   registroEForm: FormGroup;
+  registroCForm: FormGroup;
   badpassword: boolean;
+  newcompany: boolean;
+  user:any ={
+    name:"",
+    company:""
+  };
+  ResultadoModificar:boolean
+  claveForm: FormGroup;
+  passworderror: boolean;
+  passwordolderror: boolean;
+  passwordsucces: boolean;
   get name_feed() { return this.registroEForm.get('name'); }
   get lastname_feed() { return this.registroEForm.get('lastname'); }
   get rut_feed() { return this.registroEForm.get('rut'); }
@@ -58,19 +77,34 @@ export class DashboardComponent implements OnInit {
   get password_feed() { return this.registroEForm.get('password'); }
   get password2_feed() { return this.registroEForm.get('password2'); }
 
-  get nameEmpresa_feed() { return this.registroEForm.get('nameEmpresa'); }
-  get rutEmpresa_feed() { return this.registroEForm.get('rutEmpresa'); }
-  get razonSocial_feed() { return this.registroEForm.get('razonSocial'); }
-  get descripcion_feed() { return this.registroEForm.get('descripcion'); }
+
+  get nameEmpresa_feed() { return this.registroCForm.get('nameEmpresa'); }
+  get rutEmpresa_feed() { return this.registroCForm.get('rutEmpresa'); }
+  get razonSocial_feed() { return this.registroCForm.get('razonSocial'); }
+  get descripcion_feed() { return this.registroCForm.get('descripcion'); }
+  
+  get oldpass_feed() { return this.claveForm.get('oldpass'); }
+  get newpass_feed() { return this.claveForm.get('newpass'); }
+  get newpass2_feed() { return this.claveForm.get('newpass2'); }
+  
+  
   mailuser: any;
   an_request: any;
   an_response: any;
   Modificarlist: Array<any> = [{}]
   areatrabajo: any;
+  messageRubro:boolean;
+  messageCantidad:boolean;
+  
+  password:any ={
+    oldpass:"",
+    new:"",
+    new2:""
+  }
   constructor(private formBuilder: FormBuilder, private jumpservice: JumpqService, private loggin: AuthService) { }
 
   ngOnInit(): void {
-    this.mailuser = this.loggin.GetToken();
+    this.loaduser();
     this.panelPrincipal = true;
     //this.checkmail(this.mailuser);
     this.registroEForm = this.formBuilder.group(
@@ -82,8 +116,50 @@ export class DashboardComponent implements OnInit {
         password: ['', [Validators.required, Validators.maxLength(32), Validators.minLength(8)]],
         password2: ['', [Validators.required, Validators.maxLength(32), Validators.minLength(8)]]
       }
-    )
+    );
 
+    this.registroCForm = this.formBuilder.group(
+      {
+        nameEmpresa: ['', [Validators.required, Validators.maxLength(32), Validators.minLength(4)]],
+        rutEmpresa: ['', [Validators.required, Validators.maxLength(32), Validators.minLength(4)]],
+        razonSocial: ['', [Validators.required, Validators.maxLength(32), Validators.minLength(4)]],
+        descripcion: ['', [Validators.maxLength(200), Validators.minLength(4)]]
+      }
+    );
+
+    
+    this.claveForm = this.formBuilder.group(
+      {
+        oldpass: ['', [Validators.required, Validators.maxLength(32), Validators.minLength(4)]],
+        newpass: ['', [Validators.required, Validators.maxLength(32), Validators.minLength(4)]],
+        newpass2: ['', [Validators.required, Validators.maxLength(32), Validators.minLength(4)]],
+        }
+    );
+
+  }
+
+  loaduser() {
+    var usersend = {
+      data : this.loggin.GetToken()
+    }
+    this.jumpservice.getUserData(usersend).subscribe(
+      res => {
+        this.an_response = res;
+        this.user.company = this.an_response.user.company; 
+        this.user.name = this.an_response.user.email;
+      
+        console.log("Contiene el usuario", this.user);
+      }, err => console.error(err)
+    );
+  }
+  checkpassword(){
+
+    if(this.password.new != "" && this.password.new2 !=""){
+      if(this.password.new == this.password.new2){
+        this.passworderror = false;
+      }else{
+        this.passworderror = true;
+      }   }
   }
 /*
   checkmail(data: any) {
@@ -111,10 +187,43 @@ export class DashboardComponent implements OnInit {
   modificarEmpresa() {
     this.panelPrincipal = false;
     this.modificarEmp = true;
-    this.cargardroplist();
+    this.cargardatosEmpresa();
   }
-  ModificarContraseñaUsuario() {
-    this.ModificarContraseña = true;
+
+  ModificarEmpresaForm(){
+    this.ResultadoModificar = false;
+  if(this.newcompany == false && this.empresa.rubro >= 1 && this.empresa.cantidad >= 1){
+    
+      this.an_request = {
+        companyname:this.empresa.name,
+        companyrut:this.empresa.codigo,
+        companyRsocial:this.empresa.razon,
+        companydescription:this.empresa.descripcion,
+        companytype:this.empresa.rubro,
+        companyEnumber:this.empresa.cantidad,
+        id:this.user.company
+    };
+    this.jumpservice.modificarcompañia(this.an_request).subscribe(
+      res => {
+        this.an_response = res;
+        console.info(this.an_response);
+        if(this.an_response.status == "OK"){
+          this.ResultadoModificar=true;
+        }
+      }
+
+      , err => console.error(err)
+    );
+
+
+
+  }
+
+  }
+
+  ModificarContrasenaUsuario() {
+    console.info("entro aca en el pass");
+    this.modificarcontra = true;
     this.panelPrincipal = false;
   }
   modificarUserform(data: any) {
@@ -159,6 +268,25 @@ export class DashboardComponent implements OnInit {
 
     }
   }
+  guardarRubro(event : any){
+    console.info("entro y tiene " ,event);
+    if(event >=1){
+      this.messageRubro=false;
+    }else{
+      this.messageRubro= true;
+    }
+    this.empresa.rubro = event;
+  }
+
+  guardarEmpleados(event : any){
+    if(event >=1){
+      this.messageCantidad=false;
+    }else{
+      this.messageCantidad= true;
+    }
+    this.empresa.cantidad = event; 
+  }
+
   RegistrarUsuario() {
 
     console.info(this.registro);
@@ -197,6 +325,34 @@ export class DashboardComponent implements OnInit {
   Modificarclave() {
 
   }
+  ModificarpasswordForm(){
+    this.an_request = {
+    email: this.user.name,
+    oldpass : this.password.oldpass,
+    newpass : this.password.new
+    }
+    
+    if(this.passworderror == false){
+      console.info("todo ok");
+      this.jumpservice.modificarpassword(this.an_request).subscribe(
+        res => {
+          this.an_response = res;
+          console.info(res);
+          if (this.an_response.status == "OK") {
+            this.passwordolderror = false;
+            this.passwordsucces = true;
+          }else{
+            this.passwordolderror = true;
+            this.passwordsucces= false;
+          }
+        },
+        err => console.warn('err : ', err)
+
+      );
+
+    }
+
+  }
 
   CargarModificarUsuario() {
     this.panelPrincipal = false;
@@ -222,6 +378,35 @@ export class DashboardComponent implements OnInit {
   }
 
 
+  cargardatosEmpresa(){
+    this.an_request={
+      id:8
+    };
+    this.jumpservice.cargarcompañia(this.an_request).subscribe(
+      res => {
+        this.an_response = res;
+        console.info("Contiene la empresa", this.an_response);
+        if(this.an_response.status == "OK"){
+          this.newcompany = false;
+          this.empresa.name = this.an_response.companies.company_name;
+          this.empresa.codigo = this.an_response.companies.company_code;
+          this.empresa.razon = this.an_response.companies.company_business_name;
+          this.empresa.descripcion = this.an_response.companies.company_description;
+          this.empresa.rubro = this.an_response.companies.business_item_id;
+          this.empresa.cantidad = this.an_response.companies.company_cant_emp;
+          this.cargardroplist();
+        }else{
+          this.newcompany = true;
+          this.cargardroplist();
+        }
+
+      }
+
+      , err => console.error(err)
+    );
+
+
+  }
   cargardroplist() {
     this.jumpservice.getBusinnes().subscribe(
       res => {
@@ -274,7 +459,7 @@ export class DashboardComponent implements OnInit {
     this.modificarEmp = false;
     this.panelcrearUsuario = false;
     this.paneltablaModificarUsuario = false;
-    this.ModificarContraseña = false;
+    this.modificarcontra = false;
     this.panelModificarUsuario = false;
   }
 }

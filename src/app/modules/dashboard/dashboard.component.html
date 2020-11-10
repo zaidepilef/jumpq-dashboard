@@ -38,61 +38,214 @@
 			</div>
 			<div class="col-12">
 				<br>
-				<label (click)="Modificarclave()">
+				<label (click)="ModificarContrasenaUsuario()">
 					<h4>Modificar Contraseña</h4>
 				</label>
 			</div>
 		</div>
-		<div class="row" *ngIf="modificarEmp">
-			<div class="col-12">
-				<h2><b>información de la empresa</b></h2><br>
-			</div>
-			<div class="col-3">
-				Nombre empresa:
-			</div>
-			<div class="col-9">
-				<input type="text" class="form-control">
-			</div>
-			<div class="col-3">
-				Razón social o nombre jurídico:
-			</div>
-			<div class="col-9">
-				<input type="text" class="form-control">
-			</div>
-			<div class="col-3">
-				Descripción de la empresa:
-			</div>
-			<div class="col-9">
-				<input type="text" class="form-control">
-			</div>
-			<div class="col-3">
-				Rubro empresa
-			</div>
-			<div class="col-9">
-				<select name="areatrabajo"  class="form-control" >
-					<option value="0">Seleccionar</option>
-					<option *ngFor="let trabajo of areatrabajo" value="{{trabajo.business_item_id}}">{{trabajo.business_item_name}}</option>
-					</select>
-			</div>
-			<div class="col-3">
-				Cantidad de trabajadores:
-			</div>
-			<div class="col-9">
-				<select name="cantidad" class="form-control">
-					<option value="0">Seleccionar</option>
-					<option value="1">0-10</option>
-					<option value="2">10-30</option>
-					<option value="3">30-60</option>
-					<option value="4">+60</option>
-				</select>
-			</div>
-			<div class="col-4">
-				<button type="button" class="btn btn-primary btn-block">Modificar Usuario</button>
 
-			</div>
-			<div class="col-4">
-				<button type="button" (click)="salir()" class="btn btn-primary btn-block">Salir sin modificar</button>
-			</div>
+		<div *ngIf="modificarEmp">
+			<form [formGroup]="registroCForm" (ngSubmit)="ModificarEmpresaForm()">
+				<div class="row">
+					<div class="col-12">
+						<h2><b>información de la empresa</b></h2><br>
+					</div>
+
+					<div class="col-3">
+						Nombre empresa:
+					</div>
+					<div class="col-9">
+						<input type="text" class="form-control" formControlName="nameEmpresa"
+							[(ngModel)]="empresa.name">
+						<div *ngIf="nameEmpresa_feed.invalid && (nameEmpresa_feed.dirty || nameEmpresa_feed.touched)"
+							class="alert alert-danger">
+							<div *ngIf="nameEmpresa_feed.errors.required" class="email-feedback">Ingrese un nombre para
+								la
+								empresa
+							</div>
+							<div *ngIf="nameEmpresa_feed.errors?.minlength" class="email-feedback">Ingrese un nombre mas
+								largo
+							</div>
+							<div *ngIf="nameEmpresa_feed.errors?.maxlength" class="email-feedback">Ingrese un nombre mas
+								corto
+							</div>
+						</div>
+					</div>
+					<div class="col-3">
+						Identificacion de la empresa:
+					</div>
+					<div class="col-9">
+						<input type="text" class="form-control" formControlName="rutEmpresa"
+							[(ngModel)]="empresa.codigo">
+						<div *ngIf="rutEmpresa_feed.invalid && (rutEmpresa_feed.dirty || rutEmpresa_feed.touched)"
+							class="alert alert-danger">
+							<div *ngIf="rutEmpresa_feed.errors.required" class="email-feedback">Ingrese el codigo de la
+								identificacion de la empresa
+							</div>
+						</div>
+					</div>
+					<div class="col-3">
+						Razón social o nombre jurídico:
+					</div>
+					<div class="col-9">
+						<input type="text" class="form-control" formControlName="razonSocial"
+							[(ngModel)]="empresa.razon">
+						<div *ngIf="razonSocial_feed.invalid && (razonSocial_feed.dirty || razonSocial_feed.touched)"
+							class="alert alert-danger">
+							<div *ngIf="razonSocial_feed.errors.required" class="email-feedback">Ingrese la razon social
+								o el nombre juridico de la empresa
+							</div>
+							<div *ngIf="razonSocial_feed.errors?.minlength" class="email-feedback">Ingrese un nombre mas
+								largo
+							</div>
+							<div *ngIf="razonSocial_feed.errors?.maxlength" class="email-feedback">Ingrese un nombre mas
+								corto
+							</div>
+						</div>
+					</div>
+					<div class="col-3">
+						Descripción de la empresa:
+					</div>
+					<div class="col-9">
+						<input type="text" class="form-control" formControlName="descripcion"
+							[(ngModel)]="empresa.descripcion">
+						<div *ngIf="descripcion_feed.invalid && (descripcion_feed.dirty || descripcion_feed.touched)"
+							class="alert alert-danger">
+							<div *ngIf="descripcion_feed.errors?.minlength" class="email-feedback">Ingrese una
+								descripcion mas larga
+							</div>
+							<div *ngIf="descripcion_feed.errors?.maxlength" class="email-feedback">Ingrese una
+								descripcion mas corta
+							</div>
+						</div>
+					</div>
+					<div class="col-3">
+						Rubro empresa
+					</div>
+					<div class="col-9">
+						<select name="areatrabajo" class="form-control" (change)="guardarRubro($event.target.value)">
+							<option value="0">Seleccionar</option>
+							<option *ngFor="let trabajo of areatrabajo" value="{{trabajo.business_item_id}}"
+								[selected]="trabajo.business_item_id==empresa.rubro">{{trabajo.business_item_name}}
+							</option>
+						</select>
+					</div>
+
+					<div *ngIf="messageRubro" class="alert alert-danger col-12" role="alert"> Seleccione el rubro de la
+						empresa para continuar.</div>
+					<div class="col-3">
+						Cantidad de trabajadores:
+					</div>
+					<div class="col-9">
+						<select name="cantidad" class="form-control" (change)="guardarEmpleados($event.target.value)">
+							<option value=0 [selected]="0==empresa.cantidad">Seleccionar</option>
+							<option value=1 [selected]="1==empresa.cantidad">0-10</option>
+							<option value=2 [selected]="2==empresa.cantidad">10-30</option>
+							<option value=3 [selected]="3==empresa.cantidad">30-60</option>
+							<option value=4 [selected]="4==empresa.cantidad">+60</option>
+						</select>
+					</div>
+
+					<div *ngIf="messageCantidad" class="alert alert-danger col-12" role="alert"> Seleccione la cantidad
+						de empleados para continuar.</div>
+					<div *ngIf="ResultadoModificar" class="alert alert-success col-12" role="alert"> Se ha modificado la
+						empresa correctamente.</div>
+					<div class="form-group col-sm-12 col-md-4">
+						<button type="submit" class="btn btn-primary btn-block"
+							[disabled]="!registroCForm.valid">Modificar Empresa</button>
+
+					</div>
+					<div class="form-group col-sm-12 col-md-4">
+						<button type="button" (click)="salir()" class="btn btn-primary btn-block">Salir sin
+							modificar</button>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div *ngIf="modificarcontra">
+			<form [formGroup]="claveForm" (ngSubmit)="ModificarpasswordForm()">
+				<div class="row">
+					<div class="col-12">
+						<h2><b>Cambiar Contraseña</b></h2><br>
+					</div>
+
+					<div class="col-3">
+						Contraseña Actual:
+					</div>
+					<div class="col-9">
+						<input type="text" class="form-control" formControlName="oldpass"
+							[(ngModel)]="password.oldpass">
+						<div *ngIf="oldpass_feed.invalid && (oldpass_feed.dirty || oldpass_feed.touched)"
+							class="alert alert-danger">
+							<div *ngIf="oldpass_feed.errors.required" class="email-feedback">Ingrese una contraseña
+							</div>
+							<div *ngIf="oldpass_feed.errors?.minlength" class="email-feedback">Ingrese una contraseña mas
+								corta
+							</div>
+							<div *ngIf="oldpass_feed.errors?.maxlength" class="email-feedback">Ingrese una contraseña mas
+								corta
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-3">
+						Nueva contraseña:
+					</div>
+					<div class="col-9">
+						<input type="text" class="form-control" formControlName="newpass"
+							[(ngModel)]="password.new" (change)="checkpassword()">
+						<div *ngIf="newpass_feed.invalid && (newpass_feed.dirty || newpass_feed.touched)"
+							class="alert alert-danger">
+							<div *ngIf="newpass_feed.errors.required" class="email-feedback">Ingrese una contraseña
+							</div>
+							<div *ngIf="newpass_feed.errors?.minlength" class="email-feedback">Ingrese una contraseña mas
+								larga
+							</div>
+							<div *ngIf="newpass_feed.errors?.maxlength" class="email-feedback">Ingrese una contraseña mas
+								corta
+							</div>
+						</div>
+					</div>
+					<div class="col-3">
+						Reingresar nueva contraseña Actual:
+					</div>
+					<div class="col-9">
+						<input type="text" class="form-control" formControlName="newpass2"
+							[(ngModel)]="password.new2" (change)="checkpassword()">
+						<div *ngIf="newpass2_feed.invalid && (newpass2_feed.dirty || newpass2_feed.touched)"
+							class="alert alert-danger">
+							<div *ngIf="newpass2_feed.errors.required" class="email-feedback">Ingrese una contraseña
+							</div>
+							<div *ngIf="newpass2_feed.errors?.minlength" class="email-feedback">Ingrese una contraseña mas
+								larga
+							</div>
+							<div *ngIf="newpass2_feed.errors?.maxlength" class="email-feedback">Ingrese una contraseña mas
+								corta
+							</div>
+						</div>
+					</div>
+					
+					<div *ngIf="passworderror" class="alert alert-danger col-12">verifique que la contraseña nueva coincidan</div>
+
+					<div *ngIf="passwordolderror" class="alert alert-danger col-12">la contraseña antigua no es correcta</div>
+					
+					<div *ngIf="passwordsucces" class="alert alert-success col-12">la contraseña fue modificada correctamente</div>
+
+					<div *ngIf="messageCantidad" class="alert alert-danger col-12" role="alert">Se </div>
+					<div *ngIf="ResultadoModificar" class="alert alert-success col-12" role="alert"> Se ha modificado la
+						empresa correctamente.</div>
+					<div class="form-group col-sm-12 col-md-4">
+						<button type="submit" class="btn btn-primary btn-block"
+							[disabled]="!claveForm.valid || passworderror">Modificar contraseña</button>
+
+					</div>
+					<div class="form-group col-sm-12 col-md-4">
+						<button type="button" (click)="salir()" class="btn btn-primary btn-block">Salir sin
+							modificar</button>
+					</div>
+				</div>
+			</form>
 		</div>
 
 
@@ -127,11 +280,13 @@
 				<button type="button" (click)="salir()" class="btn btn-primary btn-block">Salir sin modificar</button>
 			</div>
 		</div>
- 
+
 		<div *ngIf="panelcrearUsuario">
 			<form [formGroup]="registroEForm" (ngSubmit)="RegistrarUsuario()">
 				<div class="row">
-					<div class="col-12"><h2>Crear Nuevo Usuario</h2></div>
+					<div class="col-12">
+						<h2>Crear Nuevo Usuario</h2>
+					</div>
 					<div class="form-group col-4">
 						<label for="name" class="col-form-label">Nombres</label>
 						<input type="text" class="form-control" placeholder="nombres" formControlName="name"
@@ -171,7 +326,7 @@
 					<div class="form-group col-4">
 						<label for="name" class="col-form-label">Correo Electronico</label>
 						<input type="text" class="form-control" placeholder="example@gmail.com" formControlName="email"
-						[(ngModel)]="registro.email">
+							[(ngModel)]="registro.email">
 						<div *ngIf="email_feed.invalid && (email_feed.dirty || email_feed.touched)"
 							class="alert alert-danger">
 							<div *ngIf="email_feed.errors.required" class="email-feedback">Necesitamos tu email</div>
@@ -199,7 +354,7 @@
 					<div class="form-group col-4">
 						<label for="name" class="col-form-label">Reingresar Contraseña</label>
 						<input type="password" class="form-control" placeholder="Contraseña" formControlName="password2"
-						[(ngModel)]="registro.pwd2" (change)="checkpass()">
+							[(ngModel)]="registro.pwd2" (change)="checkpass()">
 						<div *ngIf="password2_feed.invalid && (password2_feed.dirty || password2_feed.touched)"
 							class="alert alert-danger">
 							<div *ngIf="password2_feed.errors.required" class="email-feedback">Ingrese una contraseña
@@ -210,26 +365,27 @@
 								larga</div>
 						</div>
 					</div>
-					<div *ngIf="badpassword" class="alert alert-danger col-12">verifique que las contraseñas sean inguales</div>
+					<div *ngIf="badpassword" class="alert alert-danger col-12">verifique que las contraseñas sean
+						inguales</div>
 					<div class="col-4">
-						<label for="tipo" class="col-form-label" >Tipo de cuenta</label>
-						<select name="tipo"  class="form-control" (change)="tipo($event.target.value)">
-						<option value = "0">Seleccionar	</option>
-						<option value="2">Ejecutivo</option>
-						<option value="3">Guardia</option>
-					</select>
+						<label for="tipo" class="col-form-label">Tipo de cuenta</label>
+						<select name="tipo" class="form-control" (change)="tipo($event.target.value)">
+							<option value="0">Seleccionar </option>
+							<option value="2">Ejecutivo</option>
+							<option value="3">Guardia</option>
+						</select>
 					</div>
 					<div *ngIf="resultado" class="alert alert-success col-12">el usuario fue creado correctamente!</div>
 					<div class="col-12"></div>
 					<div class="col-4">
-						<button type="submit" class="btn btn-primary btn-block"
-							[disabled]="!registroEForm.valid">Crear nuevo usuario</button>
+						<button type="submit" class="btn btn-primary btn-block" [disabled]="!registroEForm.valid">Crear
+							nuevo usuario</button>
 					</div>
 					<div class="col-4">
 						<button type="button" (click)="salir()" class="btn btn-primary btn-block">Salir sin
 							crear</button>
 					</div>
-					
+
 				</div>
 			</form>
 		</div>
@@ -270,13 +426,15 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div *ngIf="panelModificarUsuario">
 			<form [formGroup]="registroEForm" (ngSubmit)="ModificarUsuario()">
 				<div class="row">
-					<div class="col-12"><h2>Modificar Usuario</h2></div>
+					<div class="col-12">
+						<h2>Modificar Usuario</h2>
+					</div>
 					<div class="form-group col-4">
-						
+
 						<label for="name" class="col-form-label">Nombres</label>
 						<input type="text" class="form-control" placeholder="nombres" formControlName="name"
 							[(ngModel)]="Mregistro.nombre">
@@ -315,7 +473,7 @@
 					<div class="form-group col-4">
 						<label for="name" class="col-form-label">Correo Electronico</label>
 						<input type="text" class="form-control" placeholder="example@gmail.com" formControlName="email"
-						[(ngModel)]="Mregistro.email">
+							[(ngModel)]="Mregistro.email">
 						<div *ngIf="email_feed.invalid && (email_feed.dirty || email_feed.touched)"
 							class="alert alert-danger">
 							<div *ngIf="email_feed.errors.required" class="email-feedback">Necesitamos tu email</div>
@@ -342,8 +500,8 @@
 					</div>
 					<div class="form-group col-4">
 						<label for="name" class="col-form-label">Reingresar Contraseña</label>
-						<input type="password" class="form-control" placeholder="Contraseña"
-							formControlName="password2" [(ngModel)]="Mregistro.pwd2">
+						<input type="password" class="form-control" placeholder="Contraseña" formControlName="password2"
+							[(ngModel)]="Mregistro.pwd2">
 						<div *ngIf="password2_feed.invalid && (password2_feed.dirty || password2_feed.touched)"
 							class="alert alert-danger">
 							<div *ngIf="password2_feed.errors.required" class="email-feedback">Ingrese una contraseña
@@ -355,14 +513,15 @@
 						</div>
 					</div>
 					<div class="col-4">
-						<label for="tipo" class="col-form-label" >Tipo de cuenta</label>
-						<select name="tipo"  class="form-control" (change)="tipo($event.target.value)">
-						<option value = "0" >Seleccionar	</option>
-						<option value="2" [selected]="2===Mregistro.tipo">Ejecutivo</option>
-						<option value="3"[selected]="3===Mregistro.tipo">Guardia</option>
-					</select>
+						<label for="tipo" class="col-form-label">Tipo de cuenta</label>
+						<select name="tipo" class="form-control" (change)="tipo($event.target.value)">
+							<option value="0">Seleccionar </option>
+							<option value="2" [selected]="2===Mregistro.tipo">Ejecutivo</option>
+							<option value="3" [selected]="3===Mregistro.tipo">Guardia</option>
+						</select>
 					</div>
-					<div *ngIf="resultado2" class="alert alert-success col-12">el usuario se modifico correctamente</div>
+					<div *ngIf="resultado2" class="alert alert-success col-12">el usuario se modifico correctamente
+					</div>
 					<div class="col-12"></div>
 					<div class="col-4">
 						<button type="submit" class="btn btn-primary btn-block"

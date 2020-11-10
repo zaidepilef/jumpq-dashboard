@@ -38,6 +38,7 @@ export class BranchOfficeComponent implements OnInit {
     codigo: "",
     provincia: ""
   };
+  pais: number;
   get nombre_feed() { return this.registroEForm.get('nombre'); }
   get direccion_feed() { return this.registroEForm.get('direccion'); }
   get direccion2_feed() { return this.registroEForm.get('direccion2'); }
@@ -111,7 +112,7 @@ export class BranchOfficeComponent implements OnInit {
   ngOnInit(): void {
     this.loaduser();
     this.panelPrincipal = true;
-    this.cargarProvincia();
+    
     this.registroEForm = this.formBuilder.group(
       {
         nombre: ['', [Validators.required, Validators.minLength(4)]],
@@ -144,10 +145,15 @@ export class BranchOfficeComponent implements OnInit {
   panelsucursal() {
     this.panelPrincipal = false;
     this.panelcrearsucursal = true;
+    this.pais = 1;
+    
+    this.cargarRegion(); 
   }
   panelsucursalE() {
     this.panelPrincipal = false;
     this.panelcrearsucursalE = true;
+    this.pais = 2;
+    this.cargarProvincia(); 
   }
   panelConfSucursal() {
     this.panelPrincipal = false;
@@ -175,11 +181,12 @@ export class BranchOfficeComponent implements OnInit {
     this.Comunas = [];
     this.provincia = [];
     this.an_request = {
-      company: 8
+      pais: this.pais
     };
     this.jumpservice.cargarProvincia(this.an_request).subscribe(
       res => {
         this.an_response = res;
+        console.info(this.an_response);
         this.regiones = this.an_response;
       }
 
@@ -204,7 +211,8 @@ export class BranchOfficeComponent implements OnInit {
     );
 
   }
-
+  
+  
   cargarParroquia(event: any) {
     this.registro.cod_prov = event;
     console.info("en parroquias", event);
@@ -225,6 +233,85 @@ export class BranchOfficeComponent implements OnInit {
   guardarParroquia(event: any) {
     this.parroquiaerr = false;
     this.registro.cod_parr = event;
+
+  }
+
+  
+
+
+
+
+
+
+
+
+
+  cargarRegion() {
+    this.Comunas = [];
+    this.provincia = [];
+    this.an_request = {
+      pais: this.pais
+    };
+    this.jumpservice.cargarRegion(this.an_request).subscribe(
+      res => {
+        this.an_response = res;
+        console.info(this.an_response);
+        this.regiones = this.an_response;
+      }
+
+      , err => console.error(err)
+    );
+
+  }
+  
+
+  cargarprovinciaC(event: any) {
+    this.Comunas = [];
+    this.provincia = []; 
+    this.an_request = {
+      id: event
+    };
+    this.jumpservice.cargarProvinciaC(this.an_request).subscribe(
+      res => {
+   
+        this.an_response = res;     
+        console.info("llegando", this.an_response);
+   
+        this.provincia = this.an_response;
+      }
+
+      , err => console.error(err)
+    );
+
+  }
+  cargarComuna(event : any){
+
+    this.registro.cod_prov = 0;
+
+    this.an_request = {
+      id: event
+    };
+    console.info(event);
+    this.jumpservice.cargarcomuna(this.an_request).subscribe(
+      res => {
+        this.an_response = res;
+        this.Comunas = this.an_response;
+      
+    console.info("en parroquias", this.an_response);
+      }
+
+      , err => console.error(err)
+    );
+
+
+  }
+
+
+
+  guardarComuna(event : any){
+    console.info(event);
+    this.parroquiaerr = false;
+    this.registro.cod_prov = event;
 
   }
 
@@ -284,7 +371,7 @@ export class BranchOfficeComponent implements OnInit {
       cod_localidad: this.registro.cod_parr,
       urlmap: this.registro.urlmap
     }
-    if (this.registro.cod_parr > 0) {
+    if (this.registro.cod_parr > 0 || this.pais==1) {
 
       this.jumpservice.crearSucursal(this.an_request).subscribe(
         res => {
@@ -292,14 +379,18 @@ export class BranchOfficeComponent implements OnInit {
 
           this.registro.cod_parr = 0;
           this.surc_name = this.registro.nombre;
+          
+          if(this.pais == 1){
+          this.cargarRegion();
           this.sucursalresult = true;
-          this.cargarProvincia();
+          }else{
+            this.cargarProvincia();
+            this.sucursalresult = true;
+          }
         }
 
         , err => console.error(err)
       );
-
-
 
     } else {
       this.sucursalresult = false;
@@ -321,9 +412,6 @@ export class BranchOfficeComponent implements OnInit {
     this.registro.direccion = event.direccion;
     this.registro.direccion2 = event.direccion2;
     this.registro.mapa = event.mapa;
-
-    
-
 
     this.an_request = {
       id: event.comuna

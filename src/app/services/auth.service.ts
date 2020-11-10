@@ -26,7 +26,7 @@ export class AuthService {
 	}
 
 	SignIn(authData: any) {
-		return this.httpClient.post<any>(`${environment.API_URL}/authenticate/login/`, authData);
+		return this.httpClient.post<any>(`${environment.API_URL_LOCAL}/authenticate/login/`, authData);
 		//return this.httpClient.post(`${this.SERVER_URL}/authenticate/login/`, authData);
 	}
 

@@ -33,68 +33,95 @@
 	</div>
 
 	<div *ngIf="panelcrearsucursal">
-		<form [formGroup]="registroEForm" (ngSubmit)="RegistrarUsuario()">
+		<form [formGroup]="registroEForm" (ngSubmit)="crearnuevaSucursal()">
 			<div class="row">
 				<div class="col-12">
 					<h2>Crear nueva sucursal chile</h2>
 				</div>
-				<div class="form-group col-4">
+				<div class="form-group col-sm-12 col-md-4">
 					<label for="nombre" class="col-form-label">Nombre sucursal</label>
 					<input type="text" class="form-control" placeholder="Oficinas xxxx" formControlName="nombre"
 						[(ngModel)]="registro.nombre">
-				</div>
+						<div *ngIf="nombre_feed.invalid && (nombre_feed.dirty || nombre_feed.touched)"
+						class="alert alert-danger">
+						<div *ngIf="nombre_feed.errors.required" class="email-feedback">Ingrese un nombre para la nueva sucursal
+						</div>
+						<div *ngIf="nombre_feed.errors?.minlength" class="email-feedback">Ingrese un nombre mas largo
+						</div>
+						<div *ngIf="nombre_feed.errors?.maxlength" class="email-feedback">Ingrese un nombre mas corto
+						</div>
+					</div>
+					</div>
 
 
-				<div class="form-group col-4">
+				<div class="form-group col-sm-12 col-md-4">
 					<label for="nombre" class="col-form-label">Direccion</label>
 					<input type="text" class="form-control" placeholder="Edificio 340 xxxx" formControlName="direccion"
-						[(ngModel)]="registro.direccion">
-
+						[(ngModel)]="registro.direccion"> 
+						<div *ngIf="direccion_feed.invalid && (direccion_feed.dirty || direccion_feed.touched)"
+						class="alert alert-danger">
+						<div *ngIf="direccion_feed.errors.required" class="email-feedback">Ingrese una direccion para la sucursal
+						</div>
+						<div *ngIf="direccion_feed.errors?.minlength" class="email-feedback">Ingrese una direccion mas larga
+						</div>
+						<div *ngIf="direccion_feed.errors?.maxlength" class="email-feedback">Ingrese una direccion mas corta
+						</div>
+					</div>
 				</div>
-				<div class="form-group col-4">
+				<div class="form-group col-sm-12 col-md-4">
 					<label for="name" class="col-form-label">Direccion auxiliar</label>
 					<input type="text" class="form-control" placeholder="Calle xx" formControlName="direccion2"
 						[(ngModel)]="registro.direccion2">
-
+						<div *ngIf="direccion2_feed.invalid && (direccion2_feed.dirty || direccion2_feed.touched)"
+						class="alert alert-danger">
+						<div *ngIf="direccion2_feed.errors.required" class="email-feedback">Ingrese una direccion para la sucursal
+						</div>
+						<div *ngIf="direccion2_feed.errors?.minlength" class="email-feedback">Ingrese una direccion mas larga
+						</div>
+						<div *ngIf="direccion2_feed.errors?.maxlength" class="email-feedback">Ingrese una direccion mas corta
+						</div>
+						</div>
 				</div>
 
-				<div class="form-group col-4">
+				<div class="form-group col-sm-12 col-md-4">
 					<label for="name" class="col-form-label">Google maps</label>
 					<input type="text" class="form-control" placeholder="" formControlName="urlmap"
 						[(ngModel)]="registro.urlmap">
-
+					
 				</div>
 				<div class="col-8"></div>
 				<div class="form-group col-sm-12 col-md-4">
 					<label for="regiones" class="col-form-label">Región</label>
-					<select name="regiones" class="form-control" (change)="BuscarProvincia($event)">
+					<select name="regiones" class="form-control" (change)="cargarprovinciaC($event.target.value)">
 						<option value="0">Seleccionar región</option>
-						<option *ngFor="let reg of regiones.region" value="{{reg.region_id}}">{{reg.region_name}}
+						<option *ngFor="let prov of regiones.provincia" value="{{prov.region_id}}">{{prov.region_name}}
 						</option>
 					</select>
 				</div>
 				<div class="form-group col-sm-12 col-md-4">
 
 					<label for="provincia" class="col-form-label">Provincia</label>
-					<select name="provincia" class="form-control" (change)="cargarComuna($event)">
+					<select name="provincia" class="form-control" (change)="cargarComuna($event.target.value)">
 						<option value="0">Seleccionar provincia</option>
-
-						<option *ngFor="let provi of provincia.provincia" value="{{provi.provincia_id}}">
-							{{provi.provincia_name}}</option>
+						<option *ngFor="let ciudad of provincia.ciudad" value="{{ciudad.provincia_id}}">{{ciudad.provincia_name}}
+						</option>
 
 					</select>
 				</div>
 				<div class="form-group col-sm-12 col-md-4">
-					<label for="comunas" class="col-form-label">Parroquia</label>
-					<select name="comunas" class="form-control" (change)="BuscarSucursales($event)">
+					<label for="comunas" class="col-form-label">Comuna</label>
+					<select name="comunas" class="form-control" (change)="guardarComuna($event.target.value)">
 						<option value="0">Seleccionar Comunas</option>
-						<option *ngFor="let comuna of Comunas.comuna " value="{{comuna.comuna_id}}">
-							{{comuna.comuna_name}}</option>
+						<option *ngFor="let parroquia of Comunas.parroquia " value="{{parroquia.comuna_id}}">
+							{{parroquia.comuna_name}}</option>
+
 
 					</select>
 				</div>
 				<div class="col-12"></div>
 
+				<div *ngIf="sucursalresult" class="col-12 alert alert-success">Se ha creado la sucursal {{surc_name}}
+					Correctamente!</div>
 				<div class="col-4">
 					<button type="submit" class="btn btn-primary btn-block"
 						[disabled]="!registroEForm.valid">Registrar</button>
@@ -113,7 +140,7 @@
 				<div class="col-12">
 					<h2>Crear nueva sucursal Ecuador</h2>
 				</div>
-				<div class="form-group col-4">
+				<div class="form-group col-sm-12 col-md-4">
 					<label for="nombre" class="col-form-label">Nombre sucursal</label>
 					<input type="text" class="form-control" placeholder="Oficinas xxxx" formControlName="nombre"
 						[(ngModel)]="registro.nombre">
@@ -130,7 +157,7 @@
 				</div>
 
 
-				<div class="form-group col-4">
+				<div class="form-group col-sm-12 col-md-4">
 					<label for="nombre" class="col-form-label">Direccion</label>
 					<input type="text" class="form-control" placeholder="Edificio 340 xxxx" formControlName="direccion"
 						[(ngModel)]="registro.direccion">
@@ -146,7 +173,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="form-group col-4">
+				<div class="form-group col-sm-12 col-md-4">
 					<label for="name" class="col-form-label">Direccion auxiliar</label>
 					<input type="text" class="form-control" placeholder="Calle xx" formControlName="direccion2"
 						[(ngModel)]="registro.direccion2">
@@ -165,7 +192,7 @@
 
 				</div>
 
-				<div class="form-group col-4">
+				<div class="form-group col-sm-12 col-md-4">
 					<label for="name" class="col-form-label">Google maps</label>
 					<input type="text" class="form-control" placeholder="" formControlName="urlmap"
 						[(ngModel)]="registro.urlmap">

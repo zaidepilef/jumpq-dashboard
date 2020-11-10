@@ -19,6 +19,7 @@ export class LoginComponent implements OnInit {
 		email: '',
 		password: ''
 	};
+	errormessage:boolean;
 	UserResponse: UserResponse;
 	Message: string;
 	a_response: any;
@@ -37,6 +38,7 @@ export class LoginComponent implements OnInit {
 	}
 
 	onSubmit() {
+		this.errormessage = false;
 		this.spinner.show();
 		this.UserData.email = this.LoginForm.value.email;
 		this.UserData.password = this.LoginForm.value.password;
@@ -50,6 +52,7 @@ export class LoginComponent implements OnInit {
 					this.auth.SaveToken(this.a_response.jwt);
 					this.router.navigate(['/']);
 				} else {
+					this.errormessage = true;
 					this.Message = this.a_response.message
 				}
 

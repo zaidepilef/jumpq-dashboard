@@ -11,7 +11,7 @@
 
                 <p class="login-box-msg">Ingresa con una cuenta de jumpQ</p>
                 <form [formGroup]="LoginForm" (ngSubmit)="onSubmit()">
-                    <p>{{Message}}</p>
+                    <div *ngIf="errormessage" class="alert alert-danger" role="alert"><p>{{Message}}</p></div>
                     <div class="input-group mb-3">
                         <input formControlName="email" type="email" class="form-control" placeholder="Email">
                         <div class="input-group-append">
