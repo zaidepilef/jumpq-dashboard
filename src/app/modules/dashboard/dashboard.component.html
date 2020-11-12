@@ -174,7 +174,7 @@
 						Contraseña Actual:
 					</div>
 					<div class="col-9">
-						<input type="text" class="form-control" formControlName="oldpass"
+						<input type="password" class="form-control" formControlName="oldpass"
 							[(ngModel)]="password.oldpass">
 						<div *ngIf="oldpass_feed.invalid && (oldpass_feed.dirty || oldpass_feed.touched)"
 							class="alert alert-danger">
@@ -193,7 +193,7 @@
 						Nueva contraseña:
 					</div>
 					<div class="col-9">
-						<input type="text" class="form-control" formControlName="newpass"
+						<input type="password" class="form-control" formControlName="newpass"
 							[(ngModel)]="password.new" (change)="checkpassword()">
 						<div *ngIf="newpass_feed.invalid && (newpass_feed.dirty || newpass_feed.touched)"
 							class="alert alert-danger">
@@ -211,7 +211,7 @@
 						Reingresar nueva contraseña Actual:
 					</div>
 					<div class="col-9">
-						<input type="text" class="form-control" formControlName="newpass2"
+						<input type="password" class="form-control" formControlName="newpass2"
 							[(ngModel)]="password.new2" (change)="checkpassword()">
 						<div *ngIf="newpass2_feed.invalid && (newpass2_feed.dirty || newpass2_feed.touched)"
 							class="alert alert-danger">
@@ -367,14 +367,7 @@
 					</div>
 					<div *ngIf="badpassword" class="alert alert-danger col-12">verifique que las contraseñas sean
 						inguales</div>
-					<div class="col-4">
-						<label for="tipo" class="col-form-label">Tipo de cuenta</label>
-						<select name="tipo" class="form-control" (change)="tipo($event.target.value)">
-							<option value="0">Seleccionar </option>
-							<option value="2">Ejecutivo</option>
-							<option value="3">Guardia</option>
-						</select>
-					</div>
+					<div *ngIf="emailcheckfail" class="alert alert-danger col-12">el correo electronico ingresado ya se encuentra registrado</div>
 					<div *ngIf="resultado" class="alert alert-success col-12">el usuario fue creado correctamente!</div>
 					<div class="col-12"></div>
 					<div class="col-4">
@@ -401,7 +394,6 @@
 									<th>apellido</th>
 									<th>identificacion</th>
 									<th>email</th>
-									<th>tipo de cuenta</th>
 									<th>estado cuenta</th>
 									<th>Opciones</th>
 								</tr>
@@ -412,7 +404,6 @@
 									<td>{{items.apellido}}</td>
 									<td>{{items.identification}}</td>
 									<td>{{items.email}}</td>
-									<td>{{items.tipo}}</td>
 									<td>{{items.estado}}</td>
 									<td> <button class="btn btn-info" (click)="modificarUserform(items)"><i
 												class="fas fa-search"></i></button></td>
@@ -433,7 +424,7 @@
 					<div class="col-12">
 						<h2>Modificar Usuario</h2>
 					</div>
-					<div class="form-group col-4">
+					<div class="form-group col-sm-12 col-md-4">
 
 						<label for="name" class="col-form-label">Nombres</label>
 						<input type="text" class="form-control" placeholder="nombres" formControlName="name"
@@ -446,7 +437,7 @@
 							<div *ngIf="name_feed.errors?.maxlength" class="email-feedback">Nombre demasiado largo</div>
 						</div>
 					</div>
-					<div class="form-group col-4">
+					<div class="form-group col-sm-12 col-md-4">
 						<label for="name" class="col-form-label">Apellidos</label>
 						<input type="text" class="form-control" placeholder="Paterno y materno"
 							formControlName="lastname" [(ngModel)]="Mregistro.apellidos">
@@ -461,7 +452,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="form-group col-4">
+					<div class="form-group col-sm-12 col-md-4">
 						<label for="name" class="col-form-label">Rut Completo</label>
 						<input type="text" class="form-control" placeholder="rut" formControlName="rut"
 							[(ngModel)]="Mregistro.rut">
@@ -470,7 +461,7 @@
 							<div *ngIf="rut_feed.errors.rut" class="rut-feedback">Ingrese un rut valido</div>
 						</div>
 					</div>
-					<div class="form-group col-4">
+					<div class="form-group col-sm-12 col-md-4">
 						<label for="name" class="col-form-label">Correo Electronico</label>
 						<input type="text" class="form-control" placeholder="example@gmail.com" formControlName="email"
 							[(ngModel)]="Mregistro.email">
@@ -484,7 +475,7 @@
 							El email ya se encuentra registrado
 						</div>
 					</div>
-					<div class="form-group col-4">
+					<div class="form-group col-sm-12 col-md-4">
 						<label for="name" class="col-form-label">Contraseña</label>
 						<input type="password" class="form-control" placeholder="Contraseña" formControlName="password"
 							[(ngModel)]="Mregistro.pwd">
@@ -498,7 +489,7 @@
 								larga</div>
 						</div>
 					</div>
-					<div class="form-group col-4">
+					<div class="form-group col-sm-12 col-md-4">
 						<label for="name" class="col-form-label">Reingresar Contraseña</label>
 						<input type="password" class="form-control" placeholder="Contraseña" formControlName="password2"
 							[(ngModel)]="Mregistro.pwd2">
@@ -512,13 +503,16 @@
 								larga</div>
 						</div>
 					</div>
-					<div class="col-4">
-						<label for="tipo" class="col-form-label">Tipo de cuenta</label>
+					<div class="col-sm-12 col-md-4">
+						<label for="tipo" class="col-form-label">Estado de la cuenta</label>
 						<select name="tipo" class="form-control" (change)="tipo($event.target.value)">
 							<option value="0">Seleccionar </option>
-							<option value="2" [selected]="2===Mregistro.tipo">Ejecutivo</option>
-							<option value="3" [selected]="3===Mregistro.tipo">Guardia</option>
+							<option value="1" [selected]="1===Mregistro.estado">Activada</option>
+							<option value="2" [selected]="2===Mregistro.estado">Desactivada</option>
 						</select>
+					</div>
+					
+					<div *ngIf="errorestado" class="alert alert-danger col-12">es necesario seleccionar el estado de la cuenta (activada, desactivada) para continuar
 					</div>
 					<div *ngIf="resultado2" class="alert alert-success col-12">el usuario se modifico correctamente
 					</div>

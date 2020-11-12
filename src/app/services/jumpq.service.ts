@@ -13,77 +13,77 @@ export class JumpqService {
 
 
 	public getUserData(data : any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/dashboard/tempdata/`, data);
+		return this.httpClient.post(`${environment.API_URL}/dashboard/tempdata/`, data);
 	}
 
 	public getSucursal(id: any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/branchSettings/Sucursalvisitas/`, id);
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/Sucursalvisitas/`, id);
 	}
 
 	public getSucursalCount(id: any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/branchSettings/SucursalvisitasCount/`, id);
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/SucursalvisitasCount/`, id);
 	}
 
 	public horaspendientes(id: any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/branchSettings/cantidadConsultasPendientes/`, id);
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/cantidadConsultasPendientes/`, id);
 	}
 
 	public horascompletadas(id: any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/branchSettings/cantidadConsultasCompletadas/`, id);
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/cantidadConsultasCompletadas/`, id);
 	}
 
 	public Consultaejecutivo(id: any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/branchSettings/consultasEjecutivos/`, id);
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/consultasEjecutivos/`, id);
 	}
 
 	public Consultadetalle(data: any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/branchSettings/consultasdetalle/`, data);
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/consultasdetalle/`, data);
 	}
 
 	public cantidadusuarios(data: any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/branchSettings/cantidadusuarios/`, data);
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/cantidadusuarios/`, data);
 	}
 
 	public detalleCantidadclientes(data: any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/branchSettings/cantidadusuariosdetalle/`, data);
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/cantidadusuariosdetalle/`, data);
 	}
 
 	public estadohoraSolicitadas(data: any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/branchSettings/estadohoraSolicitadas/`, data);
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/estadohoraSolicitadas/`, data);
 	}
 
 	public detalleejecutivo(data: any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/branchSettings/detalleejecutivo/`, data);
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/detalleejecutivo/`, data);
 	}
 
 	public userdata(data: any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/companies/userdata/`, data);
+		return this.httpClient.post(`${environment.API_URL}/companies/userdata/`, data);
 	}
 
 	public modificarlist(data: any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/user/modificarlist/`, data);
+		return this.httpClient.post(`${environment.API_URL}/user/modificarlist/`, data);
 	}
 
 
 	public getmail() {
-		return this.httpClient.get(`${environment.API_URL_LOCAL}/dashboard/userdata`);
+		return this.httpClient.get(`${environment.API_URL}/dashboard/userdata`);
 	}
 
 
 	public getsucursalchile(data :any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/branchs/sucursalChile`,data);
+		return this.httpClient.post(`${environment.API_URL}/branchs/sucursalChile`,data);
 	}
 
 	public getsucursalecuador(data :any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/branchs/sucursalEcuador`,data);
+		return this.httpClient.post(`${environment.API_URL}/branchs/sucursalEcuador`,data);
 	}
 
 	public getejecutivoslist(data :any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/user/ejecutivoslist`,data);
+		return this.httpClient.post(`${environment.API_URL}/user/ejecutivoslist`,data);
 	}
 
 	public getBusinnes() {
-		return this.httpClient.get(`${environment.API_URL_LOCAL}/business/`);
+		return this.httpClient.get(`${environment.API_URL}/business/`);
 	  }
 
 
@@ -91,45 +91,45 @@ export class JumpqService {
 
 	//para crear y modificar usuario
 	  public postNewUser(data : any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/user/newUser`,data);
+		return this.httpClient.post(`${environment.API_URL}/user/newUser`,data);
 	  }
 	  	
 	  public postmodificarUser(data : any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/user/modificarUser`,data);
+		return this.httpClient.post(`${environment.API_URL}/user/modificarUser`,data);
 	  }
 
 
 	  //cargar regiones o provincias
 
 	  public cargarProvincia(data : any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/regions/cargardashbProvincia`,data);
+		return this.httpClient.post(`${environment.API_URL}/regions/cargardashbProvincia`,data);
 	  }
 	  public cargarciudad(data : any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/provincia/cargardashbciudades`,data);
+		return this.httpClient.post(`${environment.API_URL}/provincia/cargardashbciudades`,data);
 	  }
 	  public cargarparroquia(data : any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/comunas/cargardashbparroquia`,data);
+		return this.httpClient.post(`${environment.API_URL}/comunas/cargardashbparroquia`,data);
 	  }
 
 
 	  public cargarRegion(data : any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/regions/cargardashbregion`,data);
+		return this.httpClient.post(`${environment.API_URL}/regions/cargardashbregion`,data);
 	  }
 	  public cargarProvinciaC(data : any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/provincia/cargardashbprov`,data);
+		return this.httpClient.post(`${environment.API_URL}/provincia/cargardashbprov`,data);
 	  }
 	  
 	  public cargarprovinciaChile(data : any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/provincia/cargardashbprov`,data);
+		return this.httpClient.post(`${environment.API_URL}/provincia/cargardashbprov`,data);
 	  }
 	  public cargarcomuna(data : any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/comunas/cargardashbcomuna`,data);
+		return this.httpClient.post(`${environment.API_URL}/comunas/cargardashbcomuna`,data);
 	  }
-
+	  
 
 	  //crear sucursal
 	  public crearSucursal(data : any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/branchs/crearSucursal`,data);
+		return this.httpClient.post(`${environment.API_URL}/branchs/crearSucursal`,data);
 	  }
 
 	  public modificarSucursal(data : any){
@@ -139,33 +139,35 @@ export class JumpqService {
 
 	  //modificar sucursal
 	  public Buscarprovincia(data : any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/regions/cargarMProvincia`,data);
+		return this.httpClient.post(`${environment.API_URL}/regions/cargarMProvincia`,data);
 	  }
-
+	  public BuscarRegion(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/regions/cargarMRegions`,data);
+	  }
 	  	  //modificar sucursal
 	  public formatohora(data : any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/branchSettings/formatohora`,data);
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/formatohora`,data);
 	  }
 
 	  public Horario(data : any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/branchSettings/horario`,data);
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/horario`,data);
 	  }
 	  public cargarHorario(data : any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/branchSettings/horariocargar`,data);
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/horariocargar`,data);
 	  }
 
 
 	  //sucursales
 	  public buscarConf(data : any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/branchSettings/buscarConf`,data);
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/buscarConf`,data);
 	  }
 
 	  public ActualizarHorario(data : any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/branchSettings/actualizarHorario`,data);
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/actualizarHorario`,data);
 	  }
 	  
 	  public crearHorario(data : any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/branchSettings/crearHorarioSucursal`,data);
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/crearHorarioSucursal`,data);
 	  }
 
 
@@ -174,23 +176,23 @@ export class JumpqService {
 
 	  	  
 	  public medios(data : any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/branchSettings/medios`,data);
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/medios`,data);
 	  }
 	  public modificarMedio(data : any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/branchSettings/mediomodificar`,data);
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/mediomodificar`,data);
 	  }
 
 	  //compañia
 	  public cargarcompañia(data : any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/companies/company`,data);
+		return this.httpClient.post(`${environment.API_URL}/companies/company`,data);
 	  }
 	  public modificarcompañia(data : any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/companies/companyUpdate`,data);
+		return this.httpClient.post(`${environment.API_URL}/companies/companyUpdate`,data);
 	  }
 
 //clave
 	  public modificarpassword(data : any) {
-		return this.httpClient.post(`${environment.API_URL_LOCAL}/user/changepassword`,data);
+		return this.httpClient.post(`${environment.API_URL}/user/changepassword`,data);
 	  }
 
 

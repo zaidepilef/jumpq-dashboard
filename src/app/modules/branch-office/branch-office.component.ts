@@ -25,20 +25,22 @@ export class BranchOfficeComponent implements OnInit {
     nombre: "",
     direccion: "",
     direccion2: "",
-    comuna: "",
+    comuna: 0,
     codlocalidad: "",
     urlmap: "",
-    cod_prov: "",
+    cod_prov: 0,
     cod_parr: 0
 
   };
- 
+
   Mprovincia: any = {
-    comuna: "",
-    codigo: "",
-    provincia: ""
+    comuna: 0,
+    codigo: 0,
+    provincia: 0
   };
   pais: number;
+  modeEcuador: boolean;
+  modeChile: boolean;
   get nombre_feed() { return this.registroEForm.get('nombre'); }
   get direccion_feed() { return this.registroEForm.get('direccion'); }
   get direccion2_feed() { return this.registroEForm.get('direccion2'); }
@@ -79,7 +81,7 @@ export class BranchOfficeComponent implements OnInit {
     Days7: false
   }
 
-  reset:any ={
+  reset: any = {
     id: "",
     format: 0,
     horaIMañana: 0,
@@ -101,8 +103,8 @@ export class BranchOfficeComponent implements OnInit {
   Horario3: Array<any> = [];
   Horario4: Array<any> = [];
   formato: any;
-  resultadomodifcar :boolean= false;
-  resultcrear :boolean;
+  resultadomodifcar: boolean = false;
+  resultcrear: boolean;
   constructor(private formBuilder: FormBuilder, private jumpservice: JumpqService, private loggin: AuthService) { }
 
 
@@ -112,7 +114,7 @@ export class BranchOfficeComponent implements OnInit {
   ngOnInit(): void {
     this.loaduser();
     this.panelPrincipal = true;
-    
+
     this.registroEForm = this.formBuilder.group(
       {
         nombre: ['', [Validators.required, Validators.minLength(4)]],
@@ -146,14 +148,14 @@ export class BranchOfficeComponent implements OnInit {
     this.panelPrincipal = false;
     this.panelcrearsucursal = true;
     this.pais = 1;
-    
-    this.cargarRegion(); 
+
+    this.cargarRegion();
   }
   panelsucursalE() {
     this.panelPrincipal = false;
     this.panelcrearsucursalE = true;
     this.pais = 2;
-    this.cargarProvincia(); 
+    this.cargarProvincia();
   }
   panelConfSucursal() {
     this.panelPrincipal = false;
@@ -186,7 +188,6 @@ export class BranchOfficeComponent implements OnInit {
     this.jumpservice.cargarProvincia(this.an_request).subscribe(
       res => {
         this.an_response = res;
-        console.info(this.an_response);
         this.regiones = this.an_response;
       }
 
@@ -197,7 +198,7 @@ export class BranchOfficeComponent implements OnInit {
   cargarCiudad(event: any) {
     this.Comunas = [];
     this.provincia = [];
-    console.info("llegando", event);
+
     this.an_request = {
       id: event
     };
@@ -211,11 +212,10 @@ export class BranchOfficeComponent implements OnInit {
     );
 
   }
-  
-  
+
+
   cargarParroquia(event: any) {
     this.registro.cod_prov = event;
-    console.info("en parroquias", event);
     this.an_request = {
       id: event
     };
@@ -236,7 +236,7 @@ export class BranchOfficeComponent implements OnInit {
 
   }
 
-  
+
 
 
 
@@ -255,7 +255,6 @@ export class BranchOfficeComponent implements OnInit {
     this.jumpservice.cargarRegion(this.an_request).subscribe(
       res => {
         this.an_response = res;
-        console.info(this.an_response);
         this.regiones = this.an_response;
       }
 
@@ -263,41 +262,40 @@ export class BranchOfficeComponent implements OnInit {
     );
 
   }
-  
+
 
   cargarprovinciaC(event: any) {
     this.Comunas = [];
-    this.provincia = []; 
+    this.provincia = [];
     this.an_request = {
       id: event
     };
     this.jumpservice.cargarProvinciaC(this.an_request).subscribe(
       res => {
-   
-        this.an_response = res;     
-        console.info("llegando", this.an_response);
-   
-        this.provincia = this.an_response;
+
+        this.an_response = res;
+        console.info(this.an_response.ciudad);
+        this.provincia = this.an_response.ciudad;
       }
 
       , err => console.error(err)
     );
 
   }
-  cargarComuna(event : any){
+  cargarComuna(event: any) {
 
     this.registro.cod_prov = 0;
 
     this.an_request = {
       id: event
     };
-    console.info(event);
+
     this.jumpservice.cargarcomuna(this.an_request).subscribe(
       res => {
         this.an_response = res;
+        console.info(this.an_response);
         this.Comunas = this.an_response;
-      
-    console.info("en parroquias", this.an_response);
+
       }
 
       , err => console.error(err)
@@ -308,8 +306,8 @@ export class BranchOfficeComponent implements OnInit {
 
 
 
-  guardarComuna(event : any){
-    console.info(event);
+  guardarComuna(event: any) {
+
     this.parroquiaerr = false;
     this.registro.cod_prov = event;
 
@@ -328,7 +326,6 @@ export class BranchOfficeComponent implements OnInit {
         this.an_response = res;
 
         this.tablachile = this.an_response.sucursal;
-        console.info(this.tablachile);
 
       }
 
@@ -348,7 +345,7 @@ export class BranchOfficeComponent implements OnInit {
         this.an_response = res;
 
         this.tablachile = this.an_response.sucursal;
-        console.info(this.tablachile);
+
 
       }
 
@@ -360,7 +357,6 @@ export class BranchOfficeComponent implements OnInit {
 
   crearnuevaSucursal() {
 
-    console.info(this.registro);
 
     this.an_request = {
       company_id: 8,
@@ -371,7 +367,7 @@ export class BranchOfficeComponent implements OnInit {
       cod_localidad: this.registro.cod_parr,
       urlmap: this.registro.urlmap
     }
-    if (this.registro.cod_parr > 0 || this.pais==1) {
+    if (this.registro.cod_parr > 0 || this.pais == 1) {
 
       this.jumpservice.crearSucursal(this.an_request).subscribe(
         res => {
@@ -379,11 +375,11 @@ export class BranchOfficeComponent implements OnInit {
 
           this.registro.cod_parr = 0;
           this.surc_name = this.registro.nombre;
-          
-          if(this.pais == 1){
-          this.cargarRegion();
-          this.sucursalresult = true;
-          }else{
+
+          if (this.pais == 1) {
+            this.cargarRegion();
+            this.sucursalresult = true;
+          } else {
             this.cargarProvincia();
             this.sucursalresult = true;
           }
@@ -402,38 +398,64 @@ export class BranchOfficeComponent implements OnInit {
 
 
   modificarSucursal(event: any) {
+
     this.paneltablamodificarSucursal = false;
     this.panelconfigurarsucursal = true;
-    console.info(event.comuna, event.codigo);
+
     this.Mprovincia.comuna = event.comuna;
     this.Mprovincia.codigo = event.codigo;
-    console.info(event);
     this.registro.nombre = event.nombre;
     this.registro.direccion = event.direccion;
     this.registro.direccion2 = event.direccion2;
     this.registro.mapa = event.mapa;
-
+    console.info(event);
     this.an_request = {
       id: event.comuna
     };
+    if (this.Country == "Ecuador") {
 
-    this.jumpservice.Buscarprovincia(this.an_request).subscribe(
-      res => {
-        this.an_response = res;
+      this.modeEcuador = true;
+      this.modeChile = false;
+      this.jumpservice.Buscarprovincia(this.an_request).subscribe(
+        res => {
+          this.an_response = res;
+          //this.tablachile = this.an_response.sucursal;
+          console.info(this.an_response);
+          this.Mprovincia.provincia = this.an_response.provincia.codigo;
+          this.cargarProvincia();
+          this.cargarCiudad(this.Mprovincia.provincia);
+          this.cargarParroquia(this.Mprovincia.comuna);
+          console.info(this.Mprovincia);
 
-        //this.tablachile = this.an_response.sucursal;
-        console.info(this.an_response.provincia.codigo);
-        this.Mprovincia.provincia = this.an_response.provincia.codigo;
-        this.cargarCiudad(this.an_response.provincia.codigo);
-        this.cargarParroquia(this.Mprovincia.comuna);
-        console.info(this.Mprovincia);
+        }
+        , err => console.error(err)
+      );
+    }
+    if (this.Country == "Chile") {
+      this.modeChile = true;
+      this.modeEcuador = false;
+      this.jumpservice.BuscarRegion(this.an_request).subscribe(
+        res => {
+          this.an_response = res;
 
-      }
+          //this.tablachile = this.an_response.sucursal;
+          console.info(this.an_response);
+          this.Mprovincia.provincia = this.an_response.provincia.codigo;
+          this.cargarRegion();
+          this.cargarprovinciaC(this.an_response.provincia.codigo);
+          
+          console.info("trae el " ,this.provincia);
+          for (var i = 0; i < this.provincia.length; i++) {
+            if (this.provincia[i].region_id == this.an_response.provincia.codigo) {
+            console.info("--------------------------");
+            }
+          }
+          this.cargarComuna(event.comuna);
+        }
 
-      , err => console.error(err)
-    );
-
-
+        , err => console.error(err)
+      );
+    }
 
 
 
@@ -442,13 +464,13 @@ export class BranchOfficeComponent implements OnInit {
   ConfigurarSucursalmostrar(event: any) {
     this.resultadomodifcar = false;
     this.resultcrear = false;
-    console.info(event);
     this.paneltablaconfigurarSucursal = false;
     this.ConfigurarSucursalmostar = true;
 
     this.horarioFormat = this.reset;
     this.NombreSucursal = event.nombre;
     this.horarioFormat.id = event.id;
+
     this.buscarConf(event.id);
     this.an_request = {
       id: event.comuna
@@ -478,7 +500,7 @@ export class BranchOfficeComponent implements OnInit {
         if (this.an_response.status == "OK") {
           this.newConfig = false;
           this.configuracion = this.an_response.hora;
-          console.info(this.configuracion);
+
           this.formato = this.an_response.hora.hours_format;
           this.drop1 = this.an_response.hora.hours_i_morning
           this.CargarHorario(this.formato);
@@ -552,7 +574,6 @@ export class BranchOfficeComponent implements OnInit {
     this.jumpservice.Horario(this.an_request).subscribe(
       res => {
         this.an_response = res;
-        console.info("Horas tiene ", this.an_response);
         this.Horario1 = this.an_response.hora
 
       }
@@ -639,49 +660,47 @@ export class BranchOfficeComponent implements OnInit {
       Days6: this.horarioFormat.Days6,
       Days7: this.horarioFormat.Days7
     }
-    if(this.newConfig == false){
+    if (this.newConfig == false) {
 
       this.jumpservice.ActualizarHorario(this.an_request).subscribe(
         res => {
-          console.info(res);
           this.an_response = res;
-          if(this.an_response.status == "OK"){
+          if (this.an_response.status == "OK") {
             this.resultadomodifcar = true;
           }
-        
+
         }
-  
+
         , err => console.error(err)
       );
-  
-    }else{
+
+    } else {
       this.jumpservice.crearHorario(this.an_request).subscribe(
         res => {
-          console.info(res);
           this.an_response = res;
-          if(this.an_response.status == "OK"){
+          if (this.an_response.status == "OK") {
             this.resultcrear = true;
           }
-        
+
         }
-  
+
         , err => console.error(err)
       );
     }
-    
+
   }
 
 
-  ModificarSucursalM(){
-    if(this.Country == "Ecuador"){
-      this.an_request ={
-        nombre:this.registro.nombre,
-        direccion:this.registro.nombre,
-        direccion2:this.registro.nombre,
-        mapa:this.registro.nombre,
-        comuna:this.registro.cod_prov,
-        codlocalidad:this.registro.cod_parr,
-      } 
+  ModificarSucursalM() {
+    if (this.Country == "Ecuador") {
+      this.an_request = {
+        nombre: this.registro.nombre,
+        direccion: this.registro.nombre,
+        direccion2: this.registro.nombre,
+        mapa: this.registro.nombre,
+        comuna: this.registro.cod_prov,
+        codlocalidad: this.registro.cod_parr,
+      }
       console.info(this.registro);
 
       /*this.jumpservice.modificarSucursal(this.an_request).subscribe(
@@ -697,7 +716,7 @@ export class BranchOfficeComponent implements OnInit {
         , err => console.error(err)
       );*/
 
-    } 
+    }
   }
 
 

@@ -23,7 +23,7 @@ export class DashboardComponent implements OnInit {
     pwd: "",
     pwd2: "",
     email: "",
-    tipo: "",
+    tipo: 2,
     registroEForm: {}
   };
   Mregistro: any = {
@@ -33,7 +33,8 @@ export class DashboardComponent implements OnInit {
     pwd: "",
     pwd2: "",
     email: "",
-    tipo: "",
+    tipo: 2,
+    estado:"",
     registroEForm: {}
   };
   reset: any = {
@@ -43,7 +44,8 @@ export class DashboardComponent implements OnInit {
     pwd: "",
     pwd2: "",
     email: "",
-    tipo: "",
+    tipo: 2,
+    estado:"",
     registroEForm: {}
   }
   resultado: boolean;
@@ -70,6 +72,8 @@ export class DashboardComponent implements OnInit {
   passworderror: boolean;
   passwordolderror: boolean;
   passwordsucces: boolean;
+  emailcheckfail: boolean;
+  errorestado: boolean;
   get name_feed() { return this.registroEForm.get('name'); }
   get lastname_feed() { return this.registroEForm.get('lastname'); }
   get rut_feed() { return this.registroEForm.get('rut'); }
@@ -91,7 +95,7 @@ export class DashboardComponent implements OnInit {
   mailuser: any;
   an_request: any;
   an_response: any;
-  Modificarlist: Array<any> = [{}]
+  Modificarlist: Array<any> = []
   areatrabajo: any;
   messageRubro:boolean;
   messageCantidad:boolean;
@@ -107,17 +111,8 @@ export class DashboardComponent implements OnInit {
     this.loaduser();
     this.panelPrincipal = true;
     //this.checkmail(this.mailuser);
-    this.registroEForm = this.formBuilder.group(
-      {
-        name: ['', [Validators.pattern(/^[a-zA-Z ]+$/), Validators.required, Validators.maxLength(32), Validators.minLength(4)]],
-        lastname: ['', [Validators.pattern(/^[a-zA-Z ]+$/), Validators.required, Validators.maxLength(32), Validators.minLength(4)]],
-        rut: ['', [Validators.required]],
-        email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required, Validators.maxLength(32), Validators.minLength(8)]],
-        password2: ['', [Validators.required, Validators.maxLength(32), Validators.minLength(8)]]
-      }
-    );
 
+    this.formcheckusuario();
     this.registroCForm = this.formBuilder.group(
       {
         nameEmpresa: ['', [Validators.required, Validators.maxLength(32), Validators.minLength(4)]],
@@ -138,6 +133,18 @@ export class DashboardComponent implements OnInit {
 
   }
 
+  formcheckusuario(){
+    this.registroEForm = this.formBuilder.group(
+      {
+        name: ['', [Validators.pattern(/^[a-zA-Z ]+$/), Validators.required, Validators.maxLength(32), Validators.minLength(4)]],
+        lastname: ['', [Validators.pattern(/^[a-zA-Z ]+$/), Validators.required, Validators.maxLength(32), Validators.minLength(4)]],
+        rut: ['', [Validators.required]],
+        email: ['', [Validators.required, Validators.email]],
+        password: ['', [Validators.required, Validators.maxLength(32), Validators.minLength(8)]],
+        password2: ['', [Validators.required, Validators.maxLength(32), Validators.minLength(8)]]
+      }
+    );
+  }
   loaduser() {
     var usersend = {
       data : this.loggin.GetToken()
@@ -229,13 +236,20 @@ export class DashboardComponent implements OnInit {
   modificarUserform(data: any) {
     this.panelModificarUsuario = true;
     this.paneltablaModificarUsuario = false;
-
+    this.resultado2 = false;
+    this.errorestado = false;
     this.Mregistro.nombre = data.nombre;
     this.Mregistro.apellidos = data.apellido;
     this.Mregistro.email = data.email;
     this.Mregistro.nombre = data.nombre;
-    this.Mregistro.tipo = data.tipo;
+    this.Mregistro.tipo = 2;
     this.Mregistro.rut = data.identification;
+    if(data.estado=="Activa"){
+      this.Mregistro.estado = 1;
+    }
+    if(data.estado=="Desactivada"){
+      this.Mregistro.estado = 2;
+    }
     console.info(data);
   }
   CrearUsuario() {
@@ -251,7 +265,9 @@ export class DashboardComponent implements OnInit {
     }
 
     if (this.panelModificarUsuario == true) {
-      this.Mregistro.tipo = data;
+      this.Mregistro.estado = data;
+      console.info("cambio",this.Mregistro);
+      
     }
 
   }
@@ -288,8 +304,8 @@ export class DashboardComponent implements OnInit {
   }
 
   RegistrarUsuario() {
-
-    console.info(this.registro);
+    this.emailcheckfail = false;
+    
 
     this.an_request = {
       nombre: this.registro.nombre,
@@ -299,18 +315,21 @@ export class DashboardComponent implements OnInit {
       type: this.registro.tipo,
       status: 1,
       email: this.registro.email,
-      company: 8
+      company: this.user.company
     }
-
+    console.info(this.an_request);
     if (this.badpassword == false) {
       this.jumpservice.postNewUser(this.an_request).subscribe(
         res => {
           this.an_response = res;
           console.info(res);
           if (this.an_response.status == "OK") {
-            console.info("usuario creado");
+
             this.resultado = true;
             this.registro = this.reset;
+            this.formcheckusuario();
+          } if (this.an_response.status == "NOOK") {
+            this.emailcheckfail = true;
           }
         },
         err => console.warn('err : ', err)
@@ -357,16 +376,21 @@ export class DashboardComponent implements OnInit {
   CargarModificarUsuario() {
     this.panelPrincipal = false;
     this.an_request = {
-      email: 8
-
+      email: 8 
     };
     this.jumpservice.modificarlist(this.an_request).subscribe(
       res => {
         this.an_response = res;
 
         this.Modificarlist = this.an_response.user;
-        console.info("mail es ", this.mailuser);
-        console.info("Contiene", this.Modificarlist);
+        for (var i = 0; i < this.Modificarlist.length; i++){
+          if (this.Modificarlist[i].estado == 1) {
+            this.Modificarlist[i].estado = "Activa";
+        } else {
+            this.Modificarlist[i].estado = "Desactivada";
+        }
+
+        }
         this.paneltablaModificarUsuario = true;
 
 
@@ -421,34 +445,36 @@ export class DashboardComponent implements OnInit {
   }
 
   ModificarUsuario() {
+    this.resultado2=false;
 
-
-    console.info(this.Mregistro);
 
     this.an_request = {
       nombre: this.Mregistro.nombre,
       apellidos: this.Mregistro.apellidos,
       rut: this.Mregistro.rut,
       pwd: this.Mregistro.pwd,
-      type: this.Mregistro.tipo,
-      status: 1,
+      type: 2,
+      status: this.Mregistro.estado,
       email: this.Mregistro.email,
-      company: 8
+      company: this.user.company
     }
-
+    if(this.Mregistro.estado > 0){
+      this.errorestado = false;
       this.jumpservice.postmodificarUser(this.an_request).subscribe(
         res => {
           this.an_response = res;
           console.info(res);
           if (this.an_response.status == "OK") {
-            console.info("usuario creado");
-            this.resultado2 = true;
-            this.Mregistro = this.reset;
+             this.resultado2 = true;
           }
         },
         err => console.warn('err : ', err)
 
       );
+    }else{
+      this.errorestado = true
+    }
+      
     }
 
 

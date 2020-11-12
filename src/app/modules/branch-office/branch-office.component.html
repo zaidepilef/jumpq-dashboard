@@ -385,7 +385,35 @@
 
 				</div>
 				<div class="col-8"></div>
-				<div class="form-group col-sm-12 col-md-4">
+				
+
+				<div *ngIf="modeChile" class="form-group col-sm-12 col-md-4">
+					<label for="regiones" class="col-form-label">Región</label>
+					<select name="regiones" class="form-control" (change)="cargarprovinciaC($event.target.value)">
+						<option value="0">Seleccionar región</option>
+						<option *ngFor="let prov of regiones.provincia" value="{{prov.region_id}}" [selected]="prov.region_id===Mprovincia.provincia">{{prov.region_name}}</option>
+					</select>
+				</div>
+				<div *ngIf="modeChile" class="form-group col-sm-12 col-md-4">
+
+					<label for="provincia" class="col-form-label">Provincia</label>
+					<select name="provincia" class="form-control" (change)="cargarComuna($event.target.value)">
+						<option value="0">Seleccionar provincia</option>
+						<option *ngFor="let ciudad of provincia" value="{{ciudad.provincia_id}}" [selected]="ciudad.region_id===Mprovincia.provincia">{{ciudad.provincia_name}}
+						</option>
+
+					</select>
+				</div>
+				<div *ngIf="modeChile" class="form-group col-sm-12 col-md-4">
+					<label for="comunas" class="col-form-label">Comuna</label>
+					<select name="comunas" class="form-control" (change)="guardarComuna($event.target.value)">
+						<option value="0">Seleccionar Comunas</option>
+						<option *ngFor="let parroquia of Comunas.parroquia " value="{{parroquia.comuna_id}}" [selected]="parroquia.comuna_id===Mprovincia.comuna">
+							{{parroquia.comuna_name}}</option>
+					</select>
+				</div>
+
+				<div *ngIf="modeEcuador" class="form-group col-sm-12 col-md-4">
 					<label for="provincia" class="col-form-label">Provincia</label>
 					<select name="provincia" class="form-control" (change)="cargarCiudad($event.target.value)">
 						<option value="0">Seleccionar la provincia</option>
@@ -393,8 +421,7 @@
 						</option>
 					</select>
 				</div>
-				<div class="form-group col-sm-12 col-md-4">
-
+				<div *ngIf="modeEcuador" class="form-group col-sm-12 col-md-4">
 					<label for="provincia" class="col-form-label">Ciudad</label>
 					<select name="provincia" class="form-control" (change)="cargarParroquia($event.target.value)">
 						<option value="0">Seleccionar la ciudad</option>
@@ -405,7 +432,7 @@
 					</select>
 				</div>
 
-				<div class="form-group col-sm-12 col-md-4">
+				<div *ngIf="modeEcuador" class="form-group col-sm-12 col-md-4">
 					<label for="comunas" class="col-form-label">Parroquia</label>
 					<select name="comunas" class="form-control" (change)="guardarParroquia($event.target.value)">
 						<option value="0">Seleccionar la parroquia</option>
@@ -414,7 +441,7 @@
 
 					</select>
 				</div>
-
+			
 				<div *ngIf="parroquiaerr" class="col-12 alert alert-danger">Seleccione una parroquia para continuar
 				</div>
 				<div *ngIf="sucursalresult" class="col-12 alert alert-success">Se ha creado la sucursal {{surc_name}}
@@ -474,7 +501,6 @@
 						</tbody>
 					</table>
 				</div>
-				<button class="btn btn-success" (click)="exportExcelCantidaHoras()">Generar Excel</button>
 				<button class="btn btn-info" (click)="salir()">Salir</button>
 
 
