@@ -19,7 +19,9 @@ export class JumpqService {
 	public getSucursal(id: any) {
 		return this.httpClient.post(`${environment.API_URL}/branchSettings/Sucursalvisitas/`, id);
 	}
-
+	public getSucursalbusqueda(id: any) {
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/Sucursalvisitasbusqueda/`, id);
+	}
 	public getSucursalCount(id: any) {
 		return this.httpClient.post(`${environment.API_URL}/branchSettings/SucursalvisitasCount/`, id);
 	}
@@ -27,13 +29,22 @@ export class JumpqService {
 	public horaspendientes(id: any) {
 		return this.httpClient.post(`${environment.API_URL}/branchSettings/cantidadConsultasPendientes/`, id);
 	}
+	public horaspendientesbusqueda(id: any) {
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/cantidadConsultasPendientesB/`, id);
+	}
 
 	public horascompletadas(id: any) {
 		return this.httpClient.post(`${environment.API_URL}/branchSettings/cantidadConsultasCompletadas/`, id);
 	}
 
+	public horascompletadasbusqueda(id: any) {
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/cantidadConsultasCompletadasB/`, id);
+	}
 	public Consultaejecutivo(id: any) {
 		return this.httpClient.post(`${environment.API_URL}/branchSettings/consultasEjecutivos/`, id);
+	}
+	public Consultaejecutivobusqueda(id: any) {
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/consultasEjecutivosbusqueda/`, id);
 	}
 
 	public Consultadetalle(data: any) {
@@ -42,6 +53,9 @@ export class JumpqService {
 
 	public cantidadusuarios(data: any) {
 		return this.httpClient.post(`${environment.API_URL}/branchSettings/cantidadusuarios/`, data);
+	}
+	public cantidadusuariosbusqueda(data: any) {
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/cantidadusuariosbusqueda/`, data);
 	}
 
 	public detalleCantidadclientes(data: any) {
@@ -110,7 +124,7 @@ export class JumpqService {
 	  public cargarparroquia(data : any) {
 		return this.httpClient.post(`${environment.API_URL}/comunas/cargardashbparroquia`,data);
 	  }
-
+	
 
 	  public cargarRegion(data : any) {
 		return this.httpClient.post(`${environment.API_URL}/regions/cargardashbregion`,data);
@@ -122,6 +136,11 @@ export class JumpqService {
 	  public cargarprovinciaChile(data : any) {
 		return this.httpClient.post(`${environment.API_URL}/provincia/cargardashbprov`,data);
 	  }
+
+	  public BuscarprovinciaModificar(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/provincia/buscarprovincia`,data);
+	  }
+
 	  public cargarcomuna(data : any) {
 		return this.httpClient.post(`${environment.API_URL}/comunas/cargardashbcomuna`,data);
 	  }
@@ -133,7 +152,7 @@ export class JumpqService {
 	  }
 
 	  public modificarSucursal(data : any){
-		//return this.httpClient.post(`${environment.API_URL_LOCAL}/branchs/crearSucursal`,data);
+		return this.httpClient.post(`${environment.API_URL_LOCAL}/branchs/modifSucursal`,data);
 	  }
 
 
@@ -141,6 +160,7 @@ export class JumpqService {
 	  public Buscarprovincia(data : any) {
 		return this.httpClient.post(`${environment.API_URL}/regions/cargarMProvincia`,data);
 	  }
+
 	  public BuscarRegion(data : any) {
 		return this.httpClient.post(`${environment.API_URL}/regions/cargarMRegions`,data);
 	  }
@@ -189,6 +209,8 @@ export class JumpqService {
 	  public modificarcompañia(data : any) {
 		return this.httpClient.post(`${environment.API_URL}/companies/companyUpdate`,data);
 	  }
+
+	  
 
 //clave
 	  public modificarpassword(data : any) {

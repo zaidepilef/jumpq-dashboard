@@ -186,7 +186,7 @@ export class DashboardComponent implements OnInit {
     );
   }*/
 
-  modificarEst() {
+  genjumpQ() {
     this.panelPrincipal = false;
     this.modificarEstilos = true;
 

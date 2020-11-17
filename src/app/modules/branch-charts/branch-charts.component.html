@@ -19,34 +19,43 @@
         </div>
     </div>
    </section>
-<div class="content">
 
     <div class="container-fluid">
-
+        <div *ngIf="errormensaje" class="col" class="alert alert-info">
+            Los siguientes graficos no fueron cargados porque no se encontro informacion en el sistema:
+            <label *ngIf="!ResultadoGrafico1">Horas solicitadas por sucursal, </label>
+            <label *ngIf="!ResultadoGrafico2">Cantidad de visitas, </label>
+            <label *ngIf="!ResultadoGrafico3">Horas tomadas por ejecutivos, </label>
+            <label *ngIf="!ResultadoGrafico4">Cantidad de Clientes.</label>
+        </div>
         <div class="row" *ngIf="graficos">
-
-            <div class="col-3">
-                <b>Horas solicitadas por sucursal <button class="btn btn-info" (click)="test()"><i
-                            class="fas fa-search"></i></button></b>
+       
+            <div *ngIf="ResultadoGrafico1" class="col-sm-12 col-md-4" >
+                <b>Horas solicitadas por sucursal <button class="btn btn-info" (click)="detallessucursal()">
+                    <i class="fas fa-search"></i></button></b>
                 <canvas id="sucursal" width="100" height="100"></canvas>
             </div>
 
-            <div class="col-3">
-                <b>Cantidad de visitas Completadas/Pendientes <button class="btn btn-info" (click)="showdetallehoraspendientes(1)"><i
-                            class="fas fa-search"></i></button></b>
+            <div *ngIf="ResultadoGrafico2"class="col-sm-12 col-md-4" >
+                <b>Cantidad de visitas <button class="btn btn-info" (click)="showdetallehoraspendientes(1)">
+                    <i class="fas fa-search"></i></button></b>
                 <canvas id="horasAgendadas" width="100" height="100"></canvas>
             </div>
 
-            <div class="col-3">
-                <b>horas tomadas por ejecutivos <button class="btn btn-info" (click)="mostrarejecutivos()"><i class="fas fa-search"></i></button></b>
+            <div *ngIf="ResultadoGrafico3" class="col-sm-12 col-md-4" >
+                <b>Horas tomadas por ejecutivos <button class="btn btn-info" (click)="mostrarejecutivos()">
+                    <i class="fas fa-search"></i></button></b>
                 <canvas id="conteoejecutivo" width="100" height="100"></canvas>
             </div>
 
-            <div class="col-3">
-                <b>Cantidad de Clientes <button class="btn btn-info" (click)="mostrarcantidadusuarios()"><i class="fas fa-search" (click)="mostrarcantidadUsuarios()"></i></button></b>
+            <div *ngIf="ResultadoGrafico4"class="col-sm-12 col-md-4" >
+                <b>Cantidad de Clientes <button class="btn btn-info" (click)="mostrarcantidadusuarios()">
+                    <i class="fas fa-search" (click)="mostrarcantidadUsuarios()"></i></button></b>
                 <canvas id="cantidadUsuarios" width="100" height="100"></canvas>
             </div>
+ 
         </div>
+    
         <div class="row" *ngIf="mostrarEstados">
             <div class="col">
                 <div class="card-body table-responsive p-0">
@@ -79,6 +88,13 @@
                 <button class="btn btn-info" (click)="cerrar()">Cerrar tabla</button>
            
             </div>
+        </div>
+        <div class="row" *ngIf="Nohayresgitros2">
+            <div class="col-12" class="alert alert-info">
+                <label>Actualmente no hay registro para mostrar</label>
+                <button class="btn btn-info" (click)="cerrar()">Cerrar tabla</button>
+            </div>
+          
         </div>
         <div class="row" *ngIf="mostrarEstadosDetalle">
             <div class="col">
@@ -136,7 +152,7 @@
                     </table>
                 </div>
                 <button class="btn btn-success" (click)="exportExcelTablesucursal()">Generar Excel</button>
-                <button class="btn btn-info" (click)="cerrar()">Cerrar</button>
+                <button class="btn btn-info" (click)="cerrar()">Cerrar tabla</button>
                
             
             </div>
@@ -175,7 +191,7 @@
                     </table>
                 </div>
                 <button class="btn btn-success" (click)="exportExcelTablesucursaldetalle()">Generar Excel</button>
-                <button class="btn btn-info" (click)="cerrar()">Cerrar</button>
+                <button class="btn btn-info" (click)="cerrar()">Cerrar tabla</button>
             
             </div>
             
@@ -209,7 +225,7 @@
                     </table>
                 </div>
                 <button class="btn btn-success" (click)="exportExcelejecutivo()">Generar Excel</button>
-                <button class="btn btn-info" (click)="cerrar()">cerrar tabla</button>
+                <button class="btn btn-info" (click)="cerrar()">Cerrar tabla</button>
                
             
             </div>
@@ -251,7 +267,7 @@
                     </table>
                 </div>
                 <button class="btn btn-success" (click)="exportExceldetalleEjecutivos()">Generar Excel</button>
-                <button class="btn btn-info" (click)="cerrar()">volver</button>
+                <button class="btn btn-info" (click)="cerrar()">Cerrar tabla</button>
                
             
             </div>
@@ -283,7 +299,7 @@
                     </table>
                 </div>
                 <button class="btn btn-success" (click)="exportExcelCantidaHoras()">Generar Excel</button>
-                <button class="btn btn-info" (click)="cerrar()">volver</button>
+                <button class="btn btn-info" (click)="cerrar()">Cerrar tabla</button>
                
             
             </div>
@@ -323,7 +339,7 @@
                     </table>
                 </div>
                 <button class="btn btn-success" (click)="exportExceldetalleEjecutivos()">Generar Excel</button>
-                <button class="btn btn-info" (click)="cerrar()">volver</button>
+                <button class="btn btn-info" (click)="cerrar()">Cerrar tabla</button>
                
             
             </div>
@@ -356,7 +372,7 @@
                     </table>
                 </div>
                 <button class="btn btn-success" (click)="exportExcelcantidadUsuarios()">Generar Excel</button>
-                <button class="btn btn-info" (click)="cerrar()">volver</button>
+                <button class="btn btn-info" (click)="cerrar()">Cerrar tabla</button>
                
             
             </div>
@@ -397,9 +413,9 @@
                     </table>
                 </div>
                 <button class="btn btn-success" (click)="exportExceldetallecantidadUsuarios()">Generar Excel</button>
-                <button class="btn btn-info" (click)="cerrar()">volver</button>
+                <button class="btn btn-info" (click)="cerrar()">Cerrar tabla</button>
                
             
             </div>
         </div>
-    </div>
+    

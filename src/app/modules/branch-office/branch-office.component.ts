@@ -1,6 +1,7 @@
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 import { AuthService } from '../../services/auth.service';
 import { JumpqService } from '../../services/jumpq.service';
 
@@ -21,7 +22,7 @@ export class BranchOfficeComponent implements OnInit {
   Comunas: Array<any> = [];
   NombreSucursal: any = {};
   registro: any = {
-    company: 8,
+    company: 0,
     nombre: "",
     direccion: "",
     direccion2: "",
@@ -30,10 +31,10 @@ export class BranchOfficeComponent implements OnInit {
     urlmap: "",
     cod_prov: 0,
     cod_parr: 0
-
   };
 
   Mprovincia: any = {
+    id:"",
     comuna: 0,
     codigo: 0,
     provincia: 0
@@ -41,6 +42,12 @@ export class BranchOfficeComponent implements OnInit {
   pais: number;
   modeEcuador: boolean;
   modeChile: boolean;
+  Modificarcomunaerror: boolean;
+  modificarResultado: boolean;
+  comunaerrorcrear: boolean;
+  Mostrarmapa:any;
+  Mostrarmapam:any;
+  mostrarDatos: boolean;
   get nombre_feed() { return this.registroEForm.get('nombre'); }
   get direccion_feed() { return this.registroEForm.get('direccion'); }
   get direccion2_feed() { return this.registroEForm.get('direccion2'); }
@@ -105,7 +112,7 @@ export class BranchOfficeComponent implements OnInit {
   formato: any;
   resultadomodifcar: boolean = false;
   resultcrear: boolean;
-  constructor(private formBuilder: FormBuilder, private jumpservice: JumpqService, private loggin: AuthService) { }
+  constructor(private _sanitizationService: DomSanitizer,private formBuilder: FormBuilder, private jumpservice: JumpqService, private loggin: AuthService) { }
 
 
 
@@ -115,6 +122,14 @@ export class BranchOfficeComponent implements OnInit {
     this.loaduser();
     this.panelPrincipal = true;
 
+    this.formload();
+
+
+
+
+  }
+
+  formload(){
     this.registroEForm = this.formBuilder.group(
       {
         nombre: ['', [Validators.required, Validators.minLength(4)]],
@@ -123,12 +138,7 @@ export class BranchOfficeComponent implements OnInit {
         urlmap: ['', [Validators.required]]
       }
     )
-
-
-
-
   }
-
 
   loaduser() {
     var usersend = {
@@ -138,7 +148,7 @@ export class BranchOfficeComponent implements OnInit {
       res => {
         this.an_response = res;
         this.User = this.an_response.user;
-        console.info(this.User);
+        
       }, err => console.error(err)
     );
   }
@@ -147,6 +157,13 @@ export class BranchOfficeComponent implements OnInit {
   panelsucursal() {
     this.panelPrincipal = false;
     this.panelcrearsucursal = true;
+
+    this.registro.nombre = "";
+    this.registro.direccion = "";
+    this.registro.direccion2 = "";
+    this.registro.comuna = 0;
+    this.registro.cod_prov = 0;
+
     this.pais = 1;
 
     this.cargarRegion();
@@ -267,6 +284,7 @@ export class BranchOfficeComponent implements OnInit {
   cargarprovinciaC(event: any) {
     this.Comunas = [];
     this.provincia = [];
+    this.registro.cod_prov = 0;
     this.an_request = {
       id: event
     };
@@ -274,7 +292,7 @@ export class BranchOfficeComponent implements OnInit {
       res => {
 
         this.an_response = res;
-        console.info(this.an_response.ciudad);
+
         this.provincia = this.an_response.ciudad;
       }
 
@@ -282,10 +300,10 @@ export class BranchOfficeComponent implements OnInit {
     );
 
   }
+
   cargarComuna(event: any) {
-
+    this.Comunas = [];
     this.registro.cod_prov = 0;
-
     this.an_request = {
       id: event
     };
@@ -293,7 +311,6 @@ export class BranchOfficeComponent implements OnInit {
     this.jumpservice.cargarcomuna(this.an_request).subscribe(
       res => {
         this.an_response = res;
-        console.info(this.an_response);
         this.Comunas = this.an_response;
 
       }
@@ -306,19 +323,26 @@ export class BranchOfficeComponent implements OnInit {
 
 
 
-  guardarComuna(event: any) {
+   
 
-    this.parroquiaerr = false;
+  guardarComunaM(event: any) {
+
     this.registro.cod_prov = event;
+ 
 
   }
+  guardarComuna(event: any) {
 
+    this.registro.cod_prov = event;
+ 
+
+  }
   cargartablachile() {
 
     this.panelPrincipal = false;
     this.Country = "Chile";
     this.an_request = {
-      email: 8
+      email: this.User.company
     };
 
     this.jumpservice.getsucursalchile(this.an_request).subscribe(
@@ -337,7 +361,7 @@ export class BranchOfficeComponent implements OnInit {
     this.panelPrincipal = false;
     this.Country = "Ecuador";
     this.an_request = {
-      email: 8
+      email: this.User.company
     };
 
     this.jumpservice.getsucursalecuador(this.an_request).subscribe(
@@ -354,12 +378,17 @@ export class BranchOfficeComponent implements OnInit {
 
   }
 
+  CargarMapa(){
+   
+    this.mostrarDatos=true;
+    this.Mostrarmapa = this._sanitizationService.bypassSecurityTrustHtml(this.registro.urlmap);
 
+  }
   crearnuevaSucursal() {
 
-
+    this.comunaerrorcrear = false;
     this.an_request = {
-      company_id: 8,
+      company_id: this.User.company,
       nombre: this.registro.nombre,
       dirrecion: this.registro.direccion,
       dirrecion2: this.registro.direccion2,
@@ -367,15 +396,21 @@ export class BranchOfficeComponent implements OnInit {
       cod_localidad: this.registro.cod_parr,
       urlmap: this.registro.urlmap
     }
-    if (this.registro.cod_parr > 0 || this.pais == 1) {
+    if (this.registro.cod_parr > 0 || this.registro.cod_prov > 0) {
 
       this.jumpservice.crearSucursal(this.an_request).subscribe(
         res => {
           this.an_response = res;
-
-          this.registro.cod_parr = 0;
+        
+           
           this.surc_name = this.registro.nombre;
-
+          this.registro.nombre = "";
+          this.registro.dirrecion = "";
+          this.registro.dirrecion2 = "";
+          this.registro.cod_prov = 0;
+          this.registro.cod_parr = 0;
+          this.registro.urlmap = "";
+          this.formload();
           if (this.pais == 1) {
             this.cargarRegion();
             this.sucursalresult = true;
@@ -391,6 +426,7 @@ export class BranchOfficeComponent implements OnInit {
     } else {
       this.sucursalresult = false;
       this.parroquiaerr = true;
+      this.comunaerrorcrear =true;
     }
 
   }
@@ -398,17 +434,20 @@ export class BranchOfficeComponent implements OnInit {
 
 
   modificarSucursal(event: any) {
-
+    this.modificarResultado=false;
+    
     this.paneltablamodificarSucursal = false;
     this.panelconfigurarsucursal = true;
-
+    this.Mprovincia.id = event.id,
     this.Mprovincia.comuna = event.comuna;
     this.Mprovincia.codigo = event.codigo;
+    
+
     this.registro.nombre = event.nombre;
     this.registro.direccion = event.direccion;
     this.registro.direccion2 = event.direccion2;
     this.registro.mapa = event.mapa;
-    console.info(event);
+
     this.an_request = {
       id: event.comuna
     };
@@ -420,12 +459,12 @@ export class BranchOfficeComponent implements OnInit {
         res => {
           this.an_response = res;
           //this.tablachile = this.an_response.sucursal;
-          console.info(this.an_response);
+     
           this.Mprovincia.provincia = this.an_response.provincia.codigo;
           this.cargarProvincia();
           this.cargarCiudad(this.Mprovincia.provincia);
           this.cargarParroquia(this.Mprovincia.comuna);
-          console.info(this.Mprovincia);
+         
 
         }
         , err => console.error(err)
@@ -439,28 +478,41 @@ export class BranchOfficeComponent implements OnInit {
           this.an_response = res;
 
           //this.tablachile = this.an_response.sucursal;
-          console.info(this.an_response);
+       
           this.Mprovincia.provincia = this.an_response.provincia.codigo;
           this.cargarRegion();
           this.cargarprovinciaC(this.an_response.provincia.codigo);
+          this.buscarProvincia(event.comuna);
           
-          console.info("trae el " ,this.provincia);
-          for (var i = 0; i < this.provincia.length; i++) {
-            if (this.provincia[i].region_id == this.an_response.provincia.codigo) {
-            console.info("--------------------------");
-            }
-          }
-          this.cargarComuna(event.comuna);
+
         }
 
         , err => console.error(err)
       );
     }
+   
+  }
 
+  buscarProvincia(event: any) {
+
+    this.an_request = {
+      id: event
+    };
+
+    this.jumpservice.BuscarprovinciaModificar(this.an_request).subscribe(
+      res => {
+        this.an_response = res;
+        this.Mprovincia.codigo = this.an_response.provincia.codigo;
+
+        this.cargarComuna(this.Mprovincia.codigo);
+        this.registro.cod_prov = event;
+      }
+
+      , err => console.error(err)
+    );
 
 
   }
-
   ConfigurarSucursalmostrar(event: any) {
     this.resultadomodifcar = false;
     this.resultcrear = false;
@@ -642,6 +694,36 @@ export class BranchOfficeComponent implements OnInit {
     this.horarioFormat.horaTtarde = event;
   }
 
+  ModificarSucursalM() {
+    
+  
+    this.an_request = {
+      nombre: this.registro.nombre,
+      direccion: this.registro.direccion,
+      direccion2: this.registro.direccion2,
+      mapa: this.registro.mapa,
+      comuna: this.registro.cod_prov,
+      company: this.User.company,
+      id: this.Mprovincia.id
+    };
+
+  
+    if(this.registro.cod_prov > 0){
+      this.Modificarcomunaerror = false;
+      this.modificarResultado = true;
+      this.jumpservice.modificarSucursal(this.an_request).subscribe(
+        res => {
+          this.an_response = res;
+        }
+  
+        , err => console.error(err)
+      );
+    }else{
+      this.Modificarcomunaerror = true;
+    }
+  
+
+  }
 
   GenerarHorario() {
     this.an_request = {
@@ -691,33 +773,7 @@ export class BranchOfficeComponent implements OnInit {
   }
 
 
-  ModificarSucursalM() {
-    if (this.Country == "Ecuador") {
-      this.an_request = {
-        nombre: this.registro.nombre,
-        direccion: this.registro.nombre,
-        direccion2: this.registro.nombre,
-        mapa: this.registro.nombre,
-        comuna: this.registro.cod_prov,
-        codlocalidad: this.registro.cod_parr,
-      }
-      console.info(this.registro);
-
-      /*this.jumpservice.modificarSucursal(this.an_request).subscribe(
-        res => {
-          console.info(res);
-          this.an_response = res;
-          if(this.an_response.status == "OK"){
-            this.resultcrear = true;
-          }
-        
-        }
-  
-        , err => console.error(err)
-      );*/
-
-    }
-  }
+ 
 
 
 }
