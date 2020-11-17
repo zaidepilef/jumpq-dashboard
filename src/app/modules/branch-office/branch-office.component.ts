@@ -342,7 +342,7 @@ export class BranchOfficeComponent implements OnInit {
     this.panelPrincipal = false;
     this.Country = "Chile";
     this.an_request = {
-      email: this.User.company
+      company_id: this.User.company
     };
 
     this.jumpservice.getsucursalchile(this.an_request).subscribe(

@@ -251,33 +251,31 @@
 
 		<div class="row" *ngIf="modificarEstilos">
 			<div class="col-12">
-				<b>Modificar estilo de la pagina</b><br>
+				<h2><b>Informacion sobre la configuracion</b></h2><br>
 			</div>
+			  
 			<div class="col-3">
-				Color superior:
+				Sucursales Actualmente registradas:
 			</div>
-			<div class="col-9">
-				<input type="text" class="form-control">
-			</div>
-			<div class="col-3">
-				Color inferior
-			</div>
-			<div class="col-9">
-				<input type="text" class="form-control">
-			</div>
-			<div class="col-3">
-				logo empresa
-			</div>
-			<div class="col-9">
-				<input type="file">
-				<br>
-			</div>
+			<div class="col">{{conteosucursal}}</div>
+			<div class="col-12"></div>
 
-			<div class="col-4"><br>
-				<button type="button" class="btn btn-primary btn-block">Guardar Cambios</button>
+			<div class="col-3">
+				Sucursales con horarios de atencion configurados:
 			</div>
+			<div class="col">{{conteoconfiguracion}}</div>
+			<div class="col-12"></div>
+
+			<div class="col-3">
+				Link jumpq:
+			</div>
+			
+			<div class="col"><a href="https://jumpqapp.azurewebsites.net/turno/{{linkJumpq}}" target="_blank">https://jumpqapp.azurewebsites.net/turno/{{linkJumpq}}</a></div>
+			<div class="col-12"></div>
+
+			 
 			<div class="col-4"><br>
-				<button type="button" (click)="salir()" class="btn btn-primary btn-block">Salir sin modificar</button>
+				<button type="button" (click)="salir()" class="btn btn-primary btn-block">Volver</button>
 			</div>
 		</div>
 

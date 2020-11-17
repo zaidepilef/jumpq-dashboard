@@ -10,7 +10,7 @@ export class SuscripcionComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.panelPrincipal = true;
+    this.panelPrincipal = false;
   }
 
 }

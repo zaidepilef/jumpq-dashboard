@@ -30,12 +30,12 @@ export class HeaderComponent implements OnInit {
         this.an_response = res;
         this.user.name = this.an_response.user.name;
       
-        console.log("Contiene el usuario nombre", this.an_response);
+     
       }, err => console.error(err)
     );
   }
   onClickMe() {
-    console.log('logout');
+    
 
     this.spinner.show();
   

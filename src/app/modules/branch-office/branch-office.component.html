@@ -12,7 +12,7 @@
 				<h4>Agregar Nueva sucursal</h4>
 			</label>
 		</div>
-		<div class="col-12">
+		<div *ngIf="ModeOf" class="col-12">
 			<br>
 			<label (click)="panelsucursalE()">
 				<h4>Agregar Nueva sucursal ecuador</h4>
@@ -283,7 +283,7 @@
 				<h2>Configurar sucursales {{Country}}</h2><br>
 			</div>
 			<div class="col-12">
-				<div class="btn-group" role="group" aria-label="Basic example">
+				<div *ngIf="ModeOf" class="btn-group" role="group" aria-label="Basic example">
 					<button type="button" class="btn btn-secondary" (click)="cargartablachile()">Sucursales
 						Chile</button>
 					<button type="button" class="btn btn-secondary" (click)="cargartablaecuador()">Sucursales
@@ -490,7 +490,7 @@
 			<div class="col-12">
 				<h2>Modificar sucursales {{Country}}</h2>
 			</div>
-			<div class="col-12">
+			<div class="col-12" *ngIf="ModeOf">
 				<div class="btn-group" role="group" aria-label="Basic example">
 					<button type="button" class="btn btn-secondary" (click)="cargartablachile()">Sucursales
 						Chile</button>

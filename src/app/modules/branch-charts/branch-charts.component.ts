@@ -471,6 +471,7 @@ export class BranchChartsComponent implements OnInit {
         this.jumpservice.Consultaejecutivo(this.an_request).subscribe(
             res => {
                 this.an_response = res;
+                
                 if (this.an_response.status == "OK") {
                     this.ejecutivo = this.an_response.ejecutivo;
                     this.ejecutivosConteo();
@@ -1112,7 +1113,7 @@ export class BranchChartsComponent implements OnInit {
         this.jumpservice.Consultaejecutivobusqueda(data).subscribe(
             res => {
                 this.an_response = res;
-                
+               
                 if (this.an_response.status == "OK") {
                     this.ejecutivo = this.an_response.ejecutivo;
                     this.ejecutivosConteo();

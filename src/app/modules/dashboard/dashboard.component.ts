@@ -74,6 +74,10 @@ export class DashboardComponent implements OnInit {
   passwordsucces: boolean;
   emailcheckfail: boolean;
   errorestado: boolean;
+
+  linkJumpq:any="test";
+  conteosucursal: any = 0;
+  conteoconfiguracion: any = 0;
   get name_feed() { return this.registroEForm.get('name'); }
   get lastname_feed() { return this.registroEForm.get('lastname'); }
   get rut_feed() { return this.registroEForm.get('rut'); }
@@ -99,7 +103,7 @@ export class DashboardComponent implements OnInit {
   areatrabajo: any;
   messageRubro:boolean;
   messageCantidad:boolean;
-  
+  ModeOf:boolean = false;
   password:any ={
     oldpass:"",
     new:"",
@@ -155,7 +159,7 @@ export class DashboardComponent implements OnInit {
         this.user.company = this.an_response.user.company; 
         this.user.name = this.an_response.user.email;
       
-        console.log("Contiene el usuario", this.user);
+       
       }, err => console.error(err)
     );
   }
@@ -190,8 +194,55 @@ export class DashboardComponent implements OnInit {
     this.panelPrincipal = false;
     this.modificarEstilos = true;
 
+    this.an_request = {
+      company : this.user.company
+    }
+    this.MostrarSucursales(this.an_request);
+    this.MostrarConfiguracion(this.an_request);
+    this.BuscarJumpq(this.an_request);
   }
+
+
+  MostrarSucursales(data : any){
+    this.jumpservice.ContarSucursal(data).subscribe(
+      res => {
+        this.an_response = res;
+
+        this.conteosucursal = this.an_response.sucursal.sucursales;
+      }
+
+      , err => console.error(err)
+    );
+  }
+
+  MostrarConfiguracion(data : any){
+    this.jumpservice.ContarConfiguracion(data).subscribe(
+      res => {
+        this.an_response = res;
+         
+        this.conteoconfiguracion = this.an_response.sucursal.conteo;
+         
+      }
+
+      , err => console.error(err)
+    );
+  }
+
+  BuscarJumpq(data : any){
+    this.jumpservice.linkjumpq(data).subscribe(
+      res => {
+        this.an_response = res;
+    
+        this.linkJumpq = this.an_response.link.linkjump;
+         
+      }
+
+      , err => console.error(err)
+    );
+  }
+
   modificarEmpresa() {
+    this.ResultadoModificar = false;
     this.panelPrincipal = false;
     this.modificarEmp = true;
     this.cargardatosEmpresa();
@@ -213,7 +264,7 @@ export class DashboardComponent implements OnInit {
     this.jumpservice.modificarcompañia(this.an_request).subscribe(
       res => {
         this.an_response = res;
-        console.info(this.an_response);
+        
         if(this.an_response.status == "OK"){
           this.ResultadoModificar=true;
         }
@@ -229,7 +280,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ModificarContrasenaUsuario() {
-    console.info("entro aca en el pass");
+   
     this.modificarcontra = true;
     this.panelPrincipal = false;
   }
@@ -250,7 +301,7 @@ export class DashboardComponent implements OnInit {
     if(data.estado=="Desactivada"){
       this.Mregistro.estado = 2;
     }
-    console.info(data);
+
   }
   CrearUsuario() {
     this.panelPrincipal = false;
@@ -266,7 +317,7 @@ export class DashboardComponent implements OnInit {
 
     if (this.panelModificarUsuario == true) {
       this.Mregistro.estado = data;
-      console.info("cambio",this.Mregistro);
+     
       
     }
 
@@ -274,7 +325,7 @@ export class DashboardComponent implements OnInit {
 
   checkpass() {
     if (this.registro.pwd != "" && this.registro.pwd2 != "") {
-      console.info("entro");
+     
 
       if (this.registro.pwd == this.registro.pwd2) {
         this.badpassword = false;
@@ -285,7 +336,7 @@ export class DashboardComponent implements OnInit {
     }
   }
   guardarRubro(event : any){
-    console.info("entro y tiene " ,event);
+ 
     if(event >=1){
       this.messageRubro=false;
     }else{
@@ -317,12 +368,12 @@ export class DashboardComponent implements OnInit {
       email: this.registro.email,
       company: this.user.company
     }
-    console.info(this.an_request);
+   
     if (this.badpassword == false) {
       this.jumpservice.postNewUser(this.an_request).subscribe(
         res => {
           this.an_response = res;
-          console.info(res);
+      
           if (this.an_response.status == "OK") {
 
             this.resultado = true;
@@ -352,11 +403,11 @@ export class DashboardComponent implements OnInit {
     }
     
     if(this.passworderror == false){
-      console.info("todo ok");
+
       this.jumpservice.modificarpassword(this.an_request).subscribe(
         res => {
           this.an_response = res;
-          console.info(res);
+       
           if (this.an_response.status == "OK") {
             this.passwordolderror = false;
             this.passwordsucces = true;
@@ -376,7 +427,7 @@ export class DashboardComponent implements OnInit {
   CargarModificarUsuario() {
     this.panelPrincipal = false;
     this.an_request = {
-      email: 8 
+      email: this.user.company
     };
     this.jumpservice.modificarlist(this.an_request).subscribe(
       res => {
@@ -404,12 +455,12 @@ export class DashboardComponent implements OnInit {
 
   cargardatosEmpresa(){
     this.an_request={
-      id:8
+      id:this.user.company
     };
     this.jumpservice.cargarcompañia(this.an_request).subscribe(
       res => {
         this.an_response = res;
-        console.info("Contiene la empresa", this.an_response);
+
         if(this.an_response.status == "OK"){
           this.newcompany = false;
           this.empresa.name = this.an_response.companies.company_name;
@@ -436,7 +487,7 @@ export class DashboardComponent implements OnInit {
       res => {
         this.an_response = res;
         this.areatrabajo = this.an_response.businessItem
-        console.info("Contiene", this.areatrabajo);
+
 
       }
 
@@ -463,7 +514,7 @@ export class DashboardComponent implements OnInit {
       this.jumpservice.postmodificarUser(this.an_request).subscribe(
         res => {
           this.an_response = res;
-          console.info(res);
+      
           if (this.an_response.status == "OK") {
              this.resultado2 = true;
           }

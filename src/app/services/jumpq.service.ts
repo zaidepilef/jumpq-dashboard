@@ -210,7 +210,7 @@ export class JumpqService {
 		return this.httpClient.post(`${environment.API_URL}/companies/companyUpdate`,data);
 	  }
 
-	  
+
 
 //clave
 	  public modificarpassword(data : any) {
@@ -218,4 +218,15 @@ export class JumpqService {
 	  }
 
 
+
+
+	public ContarSucursal(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/ContarSucursal`,data);
+	}
+	public ContarConfiguracion(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/ContarConfiguracion`,data);
+	}	  
+	public linkjumpq(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/jumpqlink`,data);
+	}	  
 }

@@ -32,7 +32,7 @@ export class VirtualcallComponent implements OnInit {
 
   ngOnInit(): void {
    
-    this.panelPrincipal = true;
+    this.panelPrincipal = false;
 
     this.registroEForm = this.formBuilder.group(
       {
@@ -56,7 +56,7 @@ export class VirtualcallComponent implements OnInit {
           
           this.ejecutivos = this.an_response.user;
            
-          console.info("Contiene",this.ejecutivos);
+           
           this.PanelEjecutivo = true;
        
         
@@ -69,12 +69,12 @@ export class VirtualcallComponent implements OnInit {
 
     
     ConfigurarAgendamiento(data : any){
-      console.info(data);
+  
       this.ejecutivoSeleccionado = data.name;
-      console.info(this.ejecutivoSeleccionado);
+ 
       this.panelconfE = true;
       this.PanelEjecutivo = false;
-      console.info(this.ejecutivoSeleccionado);
+ 
     }
   
 
@@ -102,7 +102,7 @@ export class VirtualcallComponent implements OnInit {
           this.an_response = res;
           
           this.medios = this.an_response.medios;
-          console.info(this.medios);
+           
         
       }
   
@@ -112,13 +112,13 @@ export class VirtualcallComponent implements OnInit {
 
 
   ModificarMedio(event : any){
-    console.info(event);
+    
     this.PanelMedio = false;
     this.PanelMedioModificar = true;
     this.medioscontacto.estado = event.status;
     this.medioscontacto.nombre = event.meet_name;
     this.medioscontacto.id = event.meet_configId;
-    console.info(this.medioscontacto.estado);
+    
     this.resultadoMedio=false;
 
   }
@@ -134,7 +134,7 @@ export class VirtualcallComponent implements OnInit {
 
      
     this.an_request = this.medioscontacto;
-    console.info(this.an_request); 
+    
     
     this.jumpservice.modificarMedio(this.an_request).subscribe(
       res => {
@@ -143,7 +143,7 @@ export class VirtualcallComponent implements OnInit {
           if(this.an_response.status == "OK"){
             this.resultadoMedio = true;
           }
-          console.info(this.an_response);
+        
         
       }
   

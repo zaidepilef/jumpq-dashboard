@@ -39,7 +39,7 @@ export class SidebarComponent implements OnInit {
       res => {
          this.an_response = res;
          this.userdata = this.an_response.user;
-         console.info("tiene esto ",this.userdata);
+      
          this.Company();
       }, err => console.error(err)
     );
