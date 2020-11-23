@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { User, UserResponse } from 'src/app/models/user.interface';
 import { AuthService } from 'src/app/services/auth.service'
-
+import * as CryptoJS from 'crypto-js';
 @Component({
 	selector: 'app-login',
 	templateUrl: './login.component.html',
@@ -42,11 +42,11 @@ export class LoginComponent implements OnInit {
 		this.spinner.show();
 		this.UserData.email = this.LoginForm.value.email;
 		this.UserData.password = this.LoginForm.value.password;
-		console.log('UserData : ', this.UserData);
+	
 		this.auth.SignIn(this.UserData).subscribe(
 			res => {
 				this.a_response = res;
-				console.log("a_response : ", this.a_response);
+				
 				
 				if (this.a_response.status == 'OK') {
 					this.auth.SaveToken(this.a_response.jwt);

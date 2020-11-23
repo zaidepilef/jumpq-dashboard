@@ -224,8 +224,7 @@
 								corta
 							</div>
 						</div>
-					</div>
-					
+					</div>  
 					<div *ngIf="passworderror" class="alert alert-danger col-12">verifique que la contraseña nueva coincidan</div>
 
 					<div *ngIf="passwordolderror" class="alert alert-danger col-12">la contraseña antigua no es correcta</div>
@@ -266,17 +265,25 @@
 			<div class="col">{{conteoconfiguracion}}</div>
 			<div class="col-12"></div>
 
+			<div *ngIf="nolink">
 			<div class="col-3">
 				Link jumpq:
 			</div>
-			
-			<div class="col"><a href="https://jumpqapp.azurewebsites.net/turno/{{linkJumpq}}" target="_blank">https://jumpqapp.azurewebsites.net/turno/{{linkJumpq}}</a></div>
+		
+			<div class="col-9"><a href="https://jumpqapp.azurewebsites.net/turno/{{linkJumpq}}" target="_blank">https://jumpqapp.azurewebsites.net/turno/{{linkJumpq}}</a></div>
+			</div>
+			<div *ngIf="nolinkalert" class="col-12 alert alert-info">
+				Aun no se ha generado el link de jumpq
+				</div>
 			<div class="col-12"></div>
 
-			 
+			<div *ngIf="nolinkalert" class="col-4"><br>
+				<button type="button" (click)="Crearjumpq()" class="btn btn-success btn-block">Generar link jumpq</button>
+			</div>
 			<div class="col-4"><br>
 				<button type="button" (click)="salir()" class="btn btn-primary btn-block">Volver</button>
 			</div>
+	
 		</div>
 
 		<div *ngIf="panelcrearUsuario">

@@ -21,6 +21,7 @@ export class BranchOfficeComponent implements OnInit {
   provincia: Array<any> = [];
   Comunas: Array<any> = [];
   NombreSucursal: any = {};
+  sucursalId: any = 0;
   registro: any = {
     company: 0,
     nombre: "",
@@ -34,7 +35,7 @@ export class BranchOfficeComponent implements OnInit {
   };
 
   Mprovincia: any = {
-    id:"",
+    id: "",
     comuna: 0,
     codigo: 0,
     provincia: 0
@@ -45,9 +46,12 @@ export class BranchOfficeComponent implements OnInit {
   Modificarcomunaerror: boolean;
   modificarResultado: boolean;
   comunaerrorcrear: boolean;
-  Mostrarmapa:any;
-  Mostrarmapam:any;
+  Mostrarmapa: any;
+  Mostrarmapam: any;
   mostrarDatos: boolean;
+  sucursaldelete: boolean = false;
+  resulterror: boolean = false;
+  errorhorario: string = "";
   get nombre_feed() { return this.registroEForm.get('nombre'); }
   get direccion_feed() { return this.registroEForm.get('direccion'); }
   get direccion2_feed() { return this.registroEForm.get('direccion2'); }
@@ -78,7 +82,7 @@ export class BranchOfficeComponent implements OnInit {
     horaTMañana: 0,
     horaItarde: 0,
     horaTtarde: 0,
-    turno: 0,
+    turno: "",
     Days1: false,
     Days2: false,
     Days3: false,
@@ -112,7 +116,7 @@ export class BranchOfficeComponent implements OnInit {
   formato: any;
   resultadomodifcar: boolean = false;
   resultcrear: boolean;
-  constructor(private _sanitizationService: DomSanitizer,private formBuilder: FormBuilder, private jumpservice: JumpqService, private loggin: AuthService) { }
+  constructor(private _sanitizationService: DomSanitizer, private formBuilder: FormBuilder, private jumpservice: JumpqService, private loggin: AuthService) { }
 
 
 
@@ -129,7 +133,7 @@ export class BranchOfficeComponent implements OnInit {
 
   }
 
-  formload(){
+  formload() {
     this.registroEForm = this.formBuilder.group(
       {
         nombre: ['', [Validators.required, Validators.minLength(4)]],
@@ -148,7 +152,7 @@ export class BranchOfficeComponent implements OnInit {
       res => {
         this.an_response = res;
         this.User = this.an_response.user;
-        
+
       }, err => console.error(err)
     );
   }
@@ -188,6 +192,7 @@ export class BranchOfficeComponent implements OnInit {
     this.paneltablaconfigurarSucursal = false;
     this.panelconfigurarsucursal = false;
     this.ConfigurarSucursalmostar = false;
+    this.sucursaldelete = false;
   }
 
   panelModfSucursal() {
@@ -323,18 +328,18 @@ export class BranchOfficeComponent implements OnInit {
 
 
 
-   
+
 
   guardarComunaM(event: any) {
 
     this.registro.cod_prov = event;
- 
+
 
   }
   guardarComuna(event: any) {
 
     this.registro.cod_prov = event;
- 
+
 
   }
   cargartablachile() {
@@ -378,9 +383,9 @@ export class BranchOfficeComponent implements OnInit {
 
   }
 
-  CargarMapa(){
-   
-    this.mostrarDatos=true;
+  CargarMapa() {
+
+    this.mostrarDatos = true;
     this.Mostrarmapa = this._sanitizationService.bypassSecurityTrustHtml(this.registro.urlmap);
 
   }
@@ -401,8 +406,8 @@ export class BranchOfficeComponent implements OnInit {
       this.jumpservice.crearSucursal(this.an_request).subscribe(
         res => {
           this.an_response = res;
-        
-           
+
+
           this.surc_name = this.registro.nombre;
           this.registro.nombre = "";
           this.registro.dirrecion = "";
@@ -426,7 +431,7 @@ export class BranchOfficeComponent implements OnInit {
     } else {
       this.sucursalresult = false;
       this.parroquiaerr = true;
-      this.comunaerrorcrear =true;
+      this.comunaerrorcrear = true;
     }
 
   }
@@ -434,14 +439,15 @@ export class BranchOfficeComponent implements OnInit {
 
 
   modificarSucursal(event: any) {
-    this.modificarResultado=false;
-    
+
+    this.modificarResultado = false;
+    this.sucursalId = event.id;
     this.paneltablamodificarSucursal = false;
     this.panelconfigurarsucursal = true;
     this.Mprovincia.id = event.id,
-    this.Mprovincia.comuna = event.comuna;
+      this.Mprovincia.comuna = event.comuna;
     this.Mprovincia.codigo = event.codigo;
-    
+
 
     this.registro.nombre = event.nombre;
     this.registro.direccion = event.direccion;
@@ -459,12 +465,12 @@ export class BranchOfficeComponent implements OnInit {
         res => {
           this.an_response = res;
           //this.tablachile = this.an_response.sucursal;
-     
+
           this.Mprovincia.provincia = this.an_response.provincia.codigo;
           this.cargarProvincia();
           this.cargarCiudad(this.Mprovincia.provincia);
           this.cargarParroquia(this.Mprovincia.comuna);
-         
+
 
         }
         , err => console.error(err)
@@ -478,19 +484,19 @@ export class BranchOfficeComponent implements OnInit {
           this.an_response = res;
 
           //this.tablachile = this.an_response.sucursal;
-       
+
           this.Mprovincia.provincia = this.an_response.provincia.codigo;
           this.cargarRegion();
           this.cargarprovinciaC(this.an_response.provincia.codigo);
           this.buscarProvincia(event.comuna);
-          
+
 
         }
 
         , err => console.error(err)
       );
     }
-   
+
   }
 
   buscarProvincia(event: any) {
@@ -544,7 +550,7 @@ export class BranchOfficeComponent implements OnInit {
     this.an_request = {
       id: event
     };
-    this.horarioFormat.turno = 0;
+    this.horarioFormat.turno = "";
     this.jumpservice.buscarConf(this.an_request).subscribe(
       res => {
         this.an_response = res;
@@ -695,8 +701,8 @@ export class BranchOfficeComponent implements OnInit {
   }
 
   ModificarSucursalM() {
-    
-  
+
+
     this.an_request = {
       nombre: this.registro.nombre,
       direccion: this.registro.direccion,
@@ -707,25 +713,67 @@ export class BranchOfficeComponent implements OnInit {
       id: this.Mprovincia.id
     };
 
-  
-    if(this.registro.cod_prov > 0){
+
+    if (this.registro.cod_prov > 0) {
       this.Modificarcomunaerror = false;
       this.modificarResultado = true;
       this.jumpservice.modificarSucursal(this.an_request).subscribe(
         res => {
           this.an_response = res;
         }
-  
+
         , err => console.error(err)
       );
-    }else{
+    } else {
       this.Modificarcomunaerror = true;
     }
-  
+
 
   }
 
+  borrarSucursal() {
+    if (confirm("¿Esta seguro que desea borrar esta sucursal?")) {
+      this.an_request = {
+        id: this.sucursalId,
+        company: this.User.company
+      }
+      this.jumpservice.borraSucursalespecial(this.an_request).subscribe(
+        res => {
+
+          this.jumpservice.borraSucursalconf(this.an_request).subscribe(
+            res => {
+              this.an_response = res;
+
+              this.jumpservice.borraSucursal(this.an_request).subscribe(
+                res => {
+                  this.an_response = res;
+                  if (this.an_response.status == "OK") {
+                    this.panelconfigurarsucursal = false;
+                    this.sucursaldelete = true;
+                  }
+                }
+
+                , err => console.error(err)
+              );
+
+            }
+            , err => console.error(err)
+          );
+
+        }
+
+        , err => console.error(err)
+      );
+
+
+    }
+  }
+
+
   GenerarHorario() {
+    this.resulterror = false;
+    this.resultadomodifcar = false;
+    this.resultcrear = false;
     this.an_request = {
       id: this.horarioFormat.id,
       format: this.horarioFormat.format,
@@ -743,37 +791,90 @@ export class BranchOfficeComponent implements OnInit {
       Days7: this.horarioFormat.Days7
     }
     if (this.newConfig == false) {
+      if (this.horarioFormat.turno > 0) {
 
-      this.jumpservice.ActualizarHorario(this.an_request).subscribe(
-        res => {
-          this.an_response = res;
-          if (this.an_response.status == "OK") {
-            this.resultadomodifcar = true;
+
+        if (this.horarioFormat.format > 0) {
+          if (this.horarioFormat.horaIMañana > 0 && this.horarioFormat.horaTMañana > 0 && this.horarioFormat.horaItarde > 0 && this.horarioFormat.horaTtarde > 0) {
+
+            if (this.horarioFormat.Days1 == true || this.horarioFormat.Days2 == true || this.horarioFormat.Days3 == true || this.horarioFormat.Days4 == true || this.horarioFormat.Days5 == true || this.horarioFormat.Days6 == true || this.horarioFormat.Days7 == true) {
+
+
+              this.jumpservice.ActualizarHorario(this.an_request).subscribe(
+                res => {
+                  this.an_response = res;
+                  if (this.an_response.status == "OK") {
+                    this.resultadomodifcar = true;
+                  }
+
+                }
+
+                , err => console.error(err)
+              );
+            } else {
+              this.resulterror = true;
+              this.errorhorario = "Seleccione los dias de trabajo";
+            }
+          } else {
+
+            this.resulterror = true;
+            this.errorhorario = "Forme el horario de atencion para continuar";
           }
-
+        } else {
+          this.resulterror = true;
+          this.errorhorario = "Seleccione un formato de horas para continuar.";
         }
-
-        , err => console.error(err)
-      );
-
+      } else {
+        this.resulterror = true;
+        this.errorhorario = "Ingrese la cantidad de turnos en la misma hora (minimo 1)";
+      }
     } else {
-      this.jumpservice.crearHorario(this.an_request).subscribe(
-        res => {
-          this.an_response = res;
-          if (this.an_response.status == "OK") {
-            this.resultcrear = true;
+      if (this.horarioFormat.turno > 0) {
+
+
+        if (this.horarioFormat.format > 0) {
+          if (this.horarioFormat.horaIMañana > 0 && this.horarioFormat.horaTMañana > 0 && this.horarioFormat.horaItarde > 0 && this.horarioFormat.horaTtarde > 0) {
+
+            if (this.horarioFormat.Days1 == true || this.horarioFormat.Days2 == true || this.horarioFormat.Days3 == true || this.horarioFormat.Days4 == true || this.horarioFormat.Days5 == true || this.horarioFormat.Days6 == true || this.horarioFormat.Days7 == true) {
+
+              this.jumpservice.crearHorario(this.an_request).subscribe(
+                res => {
+                  this.an_response = res;
+                  if (this.an_response.status == "OK") {
+                    this.resultcrear = true;
+                    this.newConfig =false;
+                  }
+
+                }
+
+                , err => console.error(err)
+              );
+
+            } else {
+              this.resulterror = true;
+              this.errorhorario = "Seleccione los dias de trabajo";
+            }
+          } else {
+
+            this.resulterror = true;
+            this.errorhorario = "Forme el horario de atencion para continuar";
           }
-
+        } else {
+          this.resulterror = true;
+          this.errorhorario = "Seleccione un formato de horas para continuar.";
         }
+      } else {
+        this.resulterror = true;
+        this.errorhorario = "Ingrese la cantidad de turnos en la misma hora (minimo 1)";
+      }
 
-        , err => console.error(err)
-      );
     }
+
 
   }
 
 
- 
+
 
 
 }

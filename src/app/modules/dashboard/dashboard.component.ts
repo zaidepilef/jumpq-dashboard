@@ -2,6 +2,7 @@ import { Component, OnInit, ɵConsole } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms'
 import { AuthService } from '../../services/auth.service'
 import { JumpqService } from '../../services/jumpq.service'
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -78,6 +79,8 @@ export class DashboardComponent implements OnInit {
   linkJumpq:any="test";
   conteosucursal: any = 0;
   conteoconfiguracion: any = 0;
+  nolink: boolean = false;
+  nolinkalert: boolean = false;
   get name_feed() { return this.registroEForm.get('name'); }
   get lastname_feed() { return this.registroEForm.get('lastname'); }
   get rut_feed() { return this.registroEForm.get('rut'); }
@@ -112,6 +115,9 @@ export class DashboardComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private jumpservice: JumpqService, private loggin: AuthService) { }
 
   ngOnInit(): void {
+    
+   
+
     this.loaduser();
     this.panelPrincipal = true;
     //this.checkmail(this.mailuser);
@@ -232,8 +238,16 @@ export class DashboardComponent implements OnInit {
     this.jumpservice.linkjumpq(data).subscribe(
       res => {
         this.an_response = res;
-    
-        this.linkJumpq = this.an_response.link.linkjump;
+        
+        if(this.an_response.status == "OK"){
+          this.linkJumpq = this.an_response.link.linkjump;
+          this.nolink=true;
+          this.nolinkalert=false;
+        }else{
+          this.nolink=false;
+          this.nolinkalert=true;
+        }
+        
          
       }
 
@@ -392,9 +406,25 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  Modificarclave() {
+  Crearjumpq() {
+    this.an_request = {
+      company : this.user.company
+    }
+    this.jumpservice.crearlinkjumpq(this.an_request).subscribe(
+      res => {
+        this.an_response = res;
+        if(this.an_response.status =="OK"){
+          this.genjumpQ();
+        }else{
 
+        }
+ 
+      }
+
+      , err => console.error(err)
+    );
   }
+
   ModificarpasswordForm(){
     this.an_request = {
     email: this.user.name,
@@ -528,7 +558,7 @@ export class DashboardComponent implements OnInit {
       
     }
 
-
+ 
 
   salir() {
     this.panelPrincipal = true;

@@ -142,8 +142,8 @@
 				<div *ngIf="sucursalresult" class="col-12 alert alert-success">Se ha creado la sucursal {{surc_name}}
 					Correctamente!</div>
 				<div class="col-4">
-					<button type="submit" class="btn btn-primary btn-block"
-						[disabled]="!registroEForm.valid">Registrar</button>
+					<button type="submit" class="btn btn-success btn-block"
+						[disabled]="!registroEForm.valid">Registrar Sucursal</button>
 				</div>
 				<div class="col-4">
 					<button type="button" (click)="salir()" class="btn btn-primary btn-block">Salir sin
@@ -270,7 +270,7 @@
 						[disabled]="!registroEForm.valid">Registrar</button>
 				</div>
 				<div class="col-4">
-					<button type="button" (click)="salir()" class="btn btn-primary btn-block">Salir</button>
+					<button type="button" (click)="salir()" class="btn btn-primary btn-block">Volver</button>
 				</div>
 			</div>
 		</form>
@@ -280,7 +280,7 @@
 	<div *ngIf="paneltablaconfigurarSucursal">
 		<div class="row">
 			<div class="col-12">
-				<h2>Configurar sucursales {{Country}}</h2><br>
+				<h2>Configurar horario sucursales</h2><br>
 			</div>
 			<div class="col-12">
 				<div *ngIf="ModeOf" class="btn-group" role="group" aria-label="Basic example">
@@ -317,8 +317,7 @@
 						</tbody>
 					</table>
 				</div>
-				<button class="btn btn-success" (click)="exportExcelCantidaHoras()">Generar Excel</button>
-				<button class="btn btn-info" (click)="salir()">Salir</button>
+				<button class="btn btn-info" (click)="salir()">Volver</button>
 
 
 			</div>
@@ -473,16 +472,26 @@
 					Correctamente!</div>
 
 				<div class="col-4">
-					<button type="submit" class="btn btn-primary btn-block" [disabled]="!registroEForm.valid">Modificar
-						Sucursal</button>
+					<button type="submit" class="btn btn-success btn-block" [disabled]="!registroEForm.valid">Modificar sucursal</button>
 				</div>
 				<div class="col-4">
-					<button type="button" (click)="salir()" class="btn btn-primary btn-block">Salir</button>
+					<button type="button" class="btn btn-danger btn-block" (click)="borrarSucursal()">Eliminar Sucursal</button>
+				</div>
+				<div class="col-4">
+					<button type="button" (click)="salir()" class="btn btn-primary btn-block">Volver</button>
 				</div>
 			</div>
 		</form>
 
 
+	</div>
+	<div *ngIf="sucursaldelete" class="row">
+	<div class="col-12 alert alert-success">
+		Se ha eliminado la sucursal correctamente
+	</div>
+	<div class="col-4">
+		<button type="button" (click)="salir()" class="btn btn-primary btn-block">Volver</button>
+	</div>
 	</div>
 
 	<div *ngIf="paneltablamodificarSucursal">
@@ -526,7 +535,7 @@
 						</tbody>
 					</table>
 				</div>
-				<button class="btn btn-info" (click)="salir()">Salir</button>
+				<button class="btn btn-info" (click)="salir()">Volver</button>
 
 
 			</div>
@@ -537,13 +546,13 @@
 
 		<div class="row">
 			<div class="col-12">
-				<h2>Configurar Sucursal {{NombreSucursal}}</h2>
+				<h2>Configurar Horario Sucursal {{NombreSucursal}}</h2>
 			</div>
 			<div *ngIf="newConfig" class="col-12 alert alert-info">
 				Esta sucursal no tiene configuradas sus horas te atencion!
 			</div>
 			<div class="form-group col-sm-12 col-md-4">
-				<label for="formato" class="col-form-label">Cantidad de turnos en la misma hora</label>
+				<label for="formato" class="col-form-label">Cantidad de turnos por hora</label>
 				<input type="text" [(ngModel)]="horarioFormat.turno" class="form-control"
 					placeholder="Ejemplo: 1 o 2 por turno">
 			</div>
@@ -630,12 +639,16 @@
 				<div *ngIf="resultadomodifcar" class="col-12 alert alert-success">
 					Se ha modificado el horario de la sucursal correctamente!
 				</div>
+				
+				<div *ngIf="resulterror" class="col-12 alert alert-danger">
+					{{errorhorario}}
+				</div>
 				<div *ngIf="resultcrear" class="col-12 alert alert-success">
 					Se ha creado el horario de la sucursal correctamente!
 				</div>
 				<div class="col-12">
 					<button class="btn btn-success" (click)="GenerarHorario()">Guardar Cambios</button>
-					<button class="btn btn-info" (click)="salir()">Salir</button>
+					<button class="btn btn-info" (click)="salir()">Volver</button>
 				</div>
 			</div>
 		</div>

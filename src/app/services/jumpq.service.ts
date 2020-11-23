@@ -155,7 +155,15 @@ export class JumpqService {
 		return this.httpClient.post(`${environment.API_URL_LOCAL}/branchs/modifSucursal`,data);
 	  }
 
-
+	  public borraSucursal(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/branchs/borraSucursal`,data);
+	  }
+	  public borraSucursalconf(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/branchs/borraSucursalconf`,data);
+	  }
+	  public borraSucursalespecial(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/branchs/borraSucursalespecial`,data);
+	  }
 	  //modificar sucursal
 	  public Buscarprovincia(data : any) {
 		return this.httpClient.post(`${environment.API_URL}/regions/cargarMProvincia`,data);
@@ -228,5 +236,8 @@ export class JumpqService {
 	}	  
 	public linkjumpq(data : any) {
 		return this.httpClient.post(`${environment.API_URL}/branchSettings/jumpqlink`,data);
+	}	
+	public crearlinkjumpq(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/crearjumpqlink`,data);
 	}	  
 }
