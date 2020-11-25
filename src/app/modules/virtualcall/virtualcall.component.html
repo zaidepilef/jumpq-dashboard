@@ -70,12 +70,12 @@
 
 				<label for="name" class="col-form-label">Nombre</label>
 				<input type="text" class="form-control" placeholder="nombres" formControlName="nombre"
-					[(ngModel)]="medioscontacto.nombre">
+					[(ngModel)]="medioscontacto.nombre" disabled>
 				<div *ngIf="name_feed.invalid && (name_feed.dirty || name_feed.touched)" class="alert alert-danger">
-					<div *ngIf="name_feed.errors.required" class="email-feedback">Necesitamos tu nombre</div>
+					<div *ngIf="name_feed.errors.required" class="email-feedback">Ingrese un medio de contacto</div>
 					<div *ngIf="name_feed.errors.pattern" class="email-feedback">Un nombre extraño</div>
-					<div *ngIf="name_feed.errors?.minlength" class="email-feedback">Nombre demasiado corto</div>
-					<div *ngIf="name_feed.errors?.maxlength" class="email-feedback">Nombre demasiado largo</div>
+					<div *ngIf="name_feed.errors?.minlength" class="email-feedback">el nombre ingresado es demasiado corto</div>
+					<div *ngIf="name_feed.errors?.maxlength" class="email-feedback">el nombre ingresado es demasiado largo</div>
 				</div>
 			</div>
 
@@ -167,7 +167,7 @@
 			</div>
 			<div class="form-group col-sm-12 col-md-4">
 				<label for="formato" class="col-form-label">Medio de contacto</label>
-				<select name="medios" class="form-control" (change)="guardarmedios($event.target.value)">
+				<select name="medios" class="form-control" (change)="guardarmedios($event.target.value)" >
 					<option value="0">Seleccionar</option>
 					<option *ngFor="let medios of medios " value="{{medios.meet_configId}}" [selected]="medios.meet_configId==configuracion.id_solicitud">
 						{{medios.meet_name}}</option>

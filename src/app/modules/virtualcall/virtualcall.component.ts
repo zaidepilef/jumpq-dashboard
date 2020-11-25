@@ -25,12 +25,12 @@ export class VirtualcallComponent implements OnInit {
     estado: 0,
     id: 0
   }
-  medioReset ={
+  medioReset = {
     nombre: "",
     estado: 0,
     id: 0
   }
-  tipodemedio:any;
+  tipodemedio: any;
   user: any = {
     name: "",
     company: ""
@@ -323,7 +323,7 @@ export class VirtualcallComponent implements OnInit {
         if (this.an_response.status == "OK") {
           this.newConfig = false;
           this.configuracion = this.an_response.hora;
-        
+
           this.formato = this.an_response.hora.hours_format;
           this.drop1 = this.an_response.hora.hours_i_morning
           this.CargarHorario(this.formato);
@@ -680,19 +680,26 @@ export class VirtualcallComponent implements OnInit {
 
     this.an_request = {
       id: this.user.company
-
     };
+
+
     this.jumpservice.medios(this.an_request).subscribe(
       res => {
         this.an_response = res;
-
-        this.medios = this.an_response.medios;
-        for (var i = 0; i < this.medios.length; i++) {
-          if (this.medios[i].status == 1) {
-            this.medios[i].status = "Activa";
-          } else {
-            this.medios[i].status = "Desactivada";
+        if (this.an_response.status == "OK") {
+          this.medios = this.an_response.medios;
+          for (var i = 0; i < this.medios.length; i++) {
+            if (this.medios[i].status == 1) {
+              this.medios[i].status = "Activa";
+            } else {
+              this.medios[i].status = "Desactivada";
+            }
           }
+        }else{
+          this.an_request = {
+            company: this.user.company
+          };
+          this.inicializar(this.an_request);
         }
       }
 
@@ -700,7 +707,22 @@ export class VirtualcallComponent implements OnInit {
     );
   }
 
-  
+  inicializar(event : any){
+
+    this.jumpservice.crearMedio(event).subscribe(
+      res => {
+        this.an_response = res;
+        if(this.an_response.status == "OK"){
+          this.configurarMedio();
+        }
+        
+      }
+
+      , err => console.error(err)
+    );
+
+  }
+
 
   ModificarMedio(event: any) {
     this.tipodemedio = "Modificar Medio de contacto";
@@ -725,30 +747,30 @@ export class VirtualcallComponent implements OnInit {
     this.registro.estado = event;
   }
 
-  EliminarEjecutivo(){
+  EliminarEjecutivo() {
     if (confirm("¿Esta seguro que desea borrar este ejecutivo?")) {
-    this.an_request = {
-      user: this.registro.id,
-      email: this.registro.email
-    };
-    this.jumpservice.HorarioEjecutivo(this.an_request).subscribe(
-      res => {
-        this.an_response = res;
-      }
+      this.an_request = {
+        user: this.registro.id,
+        email: this.registro.email
+      };
+      this.jumpservice.HorarioEjecutivo(this.an_request).subscribe(
+        res => {
+          this.an_response = res;
+        }
 
-      , err => console.error(err)
-    );
-    this.jumpservice.EliminarEjecutivo(this.an_request).subscribe(
-      res => {
-        this.an_response = res;
-        this.panelGestionEjecutivo=false;
-        this.paneleliminar =true;
-      }
+        , err => console.error(err)
+      );
+      this.jumpservice.EliminarEjecutivo(this.an_request).subscribe(
+        res => {
+          this.an_response = res;
+          this.panelGestionEjecutivo = false;
+          this.paneleliminar = true;
+        }
 
-      , err => console.error(err)
-    );
+        , err => console.error(err)
+      );
+    }
   }
-}
   GestionarE() {
 
     this.panelPrincipal = false;

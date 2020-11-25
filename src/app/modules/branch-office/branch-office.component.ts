@@ -31,9 +31,10 @@ export class BranchOfficeComponent implements OnInit {
     codlocalidad: "",
     urlmap: "",
     cod_prov: 0,
-    cod_parr: 0
+    cod_parr: 0,
+    email:""
   };
-
+checkmapa:boolean = false;
   Mprovincia: any = {
     id: "",
     comuna: 0,
@@ -52,11 +53,15 @@ export class BranchOfficeComponent implements OnInit {
   sucursaldelete: boolean = false;
   resulterror: boolean = false;
   errorhorario: string = "";
+  mostrarDatos2: boolean;
+  Mostrarmapa2: any;
+  Modificarmapaerror: boolean;
+  mapanovalido: boolean;
   get nombre_feed() { return this.registroEForm.get('nombre'); }
   get direccion_feed() { return this.registroEForm.get('direccion'); }
   get direccion2_feed() { return this.registroEForm.get('direccion2'); }
   get urlmap_feed() { return this.registroEForm.get('urlmap'); }
-
+  get mail_feed() { return this.registroEForm.get('mail'); }
 
   registroEForm: FormGroup;
   an_request: any;
@@ -139,7 +144,9 @@ export class BranchOfficeComponent implements OnInit {
         nombre: ['', [Validators.required, Validators.minLength(4)]],
         direccion: ['', [Validators.required, Validators.minLength(4)]],
         direccion2: ['', [Validators.minLength(4)]],
-        urlmap: ['', [Validators.required]]
+        urlmap: ['', [Validators.required]],
+        mail: ['', [Validators.email]]
+
       }
     )
   }
@@ -161,7 +168,7 @@ export class BranchOfficeComponent implements OnInit {
   panelsucursal() {
     this.panelPrincipal = false;
     this.panelcrearsucursal = true;
-
+    this.registro.email = "";
     this.registro.nombre = "";
     this.registro.direccion = "";
     this.registro.direccion2 = "";
@@ -193,6 +200,8 @@ export class BranchOfficeComponent implements OnInit {
     this.panelconfigurarsucursal = false;
     this.ConfigurarSucursalmostar = false;
     this.sucursaldelete = false;
+    this.Modificarmapaerror = false;
+    this.mapanovalido = false;
   }
 
   panelModfSucursal() {
@@ -384,9 +393,40 @@ export class BranchOfficeComponent implements OnInit {
   }
 
   CargarMapa() {
-
+    if(this.registro.urlmap.substr(0,7).toString() == "<iframe"){
+      this.mapanovalido = false;
+    if(this.checkmapa == false){
+      this.checkmapa =true;
     this.mostrarDatos = true;
     this.Mostrarmapa = this._sanitizationService.bypassSecurityTrustHtml(this.registro.urlmap);
+  }else{
+    this.checkmapa =false;
+    this.mostrarDatos = false;
+    this.Mostrarmapa = "";
+  }}else{
+    this.checkmapa =false;
+    this.mostrarDatos = false;
+    this.mapanovalido = true;
+  }
+  }
+  CargarMapa2() {
+    if(this.registro.urlmap.substr(0,7).toString() == "<iframe"){
+      this.mapanovalido = false;
+    
+    if(this.checkmapa == false){
+      this.checkmapa =true;
+      this.mostrarDatos2 = true;
+      this.Mostrarmapa2 = this._sanitizationService.bypassSecurityTrustHtml(this.registro.urlmap);
+    }else{
+      this.checkmapa =false;
+      this.mostrarDatos2 = false;
+      this.Mostrarmapa2 = "";
+    }}else{
+      this.mostrarDatos2 = false;
+      this.Mostrarmapa2 = "";
+      this.mapanovalido = true;
+    }
+    
 
   }
   crearnuevaSucursal() {
@@ -399,8 +439,11 @@ export class BranchOfficeComponent implements OnInit {
       dirrecion2: this.registro.direccion2,
       COD_PROV: this.registro.cod_prov,
       cod_localidad: this.registro.cod_parr,
-      urlmap: this.registro.urlmap
+      urlmap: this.registro.urlmap,
+      email:this.registro.email
     }
+    if(this.registro.urlmap.substr(0,7).toString() == "<iframe"){
+      this.Modificarmapaerror = false;
     if (this.registro.cod_parr > 0 || this.registro.cod_prov > 0) {
 
       this.jumpservice.crearSucursal(this.an_request).subscribe(
@@ -433,13 +476,19 @@ export class BranchOfficeComponent implements OnInit {
       this.parroquiaerr = true;
       this.comunaerrorcrear = true;
     }
+  }else{
+      this.checkmapa =false;
+      this.mostrarDatos = false;
+      this.Modificarmapaerror = true;
+      
+    }
 
   }
 
 
 
   modificarSucursal(event: any) {
-
+    console.info(event);
     this.modificarResultado = false;
     this.sucursalId = event.id;
     this.paneltablamodificarSucursal = false;
@@ -447,12 +496,11 @@ export class BranchOfficeComponent implements OnInit {
     this.Mprovincia.id = event.id,
       this.Mprovincia.comuna = event.comuna;
     this.Mprovincia.codigo = event.codigo;
-
-
     this.registro.nombre = event.nombre;
     this.registro.direccion = event.direccion;
     this.registro.direccion2 = event.direccion2;
-    this.registro.mapa = event.mapa;
+    this.registro.urlmap = event.mapa;
+    this.registro.email = event.mail;
 
     this.an_request = {
       id: event.comuna
@@ -707,31 +755,37 @@ export class BranchOfficeComponent implements OnInit {
 
   ModificarSucursalM() {
 
-
+    this.Modificarmapaerror=false;
     this.an_request = {
       nombre: this.registro.nombre,
       direccion: this.registro.direccion,
       direccion2: this.registro.direccion2,
-      mapa: this.registro.mapa,
+      mapa: this.registro.urlmap,
       comuna: this.registro.cod_prov,
       company: this.User.company,
-      id: this.Mprovincia.id
+      id: this.Mprovincia.id,
+      email:this.registro.email
     };
-
-
-    if (this.registro.cod_prov > 0) {
-      this.Modificarcomunaerror = false;
-      this.modificarResultado = true;
-      this.jumpservice.modificarSucursal(this.an_request).subscribe(
-        res => {
-          this.an_response = res;
-        }
-
-        , err => console.error(err)
-      );
-    } else {
-      this.Modificarcomunaerror = true;
+    console.info(this.registro.urlmap.substr(0,7));
+    if(this.registro.urlmap.substr(0,7).toString() == "<iframe"){
+      if (this.registro.cod_prov > 0) {
+        this.Modificarcomunaerror = false;
+        this.modificarResultado = true;
+        this.jumpservice.modificarSucursal(this.an_request).subscribe(
+          res => {
+            this.an_response = res;
+          }
+  
+          , err => console.error(err)
+        );
+      } else {
+        this.Modificarcomunaerror = true;
+      }
+    }else{
+      this.Modificarmapaerror=true;
+      this.modificarResultado =false;
     }
+    
 
 
   }

@@ -99,14 +99,29 @@
 						[(ngModel)]="registro.urlmap">
 					<button type="button" class="btn btn-primary btn-block" (click)="CargarMapa()">Previsualizar
 						mapa</button>
+						<div *ngIf="mapanovalido" class="col-12 alert alert-danger">El mapa ingresado no es valido
+						</div>
 				</div>
-
-
+				
 				<div class="col-8" *ngIf="mostrarDatos">
 					<div class="google-maps">
 						<div [innerHTML]="Mostrarmapa" *ngIf="mostrarDatos"></div>
 					</div>
 				</div>
+
+				<div class="form-group col-sm-12 col-md-4">
+					<label for="name" class="col-form-label">Email</label>
+					<input type="text" class="form-control" placeholder="" formControlName="mail"
+						[(ngModel)]="registro.email">
+					<div *ngIf="mail_feed.invalid && (mail_feed.dirty || mail_feed.touched)"
+						class="alert alert-danger">
+						<div *ngIf="mail_feed.errors.email" class="email-feedback">Ingrese una direccion de correo valida
+						</div>
+					</div> 
+					<div class="alert alert-info">Al ingresar un correo en este campo cada vez que un cliente agende una hora llegaran un correo informando de la hora</div> 
+
+				</div>
+				<div class="col-12"></div>
 				<div class="form-group col-sm-12 col-md-4">
 					<label for="regiones" class="col-form-label">Región</label>
 					<select name="regiones" class="form-control" (change)="cargarprovinciaC($event.target.value)">
@@ -137,6 +152,8 @@
 					</select>
 				</div>
 				<div class="col-12"></div>
+				<div *ngIf="Modificarmapaerror" class="col-12 alert alert-danger">Ingrese la direccion de google maps para continuar
+				</div>
 				<div *ngIf="comunaerrorcrear" class="col-12 alert alert-danger">Seleccione una comuna para continuar
 				</div>
 				<div *ngIf="sucursalresult" class="col-12 alert alert-success">Se ha creado la sucursal {{surc_name}}
@@ -226,9 +243,11 @@
 						<div *ngIf="urlmap_feed.errors?.maxlength" class="email-feedback">Ingrese una direccion mas
 							corta
 						</div>
-					</div>
-
+					</div> 
 				</div>
+
+		 
+
 				<div class="col-8"></div>
 				<div class="form-group col-sm-12 col-md-4">
 					<label for="provincia" class="col-form-label">Provincia</label>
@@ -329,9 +348,11 @@
 		<form [formGroup]="registroEForm" (ngSubmit)="ModificarSucursalM()">
 			<div class="row">
 				<div class="col-12">
-					<h2>Modificar sucursal {{Country}}</h2>
+					<h2>Modificar sucursal {{Country}} </h2>
 				</div>
-
+				<div class="col-12 alert alert-info">Para agregar un mapa ingrese  
+					<a href="https://www.google.cl/maps/" target="_blank">Aqui</a> luego ingrese la direccion del local,posteriormente aprete donde sale compatir < insertar mapa y copie el link que se mostrara.
+				</div>
 				<div class="form-group col-4">
 					<label for="nombre" class="col-form-label">Nombre sucursal</label>
 					<input type="text" class="form-control" placeholder="Oficinas xxxx" formControlName="nombre"
@@ -387,7 +408,7 @@
 				<div class="form-group col-4">
 					<label for="name" class="col-form-label">Google maps</label>
 					<input type="text" class="form-control" placeholder="" formControlName="urlmap"
-						[(ngModel)]="registro.mapa">
+						[(ngModel)]="registro.urlmap">
 
 					<div *ngIf="urlmap_feed.invalid && (urlmap_feed.dirty || urlmap_feed.touched)"
 						class="alert alert-danger">
@@ -400,10 +421,29 @@
 							corta
 						</div>
 					</div>
-
+					<button type="button" class="btn btn-primary btn-block" (click)="CargarMapa2()">Previsualizar
+						mapa</button>
+					<div *ngIf="mapanovalido" class="col-12 alert alert-danger">El mapa ingresado no es valido
+						</div>
 				</div>
-				<div class="col-8"></div>
 
+				<div class="col-12" *ngIf="mostrarDatos2">
+					<div class="google-maps">
+						<div [innerHTML]="Mostrarmapa2" *ngIf="mostrarDatos2"></div>
+					</div>
+				</div>
+				<div class="form-group col-sm-12 col-md-4">
+					<label for="name" class="col-form-label">Email</label>
+					<input type="text" class="form-control" placeholder="" formControlName="mail"
+						[(ngModel)]="registro.email">
+					<div *ngIf="mail_feed.invalid && (mail_feed.dirty || mail_feed.touched)"
+						class="alert alert-danger">
+						<div *ngIf="mail_feed.errors.email" class="email-feedback">Ingrese una direccion de correo valida
+						</div>
+					</div>
+					<div class="alert alert-info">Al ingresar un correo en este campo cada vez que un cliente agende una hora llegaran un correo informando de la hora</div> 
+				</div>
+				<div class="col-12"></div>
 
 				<div *ngIf="modeChile" class="form-group col-sm-12 col-md-4">
 					<label for="regiones" class="col-form-label">Región</label>
@@ -464,6 +504,8 @@
 							{{parroquia.NOM_LOCALIDAD}}</option>
 
 					</select>
+				</div>
+				<div *ngIf="Modificarmapaerror" class="col-12 alert alert-danger">Ingrese la direccion de google maps para continuar
 				</div>
 
 				<div *ngIf="Modificarcomunaerror" class="col-12 alert alert-danger">Seleccione una comuna para continuar
