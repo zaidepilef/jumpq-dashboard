@@ -4,9 +4,7 @@
 
 
 <div class="container-fluid">
-	<div class="col-12" class="alert alert-info">
-		Este modulo se encuentra desactivado.
-	</div>
+
 	<div class="row" *ngIf="panelPrincipal">
 		<div class="col-12">
 			<br>
@@ -16,16 +14,17 @@
 		</div>
 		<div class="col-12">
 			<br>
-			<label (click)="configurarEjecutivo()">
-				<h4>Configurar ejecutivos</h4>
+			<label (click)="GestionarE()">
+				<h4>Gestionar Ejecutivos</h4>
 			</label>
 		</div>
 		<div class="col-12">
 			<br>
-			<label (click)="CrearUsuario()">
-				<h4>Modificar Ejecutivo</h4>
+			<label (click)="configurarEjecutivo()">
+				<h4>Configurar Horario ejecutivos</h4>
 			</label>
 		</div>
+	
 
 	</div>
 
@@ -39,30 +38,33 @@
 					<table class="table table-striped table-valign-middle" id="modificarusuario">
 						<thead>
 							<tr>
-								<th>nombre</th>
+								<th>Nombre</th>
+								<th>Estado</th>
 								<th>Opciones</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr *ngFor="let items of medios">
 								<td>{{items.meet_name}}</td>
+								<td>{{items.status}}</td>
 								<td> <button class="btn btn-info" (click)="ModificarMedio(items)"><i
 											class="fas fa-search"></i></button></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
-				<button class="btn btn-info" (click)="salir()">Salir</button>
+				<button class="btn btn-success" (click)="crearMedio()">Crear medio de contacto</button>
+				<button class="btn btn-info" (click)="salir()">Volver</button>
 			</div>
 		</div>
 
 	</div>
 
 	<div *ngIf="PanelMedioModificar">
-		<form [formGroup]="registroEForm" (ngSubmit)="generarMedio()">
+		<form [formGroup]="registroMForm" (ngSubmit)="generarMedio()">
 		<div class="row">
 			<div class="col-12">
-				<h2>Modificar Medio de contacto</h2>
+				<h2>{{tipodemedio}}</h2>
 			</div>
 			<div class="form-group col-sm-12 col-md-4">
 
@@ -78,33 +80,35 @@
 			</div>
 
 			<div class="form-group col-sm-12 col-md-4">
-				<label for="tipo" class="col-form-label">Tipo de cuenta</label>
+				<label for="tipo" class="col-form-label">Estado</label>
 				<select name="tipo" class="form-control" (change)="tipo($event.target.value)">
 					<option value="0">Seleccionar</option>
-					<option value="2" [selected]="2==medioscontacto.estado">Activada</option>
-					<option value="3" [selected]="1==medioscontacto.estado">Desactivada</option>
+					<option value="1" [selected]="1==medioscontacto.estado">Activada</option>
+					<option value="2" [selected]="2==medioscontacto.estado">Desactivada</option>
 				</select>
 
 			</div>
+			<div *ngIf="resultadoMedioerror" class="alert alert-danger col-12">Selecione un estado Activado/desactivado</div>
 			<div *ngIf="resultadoMedio" class="alert alert-success col-12">Se ha modificado el medio de contacto correctamente!</div>
+			<div *ngIf="resultadoMediocreate" class="alert alert-success col-12">Se ha creado el medio de contacto correctamente</div>
 			<div class="col-12"></div>
 			<div class="form-group col-sm-12 col-md-4">
-				<button type="submit" class="btn btn-primary btn-block"
-						[disabled]="!registroEForm.valid">Registrar</button>
+				<button type="submit" class="btn btn-success btn-block"
+						[disabled]="!registroMForm.valid">Registrar</button>
 
 			</div>
-
+		
 			<div class="form-group col-sm-12 col-md-4">
-				<button class="form-control btn btn-info" (click)="salir()">Salir</button>
-
+				<button class="form-control btn btn-info" (click)="salir()">Volver</button>
 			</div>
 		</div>
 		</form>
 	</div>
+	
 	<div *ngIf="PanelEjecutivo">
 		<div class="row">
 			<div class="col-12">
-				<h2>Configurar Ejecutivos</h2>
+				<h2>Configurar Horario Ejecutivos</h2>
 			</div>
 			<div class="col">
 				<div class="card-body table-responsive p-0">
@@ -114,7 +118,7 @@
 								<th>Nombre</th>
 								<th>Apellido</th>
 								<th>Identificacion</th>
-								<th>tipo de usuario</th>
+							
 								<th>correo electronico</th>
 								<th>Opciones</th>
 							</tr>
@@ -124,7 +128,7 @@
 								<td>{{items.name}}</td>
 								<td>{{items.last_name}}</td>
 								<td>{{items.identification_card}}</td>
-								<td>{{items.type_user}}</td>
+								
 								<td>{{items.email}}</td>
 
 								<td> <button class="btn btn-info" (click)="ConfigurarAgendamiento(items)"><i
@@ -135,13 +139,271 @@
 						</tbody>
 					</table>
 				</div>
-				<button class="btn btn-success" (click)="exportExcelCantidaHoras()">Generar Excel</button>
-				<button class="btn btn-info" (click)="salir()">Salir</button>
+				 
+				<button class="btn btn-info" (click)="salir()">Volver</button>
 
 			</div>
 		</div>
 	</div>
 
+
+	<div *ngIf="Configurarhorario">
+
+		<div class="row">
+			<div class="col-12">
+				<h2>Configurar Horario Ejecutivo {{ejecutivoSeleccionado}}</h2>
+			</div>
+			<div *ngIf="newConfig" class="col-12 alert alert-info">
+				Este ejecutivo no tiene configuradas sus horas de atencion!
+			</div>
+			<div class="form-group col-sm-12 col-md-4">
+				<label for="formato" class="col-form-label">Sucursal</label>
+				<select name="sucursal" class="form-control" (change)="guardarSucursal($event.target.value)">
+					<option value="0">Seleccionar</option>
+					<option *ngFor="let local of sucursal " value="{{local.branch_id}}" 
+					[selected]="local.branch_id===configuracion.branch_id"> {{local.branch_name}}</option>
+
+				</select>
+			</div>
+			<div class="form-group col-sm-12 col-md-4">
+				<label for="formato" class="col-form-label">Medio de contacto</label>
+				<select name="medios" class="form-control" (change)="guardarmedios($event.target.value)">
+					<option value="0">Seleccionar</option>
+					<option *ngFor="let medios of medios " value="{{medios.meet_configId}}" [selected]="medios.meet_configId==configuracion.id_solicitud">
+						{{medios.meet_name}}</option>
+
+				</select>
+			</div>
+			<div class="col-12"></div>
+			<div class="form-group col-sm-12 col-md-4">
+				<label for="formato" class="col-form-label">Formato de horas</label>
+				<select name="comunas" class="form-control" (change)="CargarHorario($event.target.value)">
+					<option value="0">Seleccionar</option>
+					<option *ngFor="let hora of formathour " value="{{hora.hora}}" [selected]="hora.hora===configuracion.hours_format">
+						{{hora.hora}} minutos</option>
+
+				</select>
+			</div>
+			<div class="form-group col-sm-12 col-md-4">
+				<label for="formato" class="col-form-label">Hora de apertura mañana</label>
+				<select name="comunas" class="form-control" (change)="cargarhorario2($event.target.value)">
+					<option value="0">Seleccionar</option>
+					<option *ngFor="let horaI of Horario1 " value="{{horaI.Numhour}}" [selected]="horaI.Numhour===configuracion.hours_i_morning">
+						{{horaI.hours_name}}</option>
+
+				</select>
+			</div>
+			<div class="form-group col-sm-12 col-md-4">
+				<label for="formato" class="col-form-label">Hora de termino mañana</label>
+				<select name="comunas" class="form-control" (change)="cargarhorario3($event.target.value)" >
+					<option value="0">Seleccionar</option>
+					<option *ngFor="let horat of Horario2 " value="{{horat.Numhour}}" [selected]="horat.Numhour===configuracion.hours_e_morning">
+						{{horat.hours_name}}</option>
+
+				</select>
+			</div>
+			<div class="form-group col-sm-12 col-md-4">
+				<label for="formato" class="col-form-label">Hora de apertura tarde</label>
+				<select name="comunas" class="form-control" (change)="cargarhorario4($event.target.value)">
+					<option value="0">Seleccionar</option>
+					<option *ngFor="let horaI of Horario3 " value="{{horaI.Numhour}}" [selected]="horaI.Numhour===configuracion.hours_i_noon">
+						{{horaI.hours_name}}</option>
+
+				</select>
+			</div>
+			<div class="form-group col-sm-12 col-md-4">
+				<label for="formato" class="col-form-label">Hora de termino tarde</label>
+				<select name="comunas" class="form-control" (change)="guardardatos($event.target.value)" >
+					<option value="0">Seleccionar</option>
+					<option *ngFor="let horaI of Horario4 " value="{{horaI.Numhour}}" [selected]="horaI.Numhour===configuracion.hours_e_noon">
+						{{horaI.hours_name}}</option>
+
+				</select>
+			</div>
+			<div class="col-12"><b>Dias de trabajo</b></div>
+			<div class="form-group col-12">
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="checkbox" id="checkbox1" [(ngModel)]="horarioFormat.Days1">
+					Lunes
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="checkbox" id="checkbox2" [(ngModel)]="horarioFormat.Days2">
+					Martes
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="checkbox" id="checkbox3" [(ngModel)]="horarioFormat.Days3">
+					Miercoles
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="checkbox" id="checkbox4" [(ngModel)]="horarioFormat.Days4">
+					Jueves
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="checkbox" id="checkbox5" [(ngModel)]="horarioFormat.Days5">
+					Viernes
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="checkbox" id="checkbox6" [(ngModel)]="horarioFormat.Days6">
+					Sabado
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="checkbox" id="checkbox7" [(ngModel)]="horarioFormat.Days7">
+					Domingo
+				</div>
+				<div *ngIf="resultadomodifcar" class="col-12 alert alert-success">
+					Se ha modificado el horario del ejecutivo correctamente!
+				</div>
+				
+				<div *ngIf="resulterror" class="col-12 alert alert-danger">
+					{{errorhorario}}
+				</div>
+				<div *ngIf="resultcrear" class="col-12 alert alert-success">
+					Se ha creado el horario del ejecutivo correctamente!
+				</div>
+			
+			</div>
+			<div class="col-4">
+				<button class="btn btn-success btn-block" (click)="GenerarHorario()">Guardar Cambios</button>
+			</div>
+			<div class="col-4">
+				<button class="btn btn-info btn-block" (click)="salir()">Volver</button>
+			</div>
+		</div>
+
+	</div>
+
+
+	<div *ngIf="PanelGestionE">
+		<div class="row">
+			<div class="col-12">
+				<h2>Gestionar Ejecutivos</h2>
+			</div>
+			<div class="col">
+				<div class="card-body table-responsive p-0">
+					<table class="table table-striped table-valign-middle" id="modificarusuario">
+						<thead>
+							<tr>
+								<th>Nombre</th>
+								<th>Apellido</th>
+								<th>Identificacion</th>
+							
+								<th>correo electronico</th>
+								<th>Opciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let items of ejecutivos">
+								<td>{{items.name}}</td>
+								<td>{{items.last_name}}</td>
+								<td>{{items.identification_card}}</td>
+							
+								<td>{{items.email}}</td>
+
+								<td> <button class="btn btn-info" (click)="gestionejecutivo(items)"><i
+											class="fas fa-search"></i></button></td>
+
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+				<button class="btn btn-success" (click)="CrearEjecutivo()">Crear Ejecutivo</button>
+				<button class="btn btn-info" (click)="salir()">Volver</button>
+
+			</div>
+		</div>
+	</div>
+	<div *ngIf="paneleliminar" >
+		<div class="col-12 alert alert-success">
+			Se ha eliminado el ejecutivo correctamente.
+		</div>
+		<div class="col-4">
+			<button type="button" (click)="salir()" class="btn btn-primary btn-block">Volver</button>
+		</div>
+	</div>
+	<div *ngIf="panelGestionEjecutivo">
+		<form [formGroup]="registroEForm" (ngSubmit)="RegistrarEjecutivo()">
+			<div class="row">
+				<div class="col-12">
+					<h2>{{tipomensaje}}</h2>
+				</div>
+				<div class="form-group col-4">
+					<label for="name" class="col-form-label">Nombres</label>
+					<input type="text" class="form-control" placeholder="nombres" formControlName="name"
+						[(ngModel)]="registro.nombre">
+					<div *ngIf="nameE_feed.invalid && (nameE_feed.dirty || nameE_feed.touched)"
+						class="alert alert-danger">
+						<div *ngIf="nameE_feed.errors.required" class="email-feedback">Necesitamos tu nombre</div>
+						<div *ngIf="nameE_feed.errors.pattern" class="email-feedback">Un nombre extraño</div>
+						<div *ngIf="nameE_feed.errors?.minlength" class="email-feedback">Nombre demasiado corto</div>
+						<div *ngIf="nameE_feed.errors?.maxlength" class="email-feedback">Nombre demasiado largo</div>
+					</div>
+				</div>
+				<div class="form-group col-4">
+					<label for="name" class="col-form-label">Apellidos</label>
+					<input type="text" class="form-control" placeholder="Paterno y materno"
+						formControlName="lastname" [(ngModel)]="registro.apellidos">
+					<div *ngIf="lastname_feed.invalid && (lastname_feed.dirty || lastname_feed.touched)"
+						class="alert alert-danger">
+						<div *ngIf="lastname_feed.errors.required" class="email-feedback">Necesitamos tus apellidos
+						</div>
+						<div *ngIf="lastname_feed.errors.pattern" class="email-feedback">Un apellido extraño</div>
+						<div *ngIf="lastname_feed.errors?.minlength" class="email-feedback">Apellido demasiado corto
+						</div>
+						<div *ngIf="lastname_feed.errors?.maxlength" class="email-feedback">Apellido demasiado largo
+						</div>
+					</div>
+				</div>
+				<div class="form-group col-4">
+					<label for="name" class="col-form-label">Identificacion</label>
+					<input type="text" class="form-control" placeholder="999999999" formControlName="rut"
+						[(ngModel)]="registro.rut">
+					<div *ngIf="rut_feed.invalid && (rut_feed.dirty || rut_feed.touched)"
+						class="alert alert-danger">
+						<div *ngIf="rut_feed.errors.required" class="rut-feedback">Identificacion requerida</div>
+					</div>
+				</div>
+				<div class="form-group col-4">
+					<label for="name" class="col-form-label">Correo Electronico</label>
+					<input type="text" class="form-control" placeholder="example@gmail.com" formControlName="email"
+						[(ngModel)]="registro.email">
+					<div *ngIf="email_feed.invalid && (email_feed.dirty || email_feed.touched)"
+						class="alert alert-danger">
+						<div *ngIf="email_feed.errors.required" class="email-feedback">Necesitamos tu email</div>
+						<div *ngIf="email_feed.errors.email" class="email-feedback">Direccion de email no es valido
+						</div>
+					</div>
+					<div *ngIf="newemail" class="alert alert-danger">
+						El email ya se encuentra registrado
+					</div>
+				</div>
+				<div class="form-group col-sm-12 col-md-4">
+					<label for="tipo" class="col-form-label">Estado</label>
+					<select name="tipo" class="form-control" (change)="tipo2($event.target.value)">
+						<option value="0">Seleccionar</option>
+						<option value="1" [selected]="1==registro.estado">Activada</option>
+						<option value="2" [selected]="2==registro.estado">Desactivada</option>
+					</select>
+	
+				</div>
+				<div *ngIf="resultadoModificar" class="alert alert-success col-12">Se modifico el ejecutivo correctamente</div>
+				<div *ngIf="emailcheckfail" class="alert alert-danger col-12">el correo electronico ingresado ya se encuentra registrado</div>
+				<div *ngIf="resultado" class="alert alert-success col-12">el ejecutivo fue creado correctamente!</div>
+				<div class="col-12"></div>
+				<div class="col-4">
+					<button type="submit" class="btn btn-success btn-block" [disabled]="!registroEForm.valid">Registrar</button>
+				</div>
+				<div *ngIf="eliminarejecutivo" class="col-4">
+					<button type="button" (click)="EliminarEjecutivo()" class="btn btn-danger btn-block">Eliminar Ejecutivo</button>
+				</div>
+				<div class="col-4">
+					<button type="button" (click)="salir()" class="btn btn-primary btn-block">Salir sin
+						crear</button>
+				</div>
+
+			</div>
+		</form>
+	</div>
 
 	<div *ngIf="panelconfE">
 		<form [formGroup]="registroEForm" (ngSubmit)="RegistrarUsuario()">

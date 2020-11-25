@@ -547,6 +547,10 @@ export class BranchOfficeComponent implements OnInit {
   }
 
   buscarConf(event: any) {
+    this.Horario1 = [];
+    this.Horario2 = [];
+    this.Horario3 = [];
+    this.Horario4 = [];
     this.an_request = {
       id: event
     };
@@ -695,6 +699,7 @@ export class BranchOfficeComponent implements OnInit {
     );
 
   }
+  
 
   guardardatos(event: any) {
     this.horarioFormat.horaTtarde = event;

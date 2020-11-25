@@ -95,11 +95,18 @@ export class JumpqService {
 	public getejecutivoslist(data :any) {
 		return this.httpClient.post(`${environment.API_URL}/user/ejecutivoslist`,data);
 	}
-
+	public listarEjecutivos(data :any) {
+		return this.httpClient.post(`${environment.API_URL}/user/listarEjecutivos`,data);
+	}
 	public getBusinnes() {
 		return this.httpClient.get(`${environment.API_URL}/business/`);
 	  }
-
+	public EliminarEjecutivo(data :any) {
+		return this.httpClient.post(`${environment.API_URL}/user/EliminarEjecutivo`,data);
+	}
+	public HorarioEjecutivo(data :any) {
+		return this.httpClient.post(`${environment.API_URL}/user/HorarioEjecutivo`,data);
+	}
 
 
 
@@ -164,6 +171,12 @@ export class JumpqService {
 	  public borraSucursalespecial(data : any) {
 		return this.httpClient.post(`${environment.API_URL}/branchs/borraSucursalespecial`,data);
 	  }
+	  public buscarsucusal(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/branchs/buscarsucusal`,data);
+	  }
+
+
+
 	  //modificar sucursal
 	  public Buscarprovincia(data : any) {
 		return this.httpClient.post(`${environment.API_URL}/regions/cargarMProvincia`,data);
@@ -184,7 +197,6 @@ export class JumpqService {
 		return this.httpClient.post(`${environment.API_URL}/branchSettings/horariocargar`,data);
 	  }
 
-
 	  //sucursales
 	  public buscarConf(data : any) {
 		return this.httpClient.post(`${environment.API_URL}/branchSettings/buscarConf`,data);
@@ -197,18 +209,37 @@ export class JumpqService {
 	  public crearHorario(data : any) {
 		return this.httpClient.post(`${environment.API_URL}/branchSettings/crearHorarioSucursal`,data);
 	  }
-
-
-
-	  //medio de contacto
-
-	  	  
+	  
+	  //medio de contacto 
 	  public medios(data : any) {
 		return this.httpClient.post(`${environment.API_URL}/branchSettings/medios`,data);
 	  }
 	  public modificarMedio(data : any) {
 		return this.httpClient.post(`${environment.API_URL}/branchSettings/mediomodificar`,data);
 	  }
+	  public crearMedio(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/crearmedio`,data);
+	  }
+	  //crear ejecutivo
+	  public newejecutivo(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/user/newEjecutivo`,data);
+	  }
+	  public modificarjecutivo(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/user/modificarEjecutivo`,data);
+	  }
+	  public modificarjecutivo2(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/user/modificarEjecutivomail`,data);
+	  }
+	  public buscarConfejecutivo(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/user/buscarConfE`,data);
+	  }
+	  public crearHorarioEjecutivo(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/user/crearHorarioEjecutivo`,data);
+	  }
+	  public ActualizarHorarioEjecutivo(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/user/actualizarHorarioE`,data);
+	  }
+
 
 	  //compañia
 	  public cargarcompañia(data : any) {

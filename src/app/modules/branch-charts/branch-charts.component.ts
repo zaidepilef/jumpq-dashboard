@@ -1053,7 +1053,7 @@ export class BranchChartsComponent implements OnInit {
         this.ResultadoGrafico3 = true;
         this.ResultadoGrafico4 = true;
         this.errormensaje = false;
-        if (d1 < d2) {
+        if (d1 <= d2) {
             this.validarfecha = false;
             this.modobusquedafecha = true;
             this.cargarSucursalbusqueda(this.an_request);

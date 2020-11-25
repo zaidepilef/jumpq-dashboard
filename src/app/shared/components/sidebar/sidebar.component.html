@@ -28,25 +28,25 @@
 					
 					<li class="nav-item">
 
-						<a href="/" class="nav-link" [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+						<a href="/" class="nav-link" [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="home()">
 							<p>Cuenta y parametrización <i class="right fas fa-angle-left"></i></p>
 						</a>
 					</li>
 
 					<li class="nav-item">
-						<a class="nav-link" [routerLink]="['/branchoffice']" routerLinkActive="active" (click)="test()">
+						<a class="nav-link" [routerLink]="['/branchoffice']" routerLinkActive="active" (click)="branchoffice()">
 							<p>Configuración de locales<i class="fas fa-angle-left right"></i></p>
 						</a>
 					</li>
 
 					<li class="nav-item">
-						<a class="nav-link" [routerLink]="['/virtualcall']" routerLinkActive="active">
+						<a class="nav-link" [routerLink]="['/virtualcall']" routerLinkActive="active" (click)="virtual()">
 							<p>Agendamiento virtual<i class="fas fa-angle-left right"></i></p>
 						</a>
 					</li>
 
 					<li class="nav-item">
-						<a class="nav-link" [routerLink]="['/branch-charts']" routerLinkActive="active">
+						<a class="nav-link" [routerLink]="['/branch-charts']" routerLinkActive="active" (click)="estadisticas()">
 							<p>Visualizador de actividad<i class="fas fa-angle-left right"></i></p>
 						</a>
 					</li>

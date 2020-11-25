@@ -25,11 +25,37 @@ export class SidebarComponent implements OnInit {
   }
  
 
-  test(){
-    this.router.navigateByUrl('/branchoffice', { skipLocationChange: true }).then(() => {
-      this.router.navigate(['/branchoffice']);
-  }); 
-      
+  home(){
+    this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
+      window.location.reload();
+
+    }
+    );
+  
+  }
+  branchoffice(){
+    this.router.navigateByUrl('/branchoffice', { skipLocationChange: false }).then(() => {
+      window.location.reload();
+
+    }
+    );
+  
+  }
+  virtual(){
+    this.router.navigateByUrl('/virtualcall', { skipLocationChange: false }).then(() => {
+      window.location.reload();
+
+    }
+    );
+  
+  }
+  estadisticas(){
+    this.router.navigateByUrl('/branch-charts', { skipLocationChange: false }).then(() => {
+      window.location.reload();
+
+    }
+    );
+  
   }
   loaduser() {
     var usersend = {
