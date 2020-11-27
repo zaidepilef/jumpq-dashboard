@@ -196,7 +196,17 @@ export class JumpqService {
 	  public cargarHorario(data : any) {
 		return this.httpClient.post(`${environment.API_URL}/branchSettings/horariocargar`,data);
 	  }
+	  public cargarHorarioEspecial(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/horariocargarespecial`,data);
+	  }
 
+	  public GenerarHorarioEspecial(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/GenerarHorarioEspecial`,data);
+	  }
+
+	  public BorrarHorarioEspecial(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/BorrarHorarioEspecial`,data);
+	  }
 	  //sucursales
 	  public buscarConf(data : any) {
 		return this.httpClient.post(`${environment.API_URL}/branchSettings/buscarConf`,data);

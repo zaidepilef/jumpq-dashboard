@@ -689,15 +689,166 @@
 				<div *ngIf="resultcrear" class="col-12 alert alert-success">
 					Se ha creado el horario de la sucursal correctamente!
 				</div>
-				<div class="col-4">
-					<button class="btn btn-success btn-block" (click)="GenerarHorario()">Guardar Cambios</button>
-				</div>
-				<div class="col-4">
-					<button class="btn btn-info btn-block" (click)="salir()">Volver</button>
-				</div>
+				
+			</div>
+			<div class="col-4">
+				<button class="btn btn-success btn-block" (click)="GenerarHorario()">Guardar Cambios</button>
+			</div>
+			<div class="col-4">
+				<button class="btn btn-success btn-block" (click)="listarHorarioEspecial()">Ver Horario Especial</button>
+			</div>
+			<div class="col-4">
+				<button class="btn btn-info btn-block" (click)="salir()">Volver</button>
 			</div>
 		</div>
 
 	</div>
+
+	<div *ngIf="HorarioEspeciallista">
+		<div class="row">
+			<div class="col-12">
+				<h2>Horarios Especiales en la sucursal {{NombreSucursal}}</h2>
+			</div>
+	 
+			<div class="col">
+				<div class="card-body table-responsive p-0">
+					<table class="table table-striped table-valign-middle" id="modificarusuario">
+						<thead>
+							<tr>
+								<th>Dia</th>
+								<th>Cantidad de turnos</th>
+								<th>Hora mañana</th>
+								<th>Hora termino mañana</th>
+								<th>Hora tarde</th>
+								<th>Hora termino tarde</th>
+								<th>Opciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let items of horarioEspecial">
+								<td>{{items.day}}</td>
+								<td>{{items.hours_cant}}</td>
+								<td>{{items.hours_i_morning}}</td>
+								<td>{{items.hours_e_morning}}</td>
+								<td>{{items.hours_i_noon}}</td>
+								<td>{{items.hours_e_noon}}</td>
+								<td> <button class="btn btn-danger" (click)="EliminarHorarioEspecial(items)"><i class="fas fa-trash-alt"></i></button></td>
+
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+				
+
+			</div>
+			<div class="col-12"></div>
+			<div class="col-4">
+				<button class="btn btn-success btn-block" (click)="ConfigurarHorarioEspecialM()">Agregar Horario Especial</button>
+			</div>
+			<div class="col-4">
+				<button class="btn btn-info btn-block" (click)="salir()">Volver</button>
+			</div>
+		</div>
+	</div>
+
+
+	<div *ngIf="ConfigurarHorarioEspecial">
+
+		<div class="row">
+			<div class="col-12">
+				<h2>Configurar Horario Especial Sucursal {{NombreSucursal}}</h2>
+			</div>
+			<div *ngIf="newConfig" class="col-12 alert alert-info">
+				Esta sucursal no tiene configuradas sus horas de atencion!
+			</div>
+			<div class="col-sm-12 col-md-4">
+				<label for="day" class="col-form-label">Dia del horario</label>
+				<select name="day" class="form-control" (change)="day($event.target.value)">
+					<option value="0">Lunes </option>
+					<option value="1">Martes</option>
+					<option value="2">Miercoles</option>
+					<option value="3">Jueves </option>
+					<option value="4">Vienes</option>
+					<option value="5">Sabado</option>
+					<option value="6">Domingo </option>
+				</select>
+			</div>
+			<div class="form-group col-sm-12 col-md-4">
+				<label for="formato" class="col-form-label">Cantidad de turnos</label>
+				<input type="text" [(ngModel)]="horarioFormat.turno" class="form-control"
+					placeholder="Ejemplo: 1 o 2 por turno">
+			</div>
+			<div class="form-group col-sm-12 col-md-4">
+				<label for="formato" class="col-form-label">Modalidad de turnos</label>
+				<select name="comunas" class="form-control" (change)="CargarHorario($event.target.value)">
+					<option value="0">Seleccionar</option>
+					<option *ngFor="let hora of formathour " value="{{hora.hora}}">
+						{{hora.hora}} minutos</option>
+				</select>
+			</div>
+			<div class="col-12"></div>
+			<div class="form-group col-sm-12 col-md-4">
+				<label for="formato" class="col-form-label">Hora de apertura mañana</label>
+				<select name="comunas" class="form-control" (change)="cargarhorario2($event.target.value)">
+					<option value="0">Seleccionar</option>
+					<option *ngFor="let horaI of Horario1 " value="{{horaI.Numhour}}">
+						{{horaI.hours_name}}</option>
+
+				</select>
+			</div>
+			<div class="form-group col-sm-12 col-md-4">
+				<label for="formato" class="col-form-label">Hora de termino mañana</label>
+				<select name="comunas" class="form-control" (change)="cargarhorario3($event.target.value)">
+					<option value="0">Seleccionar</option>
+					<option *ngFor="let horat of Horario2 " value="{{horat.Numhour}}">
+						{{horat.hours_name}}</option>
+
+				</select>
+			</div>
+			<div class="col-12"></div>
+			<div class="form-group col-sm-12 col-md-4">
+				<label for="formato" class="col-form-label">Hora de apertura tarde</label>
+				<select name="comunas" class="form-control" (change)="cargarhorario4($event.target.value)">
+					<option value="0">Seleccionar</option>
+					<option *ngFor="let horaI of Horario3 " value="{{horaI.Numhour}}">
+						{{horaI.hours_name}}</option>
+
+				</select>
+			</div>
+			<div class="form-group col-sm-12 col-md-4">
+				<label for="formato" class="col-form-label">Hora de termino tarde</label>
+				<select name="comunas" class="form-control" (change)="guardardatos($event.target.value)">
+					<option value="0">Seleccionar</option>
+					<option *ngFor="let horaI of Horario4 " value="{{horaI.Numhour}}">
+						{{horaI.hours_name}}</option>
+
+				</select>
+			</div>
+		
+			<div class="col-12"></div>
+			<div class="form-group col-12">
+				
+				 
+				
+				<div *ngIf="resulterror" class="col-12 alert alert-danger">
+					{{errorhorario}}
+				</div>
+				<div *ngIf="resultcrear" class="col-12 alert alert-success">
+					Se ha creado el horario de la sucursal correctamente!
+				</div>
+				
+			</div>
+			<div class="col-4">
+				<button class="btn btn-success btn-block" (click)="GenerarHorarioEspecial()">Guardar Cambios</button>
+			</div>
+			<div class="col-4">
+				<button class="btn btn-info btn-block" (click)="salir()">Volver</button>
+			</div>
+		</div>
+
+	</div>
+
+
 
 </div>

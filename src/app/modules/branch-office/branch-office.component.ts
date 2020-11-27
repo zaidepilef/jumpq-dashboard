@@ -32,9 +32,9 @@ export class BranchOfficeComponent implements OnInit {
     urlmap: "",
     cod_prov: 0,
     cod_parr: 0,
-    email:""
+    email: ""
   };
-checkmapa:boolean = false;
+  checkmapa: boolean = false;
   Mprovincia: any = {
     id: "",
     comuna: 0,
@@ -57,6 +57,8 @@ checkmapa:boolean = false;
   Mostrarmapa2: any;
   Modificarmapaerror: boolean;
   mapanovalido: boolean;
+  HorarioEspeciallista: boolean;
+  ConfigurarHorarioEspecial: boolean;
   get nombre_feed() { return this.registroEForm.get('nombre'); }
   get direccion_feed() { return this.registroEForm.get('direccion'); }
   get direccion2_feed() { return this.registroEForm.get('direccion2'); }
@@ -75,10 +77,10 @@ checkmapa:boolean = false;
   Country: any = "Chile";
   ConfigurarSucursalmostar: boolean;
   newConfig: boolean;
-  formathour: Array<any> = []
-
+  formathour: Array<any> = [];
+  Dia: any;
   configuracion: any = "";
-
+  horarioEspecial: Array<any> = [];
 
   horarioFormat: any = {
     id: "",
@@ -202,6 +204,8 @@ checkmapa:boolean = false;
     this.sucursaldelete = false;
     this.Modificarmapaerror = false;
     this.mapanovalido = false;
+    this.HorarioEspeciallista=false;
+    this.ConfigurarHorarioEspecial = false;
   }
 
   panelModfSucursal() {
@@ -393,40 +397,42 @@ checkmapa:boolean = false;
   }
 
   CargarMapa() {
-    if(this.registro.urlmap.substr(0,7).toString() == "<iframe"){
+    if (this.registro.urlmap.substr(0, 7).toString() == "<iframe") {
       this.mapanovalido = false;
-    if(this.checkmapa == false){
-      this.checkmapa =true;
-    this.mostrarDatos = true;
-    this.Mostrarmapa = this._sanitizationService.bypassSecurityTrustHtml(this.registro.urlmap);
-  }else{
-    this.checkmapa =false;
-    this.mostrarDatos = false;
-    this.Mostrarmapa = "";
-  }}else{
-    this.checkmapa =false;
-    this.mostrarDatos = false;
-    this.mapanovalido = true;
-  }
+      if (this.checkmapa == false) {
+        this.checkmapa = true;
+        this.mostrarDatos = true;
+        this.Mostrarmapa = this._sanitizationService.bypassSecurityTrustHtml(this.registro.urlmap);
+      } else {
+        this.checkmapa = false;
+        this.mostrarDatos = false;
+        this.Mostrarmapa = "";
+      }
+    } else {
+      this.checkmapa = false;
+      this.mostrarDatos = false;
+      this.mapanovalido = true;
+    }
   }
   CargarMapa2() {
-    if(this.registro.urlmap.substr(0,7).toString() == "<iframe"){
+    if (this.registro.urlmap.substr(0, 7).toString() == "<iframe") {
       this.mapanovalido = false;
-    
-    if(this.checkmapa == false){
-      this.checkmapa =true;
-      this.mostrarDatos2 = true;
-      this.Mostrarmapa2 = this._sanitizationService.bypassSecurityTrustHtml(this.registro.urlmap);
-    }else{
-      this.checkmapa =false;
-      this.mostrarDatos2 = false;
-      this.Mostrarmapa2 = "";
-    }}else{
+
+      if (this.checkmapa == false) {
+        this.checkmapa = true;
+        this.mostrarDatos2 = true;
+        this.Mostrarmapa2 = this._sanitizationService.bypassSecurityTrustHtml(this.registro.urlmap);
+      } else {
+        this.checkmapa = false;
+        this.mostrarDatos2 = false;
+        this.Mostrarmapa2 = "";
+      }
+    } else {
       this.mostrarDatos2 = false;
       this.Mostrarmapa2 = "";
       this.mapanovalido = true;
     }
-    
+
 
   }
   crearnuevaSucursal() {
@@ -440,47 +446,47 @@ checkmapa:boolean = false;
       COD_PROV: this.registro.cod_prov,
       cod_localidad: this.registro.cod_parr,
       urlmap: this.registro.urlmap,
-      email:this.registro.email
+      email: this.registro.email
     }
-    if(this.registro.urlmap.substr(0,7).toString() == "<iframe"){
+    if (this.registro.urlmap.substr(0, 7).toString() == "<iframe") {
       this.Modificarmapaerror = false;
-    if (this.registro.cod_parr > 0 || this.registro.cod_prov > 0) {
+      if (this.registro.cod_parr > 0 || this.registro.cod_prov > 0) {
 
-      this.jumpservice.crearSucursal(this.an_request).subscribe(
-        res => {
-          this.an_response = res;
+        this.jumpservice.crearSucursal(this.an_request).subscribe(
+          res => {
+            this.an_response = res;
 
 
-          this.surc_name = this.registro.nombre;
-          this.registro.nombre = "";
-          this.registro.dirrecion = "";
-          this.registro.dirrecion2 = "";
-          this.registro.cod_prov = 0;
-          this.registro.cod_parr = 0;
-          this.registro.urlmap = "";
-          this.formload();
-          if (this.pais == 1) {
-            this.cargarRegion();
-            this.sucursalresult = true;
-          } else {
-            this.cargarProvincia();
-            this.sucursalresult = true;
+            this.surc_name = this.registro.nombre;
+            this.registro.nombre = "";
+            this.registro.dirrecion = "";
+            this.registro.dirrecion2 = "";
+            this.registro.cod_prov = 0;
+            this.registro.cod_parr = 0;
+            this.registro.urlmap = "";
+            this.formload();
+            if (this.pais == 1) {
+              this.cargarRegion();
+              this.sucursalresult = true;
+            } else {
+              this.cargarProvincia();
+              this.sucursalresult = true;
+            }
           }
-        }
 
-        , err => console.error(err)
-      );
+          , err => console.error(err)
+        );
 
+      } else {
+        this.sucursalresult = false;
+        this.parroquiaerr = true;
+        this.comunaerrorcrear = true;
+      }
     } else {
-      this.sucursalresult = false;
-      this.parroquiaerr = true;
-      this.comunaerrorcrear = true;
-    }
-  }else{
-      this.checkmapa =false;
+      this.checkmapa = false;
       this.mostrarDatos = false;
       this.Modificarmapaerror = true;
-      
+
     }
 
   }
@@ -581,7 +587,7 @@ checkmapa:boolean = false;
     this.an_request = {
       id: event.comuna
     };
-
+    console.info(this.horarioFormat);
     this.jumpservice.formatohora(this.an_request).subscribe(
       res => {
         this.an_response = res;
@@ -747,7 +753,7 @@ checkmapa:boolean = false;
     );
 
   }
-  
+
 
   guardardatos(event: any) {
     this.horarioFormat.horaTtarde = event;
@@ -755,7 +761,7 @@ checkmapa:boolean = false;
 
   ModificarSucursalM() {
 
-    this.Modificarmapaerror=false;
+    this.Modificarmapaerror = false;
     this.an_request = {
       nombre: this.registro.nombre,
       direccion: this.registro.direccion,
@@ -764,10 +770,10 @@ checkmapa:boolean = false;
       comuna: this.registro.cod_prov,
       company: this.User.company,
       id: this.Mprovincia.id,
-      email:this.registro.email
+      email: this.registro.email
     };
-    console.info(this.registro.urlmap.substr(0,7));
-    if(this.registro.urlmap.substr(0,7).toString() == "<iframe"){
+    console.info(this.registro.urlmap.substr(0, 7));
+    if (this.registro.urlmap.substr(0, 7).toString() == "<iframe") {
       if (this.registro.cod_prov > 0) {
         this.Modificarcomunaerror = false;
         this.modificarResultado = true;
@@ -775,17 +781,17 @@ checkmapa:boolean = false;
           res => {
             this.an_response = res;
           }
-  
+
           , err => console.error(err)
         );
       } else {
         this.Modificarcomunaerror = true;
       }
-    }else{
-      this.Modificarmapaerror=true;
-      this.modificarResultado =false;
+    } else {
+      this.Modificarmapaerror = true;
+      this.modificarResultado = false;
     }
-    
+
 
 
   }
@@ -901,7 +907,7 @@ checkmapa:boolean = false;
                   this.an_response = res;
                   if (this.an_response.status == "OK") {
                     this.resultcrear = true;
-                    this.newConfig =false;
+                    this.newConfig = false;
                   }
 
                 }
@@ -933,7 +939,232 @@ checkmapa:boolean = false;
   }
 
 
+  listarHorarioEspecial() {
+    this.ConfigurarSucursalmostar=false;
+    this.HorarioEspeciallista = true;
 
+    this.an_request = {
+      sucursal: this.horarioFormat.id
+
+    }
+
+    console.info(this.an_request);
+
+    this.jumpservice.cargarHorarioEspecial(this.an_request).subscribe(
+      res => {
+        this.an_response = res;
+        if(this.an_response.status == "OK"){
+          this.horarioEspecial = this.an_response.hora
+        for (var i = 0; i < this.horarioEspecial.length; i++) {
+          switch (this.horarioEspecial[i].day) {
+            case 0:
+              this.horarioEspecial[i].day = "Lunes";
+              break;
+            case 1:
+              this.horarioEspecial[i].day = "Martes";
+              break;
+            case 2:
+              this.horarioEspecial[i].day = "Miercoles";
+              break;
+            case 3:
+              this.horarioEspecial[i].day = "Jueves";
+              break;
+            case 4:
+              this.horarioEspecial[i].day = "Viernes";
+              break;
+            case 5:
+              this.horarioEspecial[i].day = "Sabado";
+              break;
+            case 6:
+              this.horarioEspecial[i].day = "Domingo";
+              break;
+          }
+
+          var temp = this.horarioEspecial[i].hours_i_morning;
+          if (temp.toString().length == 3) {
+
+            temp = [temp.toString().substring(0, 1), temp.toString().substring(1, 4)].join(':');
+            this.horarioEspecial[i].hours_i_morning = temp;
+          } else {
+
+
+            temp = [temp.toString().substring(0, 2), temp.toString().substring(2, 6)].join(':');
+            this.horarioEspecial[i].hours_i_morning = temp;
+          }
+          var temp2 = this.horarioEspecial[i].hours_e_morning;
+          if (temp2.toString().length == 3) {
+
+            temp2 = [temp2.toString().substring(0, 1), temp2.toString().substring(1, 4)].join(':');
+            this.horarioEspecial[i].hours_e_morning = temp2;
+          } else {
+
+
+            temp2 = [temp2.toString().substring(0, 2), temp2.toString().substring(2, 6)].join(':');
+            this.horarioEspecial[i].hours_e_morning = temp2;
+          }
+          var temp3 = this.horarioEspecial[i].hours_i_noon;
+          if (temp3.toString().length == 3) {
+
+            temp3 = [temp3.toString().substring(0, 1), temp3.toString().substring(1, 4)].join(':');
+            this.horarioEspecial[i].hours_i_noon = temp3;
+          } else {
+
+
+            temp3 = [temp3.toString().substring(0, 2), temp3.toString().substring(2, 6)].join(':');
+            this.horarioEspecial[i].hours_i_noon = temp3;
+          }
+          var temp4 = this.horarioEspecial[i].hours_e_noon;
+          if (temp4.toString().length == 3) {
+
+            temp4 = [temp4.toString().substring(0, 1), temp4.toString().substring(1, 4)].join(':');
+            this.horarioEspecial[i].hours_e_noon = temp4;
+          } else {
+
+
+            temp4 = [temp4.toString().substring(0, 2), temp4.toString().substring(2, 6)].join(':');
+            this.horarioEspecial[i].hours_e_noon = temp4;
+          }
+
+
+        }
+        
+        }
+        
+      }
+
+      , err => console.error(err)
+    );
+  }
+
+
+  ConfigurarHorarioEspecialM() {
+    this.ConfigurarHorarioEspecial= true;
+    this.HorarioEspeciallista = false;
+    this.horarioFormat.turno = "";
+    this.horarioFormat.format = 0;
+    this.formathour = [];
+    this.Horario1 = [];
+    this.Horario2 = [];
+    this.Horario3 = [];
+    this.Horario4 = [];
+    this.an_request = {};
+    this.horarioFormat.horaIMañana = 0;
+    this.horarioFormat.horaTMañana = 0;
+    this.horarioFormat.horaItarde = 0;
+    this.horarioFormat.horaTtarde = 0;
+    this.jumpservice.formatohora(this.an_request).subscribe(
+      res => {
+        this.an_response = res;
+        this.formathour = this.an_response.hora
+      }
+
+      , err => console.error(err)
+    );
+
+  }
+
+
+  day(event: any) {
+    this.Dia = event;
+    console.info(this.Dia);
+  }
+  GenerarHorarioEspecial() {
+    
+    this.resultcrear = false;
+    this.resulterror = false;
+    this.an_request = {
+      id: this.horarioFormat.id,
+      format: this.horarioFormat.format,
+      horaIMañana: this.horarioFormat.horaIMañana,
+      horaTMañana: this.horarioFormat.horaTMañana,
+      horaItarde: this.horarioFormat.horaItarde,
+      horaTtarde: this.horarioFormat.horaTtarde,
+      turno: this.horarioFormat.turno,
+      dia: this.Dia
+    }
+    if (this.horarioFormat.turno > 0) {
+      if (this.horarioFormat.format > 0) {
+        if (this.horarioFormat.horaIMañana > 0 && this.horarioFormat.horaTMañana > 0 && this.horarioFormat.horaItarde > 0 && this.horarioFormat.horaTtarde > 0) {
+          this.jumpservice.GenerarHorarioEspecial(this.an_request).subscribe(
+            res => {
+              this.an_response = res;
+              console.info(this.an_response);
+              if (this.an_response.status == "Ok") {
+                this.resultcrear = true;
+
+                this.Horario1 = [];
+                this.Horario2 = [];
+                this.Horario3 = [];
+                this.Horario4 = [];
+                this.horarioFormat.horaIMañana = 0;
+                this.horarioFormat.horaTMañana = 0;
+                this.horarioFormat.horaItarde = 0;
+                this.horarioFormat.horaTtarde = 0;
+              } else {
+                this.errorhorario = "No se pudo crear el horario el dia seleccionado ya se encuentra creado como horario especial."
+                this.resulterror = true;
+              }
+            }
+
+            , err => console.error(err)
+          );
+        } else {
+
+          this.resulterror = true;
+          this.errorhorario = "Forme el horario de atencion para continuar";
+        }
+      } else {
+        this.errorhorario = "Seleccione la modalidad de turnos para continuar."
+        this.resulterror = true;
+      }
+    } else {
+      this.errorhorario = "Ingrese la cantidad de turnos en la misma hora (minimo 1)"
+      this.resulterror = true;
+    }
+  }
+
+  EliminarHorarioEspecial(event : any){
+    var dia:any;
+    
+    if (confirm("¿Esta seguro que desea borrar este Horario?")) {
+      if(event.day == "Lunes"){
+        dia = 0;
+      }
+      if(event.day == "Martes"){
+        dia = 1;
+      }
+      if(event.day== "Miercoles"){
+        dia = 2;
+      }
+      if(event.day== "Jueves"){
+        dia = 3;
+      }
+      if(event.day== "Viernes"){
+        dia = 4;
+      }if(event.day== "Sabado"){
+        dia = 5;
+      }if(event.day== "Domingo"){
+        dia = 6;
+      } 
+
+      this.an_request={
+        dia:dia,
+        id: event.branch_o_id
+      }
+      this.jumpservice.BorrarHorarioEspecial(this.an_request).subscribe(
+        res => {
+          this.an_response = res;
+          console.info(this.an_response);
+          if (this.an_response.status == "OK") {
+            this.listarHorarioEspecial();
+          }
+      }
+
+        , err => console.error(err)
+      );
+    }
+    
+  }
 
 
 }
