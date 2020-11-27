@@ -59,6 +59,9 @@ export class BranchOfficeComponent implements OnInit {
   mapanovalido: boolean;
   HorarioEspeciallista: boolean;
   ConfigurarHorarioEspecial: boolean;
+  confid : any;
+  Sconfiguracion: boolean = false;
+  loadingpanel: boolean;
   get nombre_feed() { return this.registroEForm.get('nombre'); }
   get direccion_feed() { return this.registroEForm.get('direccion'); }
   get direccion2_feed() { return this.registroEForm.get('direccion2'); }
@@ -131,7 +134,7 @@ export class BranchOfficeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loaduser();
-    this.panelPrincipal = true;
+  
 
     this.formload();
 
@@ -154,6 +157,8 @@ export class BranchOfficeComponent implements OnInit {
   }
 
   loaduser() {
+    this.loadingpanel=true;
+    this.panelPrincipal=false;
     var usersend = {
       data: this.User
     }
@@ -161,8 +166,14 @@ export class BranchOfficeComponent implements OnInit {
       res => {
         this.an_response = res;
         this.User = this.an_response.user;
+        this.panelPrincipal=true;
+        this.loadingpanel=false;
 
-      }, err => console.error(err)
+      }, err => {
+        this.panelPrincipal=false;
+        this.loadingpanel=true;
+      }
+
     );
   }
 
@@ -494,7 +505,7 @@ export class BranchOfficeComponent implements OnInit {
 
 
   modificarSucursal(event: any) {
-    console.info(event);
+
     this.modificarResultado = false;
     this.sucursalId = event.id;
     this.paneltablamodificarSucursal = false;
@@ -587,7 +598,7 @@ export class BranchOfficeComponent implements OnInit {
     this.an_request = {
       id: event.comuna
     };
-    console.info(this.horarioFormat);
+
     this.jumpservice.formatohora(this.an_request).subscribe(
       res => {
         this.an_response = res;
@@ -616,9 +627,11 @@ export class BranchOfficeComponent implements OnInit {
         if (this.an_response.status == "OK") {
           this.newConfig = false;
           this.configuracion = this.an_response.hora;
-
+          this.confid = this.an_response.hora.branch_office_conf_id;
+          this.Sconfiguracion= true;
+           
           this.formato = this.an_response.hora.hours_format;
-          this.drop1 = this.an_response.hora.hours_i_morning
+          this.drop1 = this.an_response.hora.hours_i_morning;
           this.CargarHorario(this.formato);
           this.cargarhorario2(this.configuracion.hours_i_morning);
           this.cargarhorario3(this.configuracion.hours_e_morning);
@@ -772,7 +785,7 @@ export class BranchOfficeComponent implements OnInit {
       id: this.Mprovincia.id,
       email: this.registro.email
     };
-    console.info(this.registro.urlmap.substr(0, 7));
+     
     if (this.registro.urlmap.substr(0, 7).toString() == "<iframe") {
       if (this.registro.cod_prov > 0) {
         this.Modificarcomunaerror = false;
@@ -944,17 +957,19 @@ export class BranchOfficeComponent implements OnInit {
     this.HorarioEspeciallista = true;
 
     this.an_request = {
-      sucursal: this.horarioFormat.id
+      sucursal: this.confid
 
     }
-
-    console.info(this.an_request);
-
+  
+ 
+    
     this.jumpservice.cargarHorarioEspecial(this.an_request).subscribe(
       res => {
         this.an_response = res;
+       
         if(this.an_response.status == "OK"){
-          this.horarioEspecial = this.an_response.hora
+          this.horarioEspecial = this.an_response.hora;
+      
         for (var i = 0; i < this.horarioEspecial.length; i++) {
           switch (this.horarioEspecial[i].day) {
             case 0:
@@ -1066,14 +1081,14 @@ export class BranchOfficeComponent implements OnInit {
 
   day(event: any) {
     this.Dia = event;
-    console.info(this.Dia);
+    
   }
   GenerarHorarioEspecial() {
     
     this.resultcrear = false;
     this.resulterror = false;
     this.an_request = {
-      id: this.horarioFormat.id,
+      id: this.confid,
       format: this.horarioFormat.format,
       horaIMañana: this.horarioFormat.horaIMañana,
       horaTMañana: this.horarioFormat.horaTMañana,
@@ -1088,7 +1103,7 @@ export class BranchOfficeComponent implements OnInit {
           this.jumpservice.GenerarHorarioEspecial(this.an_request).subscribe(
             res => {
               this.an_response = res;
-              console.info(this.an_response);
+           
               if (this.an_response.status == "Ok") {
                 this.resultcrear = true;
 
@@ -1154,7 +1169,7 @@ export class BranchOfficeComponent implements OnInit {
       this.jumpservice.BorrarHorarioEspecial(this.an_request).subscribe(
         res => {
           this.an_response = res;
-          console.info(this.an_response);
+   
           if (this.an_response.status == "OK") {
             this.listarHorarioEspecial();
           }

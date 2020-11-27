@@ -81,6 +81,7 @@ export class DashboardComponent implements OnInit {
   conteoconfiguracion: any = 0;
   nolink: boolean = false;
   nolinkalert: boolean = false;
+  loadingpanel: boolean;
   get name_feed() { return this.registroEForm.get('name'); }
   get lastname_feed() { return this.registroEForm.get('lastname'); }
   get rut_feed() { return this.registroEForm.get('rut'); }
@@ -119,7 +120,7 @@ export class DashboardComponent implements OnInit {
    
 
     this.loaduser();
-    this.panelPrincipal = true;
+    
     //this.checkmail(this.mailuser);
 
     this.formcheckusuario();
@@ -156,6 +157,8 @@ export class DashboardComponent implements OnInit {
     );
   }
   loaduser() {
+    this.loadingpanel=true;
+    this.panelPrincipal=false;
     var usersend = {
       data : this.loggin.GetToken()
     }
@@ -164,9 +167,13 @@ export class DashboardComponent implements OnInit {
         this.an_response = res;
         this.user.company = this.an_response.user.company; 
         this.user.name = this.an_response.user.email;
-      
+        this.loadingpanel=false;
+        this.panelPrincipal=true;
        
-      }, err => console.error(err)
+      }, err => {
+        this.loadingpanel=true;
+        this.panelPrincipal=false;
+      }
     );
   }
   checkpassword(){

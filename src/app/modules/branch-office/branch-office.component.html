@@ -4,7 +4,7 @@
 
 
 <div class="container-fluid">
-
+	<div *ngIf="loadingpanel" class="col-12 alert alert-info">Estamos cargando la informacion del modulo porfavor espere.</div>
 	<div class="row" *ngIf="panelPrincipal">
 		<div class="col-12">
 			<br>
@@ -694,7 +694,7 @@
 			<div class="col-4">
 				<button class="btn btn-success btn-block" (click)="GenerarHorario()">Guardar Cambios</button>
 			</div>
-			<div class="col-4">
+			<div *ngIf="Sconfiguracion" class="col-4">
 				<button class="btn btn-success btn-block" (click)="listarHorarioEspecial()">Ver Horario Especial</button>
 			</div>
 			<div class="col-4">

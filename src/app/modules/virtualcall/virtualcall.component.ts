@@ -106,6 +106,7 @@ export class VirtualcallComponent implements OnInit {
   registroMForm: FormGroup;
   eliminarejecutivo: boolean;
   paneleliminar: boolean;
+  loadingpanel: boolean;
   get name_feed() { return this.registroMForm.get('nombre'); }
 
   get nameE_feed() { return this.registroEForm.get('name'); }
@@ -250,6 +251,9 @@ export class VirtualcallComponent implements OnInit {
     )
   }
   loaduser() {
+    this.loadingpanel=true;
+    this.panelPrincipal=false;
+    
     var usersend = {
       data: this.loggin.GetToken()
     }
@@ -258,9 +262,13 @@ export class VirtualcallComponent implements OnInit {
         this.an_response = res;
         this.user.company = this.an_response.user.company;
         this.user.name = this.an_response.user.email;
+        this.loadingpanel=false;
+        this.panelPrincipal=true;
 
-
-      }, err => console.error(err)
+      }, err => {
+        this.loadingpanel=true;
+        this.panelPrincipal=false;
+      }
     );
   }
 
