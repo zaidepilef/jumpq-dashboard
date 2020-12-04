@@ -27,6 +27,9 @@ export class DashboardComponent implements OnInit {
     tipo: 2,
     registroEForm: {}
   };
+  Imagen:any ={
+
+  }
   Mregistro: any = {
     nombre: "",
     apellidos: "",
@@ -82,6 +85,8 @@ export class DashboardComponent implements OnInit {
   nolink: boolean = false;
   nolinkalert: boolean = false;
   loadingpanel: boolean;
+  noimgvalid: boolean;
+  imgsuccess: boolean;
   get name_feed() { return this.registroEForm.get('name'); }
   get lastname_feed() { return this.registroEForm.get('lastname'); }
   get rut_feed() { return this.registroEForm.get('rut'); }
@@ -113,6 +118,10 @@ export class DashboardComponent implements OnInit {
     new:"",
     new2:""
   }
+  file : File = null;
+
+
+  url:any = "https://jumpnodeapi.azurewebsites.net/imaga/noimg.jpg";
   constructor(private formBuilder: FormBuilder, private jumpservice: JumpqService, private loggin: AuthService) { }
 
   ngOnInit(): void {
@@ -575,5 +584,47 @@ export class DashboardComponent implements OnInit {
     this.paneltablaModificarUsuario = false;
     this.modificarcontra = false;
     this.panelModificarUsuario = false;
+    this.imgsuccess = false;
   }
+
+
+
+
+pruebaimg(event : any){
+  this.noimgvalid = false;
+    this.an_request = {};
+
+    var reader = new FileReader();
+    reader.onload = (event:any) => {
+      this.url = event.target.result;
+    }
+     
+    reader.readAsDataURL(event.target.files[0]);
+    this.file = <File>event.target.files[0];
+ 
+}
+
+subirImg(){
+   
+ 
+  if(this.file != null){
+    this.jumpservice.pruebaimg(this.user.company,this.file).subscribe(
+      res => {
+        this.an_response = res;
+        if(this.an_response.status == "OK"){
+          this.imgsuccess = true;
+        }
+      },
+      err => console.warn('err : ', err)
+    )
+    }else{
+    console.info("no valido");
+    this.noimgvalid = true;
+  }
+    
+
+
+}
+
+
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { User } from 'src/app/models/user.interface';
+import { FormsModule } from '@angular/forms';
 
 @Injectable({
 	providedIn: 'root'
@@ -280,5 +281,14 @@ export class JumpqService {
 	}	
 	public crearlinkjumpq(data : any) {
 		return this.httpClient.post(`${environment.API_URL}/branchSettings/crearjumpqlink`,data);
+	}	  
+
+
+
+	public pruebaimg(data:any,file:File) {
+		const fd = new FormData();
+		fd.append('company',data);
+		fd.append('image',file);
+		return this.httpClient.post(`${environment.API_URL}/branchSettings/buscarimagen`,fd);
 	}	  
 }

@@ -11,7 +11,6 @@
 <section class="content">
 	<div class="container-fluid">
 
-
 		<div *ngIf="loadingpanel" class="col-12 alert alert-info">Estamos cargando la informacion del modulo porfavor espere.</div>
 
 		<!-- Small boxes (Stat box) -->
@@ -54,7 +53,6 @@
 					<div class="col-12">
 						<h2><b>información de la empresa</b></h2><br>
 					</div>
-
 					<div class="col-3">
 						Nombre empresa:
 					</div>
@@ -269,7 +267,27 @@
 			<div class="col">{{conteoconfiguracion}}</div>
 			<div class="col-12"></div>
 
-			<div *ngIf="nolink">
+			<div *ngIf="nolink" class="col-12">
+			
+			<div class="col-12">
+					<div class="col-4">
+						<input type="file" (change)="pruebaimg($event)">
+					</div>
+					<div class="col-4">
+						<button type="button" (click)="subirImg()" class="btn btn-primary btn-block">Ingresar Imagen</button>
+				
+					</div>
+						<div *ngIf="imgsuccess" class="alert alert-success">se actualizo la imagen correctamente</div>
+					<div *ngIf="noimgvalid" class="alert alert-danger">No se ha ingresado una imagen valida</div>
+					
+				</div>
+				
+			<div class="col-4"><br>
+				
+			</div>
+			<div class="col-12">
+				<img [src]="url"  width="300" height="200">
+			</div>
 			<div class="col-3">
 				Link jumpq:
 			</div>
