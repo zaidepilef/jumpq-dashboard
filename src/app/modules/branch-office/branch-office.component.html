@@ -4,7 +4,8 @@
 
 
 <div class="container-fluid">
-	<div *ngIf="loadingpanel" class="col-12 alert alert-info">Estamos cargando la informacion del modulo porfavor espere.</div>
+	<div *ngIf="loadingpanel" class="col-12 alert alert-info">Estamos cargando la informacion del modulo porfavor
+		espere.</div>
 	<div class="row" *ngIf="panelPrincipal">
 		<div class="col-12">
 			<br>
@@ -30,6 +31,12 @@
 				<h4>Configurar Horarios</h4>
 			</label>
 		</div>
+		<div class="col-12">
+			<br>
+			<label (click)="panelGuardias()">
+				<h4>Gestionar Guardias</h4>
+			</label>
+		</div>
 
 	</div>
 
@@ -39,134 +46,152 @@
 				<div class="col-12">
 					<h2>Crear nueva sucursal chile</h2>
 				</div>
-				<div class="col-12 alert alert-info">Para agregar un mapa ingrese  
-					<a href="https://www.google.cl/maps/" target="_blank">Aqui</a> luego ingrese la direccion del local,posteriormente aprete donde sale compatir < insertar mapa y copie el link que se mostrara.
-				</div>
-				<div class="form-group col-sm-12 col-md-4">
-					<label for="nombre" class="col-form-label">Nombre sucursal</label>
-					<input type="text" class="form-control" placeholder="Oficinas xxxx" formControlName="nombre"
-						[(ngModel)]="registro.nombre">
-					<div *ngIf="nombre_feed.invalid && (nombre_feed.dirty || nombre_feed.touched)"
-						class="alert alert-danger">
-						<div *ngIf="nombre_feed.errors.required" class="email-feedback">Ingrese un nombre para la nueva
-							sucursal
+				<div class="col-12 alert alert-info">Para agregar un mapa ingrese
+					<a href="https://www.google.cl/maps/" target="_blank">Aqui</a> luego ingrese la direccion del
+					local,posteriormente aprete donde sale compatir < insertar mapa y copie el link que se mostrara.
 						</div>
-						<div *ngIf="nombre_feed.errors?.minlength" class="email-feedback">Ingrese un nombre mas largo
+						<div class="form-group col-sm-12 col-md-4">
+							<label for="nombre" class="col-form-label">Nombre sucursal</label>
+							<input type="text" class="form-control" placeholder="Oficinas xxxx" formControlName="nombre"
+								[(ngModel)]="registro.nombre">
+							<div *ngIf="nombre_feed.invalid && (nombre_feed.dirty || nombre_feed.touched)"
+								class="alert alert-danger">
+								<div *ngIf="nombre_feed.errors.required" class="email-feedback">Ingrese un nombre para
+									la nueva
+									sucursal
+								</div>
+								<div *ngIf="nombre_feed.errors?.minlength" class="email-feedback">Ingrese un nombre mas
+									largo
+								</div>
+								<div *ngIf="nombre_feed.errors?.maxlength" class="email-feedback">Ingrese un nombre mas
+									corto
+								</div>
+							</div>
 						</div>
-						<div *ngIf="nombre_feed.errors?.maxlength" class="email-feedback">Ingrese un nombre mas corto
-						</div>
-					</div>
-				</div>
 
 
-				<div class="form-group col-sm-12 col-md-4">
-					<label for="nombre" class="col-form-label">Direccion</label>
-					<input type="text" class="form-control" placeholder="Edificio 340 xxxx" formControlName="direccion"
-						[(ngModel)]="registro.direccion">
-					<div *ngIf="direccion_feed.invalid && (direccion_feed.dirty || direccion_feed.touched)"
-						class="alert alert-danger">
-						<div *ngIf="direccion_feed.errors.required" class="email-feedback">Ingrese una direccion para la
-							sucursal
+						<div class="form-group col-sm-12 col-md-4">
+							<label for="nombre" class="col-form-label">Direccion</label>
+							<input type="text" class="form-control" placeholder="Edificio 340 xxxx"
+								formControlName="direccion" [(ngModel)]="registro.direccion">
+							<div *ngIf="direccion_feed.invalid && (direccion_feed.dirty || direccion_feed.touched)"
+								class="alert alert-danger">
+								<div *ngIf="direccion_feed.errors.required" class="email-feedback">Ingrese una direccion
+									para la
+									sucursal
+								</div>
+								<div *ngIf="direccion_feed.errors?.minlength" class="email-feedback">Ingrese una
+									direccion mas
+									larga
+								</div>
+								<div *ngIf="direccion_feed.errors?.maxlength" class="email-feedback">Ingrese una
+									direccion mas
+									corta
+								</div>
+							</div>
 						</div>
-						<div *ngIf="direccion_feed.errors?.minlength" class="email-feedback">Ingrese una direccion mas
-							larga
+						<div class="form-group col-sm-12 col-md-4">
+							<label for="name" class="col-form-label">Direccion auxiliar</label>
+							<input type="text" class="form-control" placeholder="Calle xx" formControlName="direccion2"
+								[(ngModel)]="registro.direccion2">
+							<div *ngIf="direccion2_feed.invalid && (direccion2_feed.dirty || direccion2_feed.touched)"
+								class="alert alert-danger">
+								<div *ngIf="direccion2_feed.errors.required" class="email-feedback">Ingrese una
+									direccion para
+									la sucursal
+								</div>
+								<div *ngIf="direccion2_feed.errors?.minlength" class="email-feedback">Ingrese una
+									direccion mas
+									larga
+								</div>
+								<div *ngIf="direccion2_feed.errors?.maxlength" class="email-feedback">Ingrese una
+									direccion mas
+									corta
+								</div>
+							</div>
 						</div>
-						<div *ngIf="direccion_feed.errors?.maxlength" class="email-feedback">Ingrese una direccion mas
-							corta
+						<div class="form-group col-sm-12 col-md-4">
+							<label for="name" class="col-form-label">Google maps</label>
+							<input type="text" class="form-control" placeholder="" formControlName="urlmap"
+								[(ngModel)]="registro.urlmap">
+							<button type="button" class="btn btn-primary btn-block" (click)="CargarMapa()">Previsualizar
+								mapa</button>
+							<div *ngIf="mapanovalido" class="col-12 alert alert-danger">El mapa ingresado no es valido
+							</div>
 						</div>
-					</div>
-				</div>
-				<div class="form-group col-sm-12 col-md-4">
-					<label for="name" class="col-form-label">Direccion auxiliar</label>
-					<input type="text" class="form-control" placeholder="Calle xx" formControlName="direccion2"
-						[(ngModel)]="registro.direccion2">
-					<div *ngIf="direccion2_feed.invalid && (direccion2_feed.dirty || direccion2_feed.touched)"
-						class="alert alert-danger">
-						<div *ngIf="direccion2_feed.errors.required" class="email-feedback">Ingrese una direccion para
-							la sucursal
-						</div>
-						<div *ngIf="direccion2_feed.errors?.minlength" class="email-feedback">Ingrese una direccion mas
-							larga
-						</div>
-						<div *ngIf="direccion2_feed.errors?.maxlength" class="email-feedback">Ingrese una direccion mas
-							corta
-						</div>
-					</div>
-				</div>
-				<div class="form-group col-sm-12 col-md-4">
-					<label for="name" class="col-form-label">Google maps</label>
-					<input type="text" class="form-control" placeholder="" formControlName="urlmap"
-						[(ngModel)]="registro.urlmap">
-					<button type="button" class="btn btn-primary btn-block" (click)="CargarMapa()">Previsualizar
-						mapa</button>
-						<div *ngIf="mapanovalido" class="col-12 alert alert-danger">El mapa ingresado no es valido
-						</div>
-				</div>
-				
-				<div class="col-8" *ngIf="mostrarDatos">
-					<div class="google-maps">
-						<div [innerHTML]="Mostrarmapa" *ngIf="mostrarDatos"></div>
-					</div>
-				</div>
 
-				<div class="form-group col-sm-12 col-md-4">
-					<label for="name" class="col-form-label">Email</label>
-					<input type="text" class="form-control" placeholder="" formControlName="mail"
-						[(ngModel)]="registro.email">
-					<div *ngIf="mail_feed.invalid && (mail_feed.dirty || mail_feed.touched)"
-						class="alert alert-danger">
-						<div *ngIf="mail_feed.errors.email" class="email-feedback">Ingrese una direccion de correo valida
+						<div class="col-8" *ngIf="mostrarDatos">
+							<div class="google-maps">
+								<div [innerHTML]="Mostrarmapa" *ngIf="mostrarDatos"></div>
+							</div>
 						</div>
-					</div> 
-					<div class="alert alert-info">Al ingresar un correo en este campo cada vez que un cliente agende una hora llegaran un correo informando de la hora</div> 
+
+						<div class="form-group col-sm-12 col-md-4">
+							<label for="name" class="col-form-label">Email</label>
+							<input type="text" class="form-control" placeholder="" formControlName="mail"
+								[(ngModel)]="registro.email">
+							<div *ngIf="mail_feed.invalid && (mail_feed.dirty || mail_feed.touched)"
+								class="alert alert-danger">
+								<div *ngIf="mail_feed.errors.email" class="email-feedback">Ingrese una direccion de
+									correo valida
+								</div>
+							</div>
+							<div class="alert alert-info">Al ingresar un correo en este campo cada vez que un cliente
+								agende una hora llegaran un correo informando de la hora</div>
+
+						</div>
+						<div class="col-12"></div>
+						<div class="form-group col-sm-12 col-md-4">
+							<label for="regiones" class="col-form-label">Región</label>
+							<select name="regiones" class="form-control"
+								(change)="cargarprovinciaC($event.target.value)">
+								<option value="0">Seleccionar región</option>
+								<option *ngFor="let prov of regiones.provincia" value="{{prov.region_id}}">
+									{{prov.region_name}}
+								</option>
+							</select>
+						</div>
+						<div class="form-group col-sm-12 col-md-4">
+
+							<label for="provincia" class="col-form-label">Provincia</label>
+							<select name="provincia" class="form-control" (change)="cargarComuna($event.target.value)">
+								<option value="0">Seleccionar provincia</option>
+								<option *ngFor="let ciudad of provincia" value="{{ciudad.provincia_id}}">
+									{{ciudad.provincia_name}}
+								</option>
+
+							</select>
+						</div>
+						<div class="form-group col-sm-12 col-md-4">
+							<label for="comunas" class="col-form-label">Comuna</label>
+							<select name="comunas" class="form-control" (change)="guardarComuna($event.target.value)">
+								<option value="0">Seleccionar Comunas</option>
+								<option *ngFor="let parroquia of Comunas.parroquia " value="{{parroquia.comuna_id}}">
+									{{parroquia.comuna_name}}</option>
+
+
+							</select>
+						</div>
+						<div class="col-12"></div>
+						<div *ngIf="Modificarmapaerror" class="col-12 alert alert-danger">Ingrese la direccion de google
+							maps para continuar
+						</div>
+						<div *ngIf="comunaerrorcrear" class="col-12 alert alert-danger">Seleccione una comuna para
+							continuar
+						</div>
+						<div *ngIf="sucursalresult" class="col-12 alert alert-success">Se ha creado la sucursal
+							{{surc_name}}
+							Correctamente!</div>
+						<div class="col-4">
+							<button type="submit" class="btn btn-success btn-block"
+								[disabled]="!registroEForm.valid">Registrar Sucursal</button>
+						</div>
+						<div class="col-4">
+							<button type="button" (click)="salir()" class="btn btn-primary btn-block">Salir sin
+								crear</button>
+						</div>
 
 				</div>
-				<div class="col-12"></div>
-				<div class="form-group col-sm-12 col-md-4">
-					<label for="regiones" class="col-form-label">Región</label>
-					<select name="regiones" class="form-control" (change)="cargarprovinciaC($event.target.value)">
-						<option value="0">Seleccionar región</option>
-						<option *ngFor="let prov of regiones.provincia" value="{{prov.region_id}}">{{prov.region_name}}
-						</option>
-					</select>
-				</div>
-				<div class="form-group col-sm-12 col-md-4">
-
-					<label for="provincia" class="col-form-label">Provincia</label>
-					<select name="provincia" class="form-control" (change)="cargarComuna($event.target.value)">
-						<option value="0">Seleccionar provincia</option>
-						<option *ngFor="let ciudad of provincia" value="{{ciudad.provincia_id}}">
-							{{ciudad.provincia_name}}
-						</option>
-
-					</select>
-				</div>
-				<div class="form-group col-sm-12 col-md-4">
-					<label for="comunas" class="col-form-label">Comuna</label>
-					<select name="comunas" class="form-control" (change)="guardarComuna($event.target.value)">
-						<option value="0">Seleccionar Comunas</option>
-						<option *ngFor="let parroquia of Comunas.parroquia " value="{{parroquia.comuna_id}}">
-							{{parroquia.comuna_name}}</option>
-
-
-					</select>
-				</div>
-				<div class="col-12"></div>
-				<div *ngIf="Modificarmapaerror" class="col-12 alert alert-danger">Ingrese la direccion de google maps para continuar
-				</div>
-				<div *ngIf="comunaerrorcrear" class="col-12 alert alert-danger">Seleccione una comuna para continuar
-				</div>
-				<div *ngIf="sucursalresult" class="col-12 alert alert-success">Se ha creado la sucursal {{surc_name}}
-					Correctamente!</div>
-				<div class="col-4">
-					<button type="submit" class="btn btn-success btn-block"
-						[disabled]="!registroEForm.valid">Registrar Sucursal</button>
-				</div>
-				<div class="col-4">
-					<button type="button" (click)="salir()" class="btn btn-primary btn-block">Salir sin
-						crear</button>
-				</div>
-			</div>
 		</form>
 	</div>
 
@@ -243,10 +268,10 @@
 						<div *ngIf="urlmap_feed.errors?.maxlength" class="email-feedback">Ingrese una direccion mas
 							corta
 						</div>
-					</div> 
+					</div>
 				</div>
 
-		 
+
 
 				<div class="col-8"></div>
 				<div class="form-group col-sm-12 col-md-4">
@@ -350,190 +375,211 @@
 				<div class="col-12">
 					<h2>Modificar sucursal {{Country}} </h2>
 				</div>
-				<div class="col-12 alert alert-info">Para agregar un mapa ingrese  
-					<a href="https://www.google.cl/maps/" target="_blank">Aqui</a> luego ingrese la direccion del local,posteriormente aprete donde sale compatir < insertar mapa y copie el link que se mostrara.
-				</div>
-				<div class="form-group col-4">
-					<label for="nombre" class="col-form-label">Nombre sucursal</label>
-					<input type="text" class="form-control" placeholder="Oficinas xxxx" formControlName="nombre"
-						[(ngModel)]="registro.nombre">
-					<div *ngIf="nombre_feed.invalid && (nombre_feed.dirty || nombre_feed.touched)"
-						class="alert alert-danger">
-						<div *ngIf="nombre_feed.errors.required" class="email-feedback">Ingrese un nombre para la
-							sucursal
+				<div class="col-12 alert alert-info">Para agregar un mapa ingrese
+					<a href="https://www.google.cl/maps/" target="_blank">Aqui</a> luego ingrese la direccion del
+					local,posteriormente aprete donde sale compatir < insertar mapa y copie el link que se mostrara.
 						</div>
-						<div *ngIf="nombre_feed.errors?.minlength" class="email-feedback">Ingrese un nombre mas largo
+						<div class="form-group col-4">
+							<label for="nombre" class="col-form-label">Nombre sucursal</label>
+							<input type="text" class="form-control" placeholder="Oficinas xxxx" formControlName="nombre"
+								[(ngModel)]="registro.nombre">
+							<div *ngIf="nombre_feed.invalid && (nombre_feed.dirty || nombre_feed.touched)"
+								class="alert alert-danger">
+								<div *ngIf="nombre_feed.errors.required" class="email-feedback">Ingrese un nombre para
+									la
+									sucursal
+								</div>
+								<div *ngIf="nombre_feed.errors?.minlength" class="email-feedback">Ingrese un nombre mas
+									largo
+								</div>
+								<div *ngIf="nombre_feed.errors?.maxlength" class="email-feedback">Ingrese un nombre mas
+									corto
+								</div>
+							</div>
 						</div>
-						<div *ngIf="nombre_feed.errors?.maxlength" class="email-feedback">Ingrese un nombre mas corto
+
+
+						<div class="form-group col-4">
+							<label for="nombre" class="col-form-label">Direccion</label>
+							<input type="text" class="form-control" placeholder="Edificio 340 xxxx"
+								formControlName="direccion" [(ngModel)]="registro.direccion">
+							<div *ngIf="direccion_feed.invalid && (direccion_feed.dirty || direccion_feed.touched)"
+								class="alert alert-danger">
+								<div *ngIf="direccion_feed.errors.required" class="email-feedback">Ingrese una direccion
+								</div>
+								<div *ngIf="direccion_feed.errors?.minlength" class="email-feedback">Ingrese una
+									direccion mas
+									larga
+								</div>
+								<div *ngIf="direccion_feed.errors?.maxlength" class="email-feedback">Ingrese una
+									direccion mas
+									corta
+								</div>
+							</div>
 						</div>
-					</div>
-				</div>
+						<div class="form-group col-4">
+							<label for="name" class="col-form-label">Direccion auxiliar</label>
+							<input type="text" class="form-control" placeholder="Calle xx" formControlName="direccion2"
+								[(ngModel)]="registro.direccion2">
 
+							<div *ngIf="direccion2_feed.invalid && (direccion2_feed.dirty || direccion2_feed.touched)"
+								class="alert alert-danger">
+								<div *ngIf="direccion2_feed.errors.required" class="email-feedback">Ingrese una
+									direccion
+								</div>
+								<div *ngIf="direccion2_feed.errors?.minlength" class="email-feedback">Ingrese una
+									direccion mas
+									larga
+								</div>
+								<div *ngIf="direccion2_feed.errors?.maxlength" class="email-feedback">Ingrese una
+									direccion mas
+									corta
+								</div>
+							</div>
 
-				<div class="form-group col-4">
-					<label for="nombre" class="col-form-label">Direccion</label>
-					<input type="text" class="form-control" placeholder="Edificio 340 xxxx" formControlName="direccion"
-						[(ngModel)]="registro.direccion">
-					<div *ngIf="direccion_feed.invalid && (direccion_feed.dirty || direccion_feed.touched)"
-						class="alert alert-danger">
-						<div *ngIf="direccion_feed.errors.required" class="email-feedback">Ingrese una direccion
 						</div>
-						<div *ngIf="direccion_feed.errors?.minlength" class="email-feedback">Ingrese una direccion mas
-							larga
+
+						<div class="form-group col-4">
+							<label for="name" class="col-form-label">Google maps</label>
+							<input type="text" class="form-control" placeholder="" formControlName="urlmap"
+								[(ngModel)]="registro.urlmap">
+
+							<div *ngIf="urlmap_feed.invalid && (urlmap_feed.dirty || urlmap_feed.touched)"
+								class="alert alert-danger">
+								<div *ngIf="urlmap_feed.errors.required" class="email-feedback">Ingrese el link del mapa
+								</div>
+								<div *ngIf="urlmap_feed.errors?.minlength" class="email-feedback">Ingrese una direccion
+									mas
+									larga
+								</div>
+								<div *ngIf="urlmap_feed.errors?.maxlength" class="email-feedback">Ingrese una direccion
+									mas
+									corta
+								</div>
+							</div>
+							<button type="button" class="btn btn-primary btn-block"
+								(click)="CargarMapa2()">Previsualizar
+								mapa</button>
+							<div *ngIf="mapanovalido" class="col-12 alert alert-danger">El mapa ingresado no es valido
+							</div>
 						</div>
-						<div *ngIf="direccion_feed.errors?.maxlength" class="email-feedback">Ingrese una direccion mas
-							corta
+
+						<div class="col-12" *ngIf="mostrarDatos2">
+							<div class="google-maps">
+								<div [innerHTML]="Mostrarmapa2" *ngIf="mostrarDatos2"></div>
+							</div>
 						</div>
-					</div>
-				</div>
-				<div class="form-group col-4">
-					<label for="name" class="col-form-label">Direccion auxiliar</label>
-					<input type="text" class="form-control" placeholder="Calle xx" formControlName="direccion2"
-						[(ngModel)]="registro.direccion2">
-
-					<div *ngIf="direccion2_feed.invalid && (direccion2_feed.dirty || direccion2_feed.touched)"
-						class="alert alert-danger">
-						<div *ngIf="direccion2_feed.errors.required" class="email-feedback">Ingrese una direccion
+						<div class="form-group col-sm-12 col-md-4">
+							<label for="name" class="col-form-label">Email</label>
+							<input type="text" class="form-control" placeholder="" formControlName="mail"
+								[(ngModel)]="registro.email">
+							<div *ngIf="mail_feed.invalid && (mail_feed.dirty || mail_feed.touched)"
+								class="alert alert-danger">
+								<div *ngIf="mail_feed.errors.email" class="email-feedback">Ingrese una direccion de
+									correo valida
+								</div>
+							</div>
+							<div class="alert alert-info">Al ingresar un correo en este campo cada vez que un cliente
+								agende una hora llegaran un correo informando de la hora</div>
 						</div>
-						<div *ngIf="direccion2_feed.errors?.minlength" class="email-feedback">Ingrese una direccion mas
-							larga
+						<div class="col-12"></div>
+
+						<div *ngIf="modeChile" class="form-group col-sm-12 col-md-4">
+							<label for="regiones" class="col-form-label">Región</label>
+							<select name="regiones" class="form-control"
+								(change)="cargarprovinciaC($event.target.value)">
+								<option value="0">Seleccionar región</option>
+								<option *ngFor="let prov of regiones.provincia" value="{{prov.region_id}}"
+									[selected]="prov.region_id===Mprovincia.provincia">{{prov.region_name}}</option>
+							</select>
 						</div>
-						<div *ngIf="direccion2_feed.errors?.maxlength" class="email-feedback">Ingrese una direccion mas
-							corta
+						<div *ngIf="modeChile" class="form-group col-sm-12 col-md-4">
+
+							<label for="provincia" class="col-form-label">Provincia</label>
+							<select name="provincia" class="form-control" (change)="cargarComuna($event.target.value)">
+								<option value="0">Seleccionar provincia</option>
+								<option *ngFor="let ciudad of provincia" value="{{ciudad.provincia_id}}"
+									[selected]="ciudad.provincia_id===Mprovincia.codigo">{{ciudad.provincia_name}}
+								</option>
+
+							</select>
 						</div>
-					</div>
-
-				</div>
-
-				<div class="form-group col-4">
-					<label for="name" class="col-form-label">Google maps</label>
-					<input type="text" class="form-control" placeholder="" formControlName="urlmap"
-						[(ngModel)]="registro.urlmap">
-
-					<div *ngIf="urlmap_feed.invalid && (urlmap_feed.dirty || urlmap_feed.touched)"
-						class="alert alert-danger">
-						<div *ngIf="urlmap_feed.errors.required" class="email-feedback">Ingrese el link del mapa
+						<div *ngIf="modeChile" class="form-group col-sm-12 col-md-4">
+							<label for="comunas" class="col-form-label">Comuna</label>
+							<select name="comunas" class="form-control" (change)="guardarComunaM($event.target.value)">
+								<option value="0">Seleccionar Comunas</option>
+								<option *ngFor="let parroquia of Comunas.parroquia " value="{{parroquia.comuna_id}}"
+									[selected]="parroquia.comuna_id===Mprovincia.comuna">
+									{{parroquia.comuna_name}}</option>
+							</select>
 						</div>
-						<div *ngIf="urlmap_feed.errors?.minlength" class="email-feedback">Ingrese una direccion mas
-							larga
+
+						<div *ngIf="modeEcuador" class="form-group col-sm-12 col-md-4">
+							<label for="provincia" class="col-form-label">Provincia</label>
+							<select name="provincia" class="form-control" (change)="cargarCiudad($event.target.value)">
+								<option value="0">Seleccionar la provincia</option>
+								<option *ngFor="let prov of regiones.provincia" value="{{prov.COD_ESTADO}}"
+									[selected]="prov.COD_ESTADO===Mprovincia.provincia">{{prov.NOM_ESTADO}}
+								</option>
+							</select>
 						</div>
-						<div *ngIf="urlmap_feed.errors?.maxlength" class="email-feedback">Ingrese una direccion mas
-							corta
+						<div *ngIf="modeEcuador" class="form-group col-sm-12 col-md-4">
+							<label for="provincia" class="col-form-label">Ciudad</label>
+							<select name="provincia" class="form-control"
+								(change)="cargarParroquia($event.target.value)">
+								<option value="0">Seleccionar la ciudad</option>
+
+								<option *ngFor="let ciudad of provincia.ciudad" value="{{ciudad.COD_PROV}}"
+									[selected]="ciudad.COD_ESTADO===Mprovincia.provincia">{{ciudad.NOM_PROV}}
+								</option>
+
+							</select>
 						</div>
-					</div>
-					<button type="button" class="btn btn-primary btn-block" (click)="CargarMapa2()">Previsualizar
-						mapa</button>
-					<div *ngIf="mapanovalido" class="col-12 alert alert-danger">El mapa ingresado no es valido
+
+						<div *ngIf="modeEcuador" class="form-group col-sm-12 col-md-4">
+							<label for="comunas" class="col-form-label">Parroquia</label>
+							<select name="comunas" class="form-control"
+								(change)="guardarParroquia($event.target.value)">
+								<option value="0">Seleccionar la parroquia</option>
+								<option *ngFor="let parroquia of Comunas.parroquia " value="{{parroquia.COD_LOCALIDAD}}"
+									[selected]="parroquia.COD_LOCALIDAD===Mprovincia.codigo">
+									{{parroquia.NOM_LOCALIDAD}}</option>
+
+							</select>
+						</div>
+						<div *ngIf="Modificarmapaerror" class="col-12 alert alert-danger">Ingrese la direccion de google
+							maps para continuar
+						</div>
+
+						<div *ngIf="Modificarcomunaerror" class="col-12 alert alert-danger">Seleccione una comuna para
+							continuar
+						</div>
+						<div *ngIf="modificarResultado" class="col-12 alert alert-success">Se ha modificado la sucursal
+							Correctamente!</div>
+
+						<div class="col-4">
+							<button type="submit" class="btn btn-success btn-block"
+								[disabled]="!registroEForm.valid">Modificar sucursal</button>
+						</div>
+						<div class="col-4">
+							<button type="button" class="btn btn-danger btn-block" (click)="borrarSucursal()">Eliminar
+								Sucursal</button>
+						</div>
+						<div class="col-4">
+							<button type="button" (click)="salir()" class="btn btn-primary btn-block">Volver</button>
 						</div>
 				</div>
-
-				<div class="col-12" *ngIf="mostrarDatos2">
-					<div class="google-maps">
-						<div [innerHTML]="Mostrarmapa2" *ngIf="mostrarDatos2"></div>
-					</div>
-				</div>
-				<div class="form-group col-sm-12 col-md-4">
-					<label for="name" class="col-form-label">Email</label>
-					<input type="text" class="form-control" placeholder="" formControlName="mail"
-						[(ngModel)]="registro.email">
-					<div *ngIf="mail_feed.invalid && (mail_feed.dirty || mail_feed.touched)"
-						class="alert alert-danger">
-						<div *ngIf="mail_feed.errors.email" class="email-feedback">Ingrese una direccion de correo valida
-						</div>
-					</div>
-					<div class="alert alert-info">Al ingresar un correo en este campo cada vez que un cliente agende una hora llegaran un correo informando de la hora</div> 
-				</div>
-				<div class="col-12"></div>
-
-				<div *ngIf="modeChile" class="form-group col-sm-12 col-md-4">
-					<label for="regiones" class="col-form-label">Región</label>
-					<select name="regiones" class="form-control" (change)="cargarprovinciaC($event.target.value)">
-						<option value="0">Seleccionar región</option>
-						<option *ngFor="let prov of regiones.provincia" value="{{prov.region_id}}"
-							[selected]="prov.region_id===Mprovincia.provincia">{{prov.region_name}}</option>
-					</select>
-				</div>
-				<div *ngIf="modeChile" class="form-group col-sm-12 col-md-4">
-
-					<label for="provincia" class="col-form-label">Provincia</label>
-					<select name="provincia" class="form-control" (change)="cargarComuna($event.target.value)">
-						<option value="0">Seleccionar provincia</option>
-						<option *ngFor="let ciudad of provincia" value="{{ciudad.provincia_id}}"
-							[selected]="ciudad.provincia_id===Mprovincia.codigo">{{ciudad.provincia_name}}
-						</option>
-
-					</select>
-				</div>
-				<div *ngIf="modeChile" class="form-group col-sm-12 col-md-4">
-					<label for="comunas" class="col-form-label">Comuna</label>
-					<select name="comunas" class="form-control" (change)="guardarComunaM($event.target.value)">
-						<option value="0">Seleccionar Comunas</option>
-						<option *ngFor="let parroquia of Comunas.parroquia " value="{{parroquia.comuna_id}}"
-							[selected]="parroquia.comuna_id===Mprovincia.comuna">
-							{{parroquia.comuna_name}}</option>
-					</select>
-				</div>
-
-				<div *ngIf="modeEcuador" class="form-group col-sm-12 col-md-4">
-					<label for="provincia" class="col-form-label">Provincia</label>
-					<select name="provincia" class="form-control" (change)="cargarCiudad($event.target.value)">
-						<option value="0">Seleccionar la provincia</option>
-						<option *ngFor="let prov of regiones.provincia" value="{{prov.COD_ESTADO}}"
-							[selected]="prov.COD_ESTADO===Mprovincia.provincia">{{prov.NOM_ESTADO}}
-						</option>
-					</select>
-				</div>
-				<div *ngIf="modeEcuador" class="form-group col-sm-12 col-md-4">
-					<label for="provincia" class="col-form-label">Ciudad</label>
-					<select name="provincia" class="form-control" (change)="cargarParroquia($event.target.value)">
-						<option value="0">Seleccionar la ciudad</option>
-
-						<option *ngFor="let ciudad of provincia.ciudad" value="{{ciudad.COD_PROV}}"
-							[selected]="ciudad.COD_ESTADO===Mprovincia.provincia">{{ciudad.NOM_PROV}}
-						</option>
-
-					</select>
-				</div>
-
-				<div *ngIf="modeEcuador" class="form-group col-sm-12 col-md-4">
-					<label for="comunas" class="col-form-label">Parroquia</label>
-					<select name="comunas" class="form-control" (change)="guardarParroquia($event.target.value)">
-						<option value="0">Seleccionar la parroquia</option>
-						<option *ngFor="let parroquia of Comunas.parroquia " value="{{parroquia.COD_LOCALIDAD}}"
-							[selected]="parroquia.COD_LOCALIDAD===Mprovincia.codigo">
-							{{parroquia.NOM_LOCALIDAD}}</option>
-
-					</select>
-				</div>
-				<div *ngIf="Modificarmapaerror" class="col-12 alert alert-danger">Ingrese la direccion de google maps para continuar
-				</div>
-
-				<div *ngIf="Modificarcomunaerror" class="col-12 alert alert-danger">Seleccione una comuna para continuar
-				</div>
-				<div *ngIf="modificarResultado" class="col-12 alert alert-success">Se ha modificado la sucursal
-					Correctamente!</div>
-
-				<div class="col-4">
-					<button type="submit" class="btn btn-success btn-block" [disabled]="!registroEForm.valid">Modificar sucursal</button>
-				</div>
-				<div class="col-4">
-					<button type="button" class="btn btn-danger btn-block" (click)="borrarSucursal()">Eliminar Sucursal</button>
-				</div>
-				<div class="col-4">
-					<button type="button" (click)="salir()" class="btn btn-primary btn-block">Volver</button>
-				</div>
-			</div>
 		</form>
 
 
 	</div>
 	<div *ngIf="sucursaldelete" class="row">
-	<div class="col-12 alert alert-success">
-		Se ha eliminado la sucursal correctamente
-	</div>
-	<div class="col-4">
-		<button type="button" (click)="salir()" class="btn btn-primary btn-block">Volver</button>
-	</div>
+		<div class="col-12 alert alert-success">
+			Se ha eliminado la sucursal correctamente
+		</div>
+		<div class="col-4">
+			<button type="button" (click)="salir()" class="btn btn-primary btn-block">Volver</button>
+		</div>
 	</div>
 
 	<div *ngIf="paneltablamodificarSucursal">
@@ -682,20 +728,21 @@
 				<div *ngIf="resultadomodifcar" class="col-12 alert alert-success">
 					Se ha modificado el horario de la sucursal correctamente!
 				</div>
-				
+
 				<div *ngIf="resulterror" class="col-12 alert alert-danger">
 					{{errorhorario}}
 				</div>
 				<div *ngIf="resultcrear" class="col-12 alert alert-success">
 					Se ha creado el horario de la sucursal correctamente!
 				</div>
-				
+
 			</div>
 			<div class="col-4">
 				<button class="btn btn-success btn-block" (click)="GenerarHorario()">Guardar Cambios</button>
 			</div>
 			<div *ngIf="Sconfiguracion" class="col-4">
-				<button class="btn btn-success btn-block" (click)="listarHorarioEspecial()">Ver Horario Especial</button>
+				<button class="btn btn-success btn-block" (click)="listarHorarioEspecial()">Ver Horario
+					Especial</button>
 			</div>
 			<div class="col-4">
 				<button class="btn btn-info btn-block" (click)="salir()">Volver</button>
@@ -709,7 +756,7 @@
 			<div class="col-12">
 				<h2>Horarios Especiales en la sucursal {{NombreSucursal}}</h2>
 			</div>
-	 
+
 			<div class="col">
 				<div class="card-body table-responsive p-0">
 					<table class="table table-striped table-valign-middle" id="modificarusuario">
@@ -732,19 +779,21 @@
 								<td>{{items.hours_e_morning}}</td>
 								<td>{{items.hours_i_noon}}</td>
 								<td>{{items.hours_e_noon}}</td>
-								<td> <button class="btn btn-danger" (click)="EliminarHorarioEspecial(items)"><i class="fas fa-trash-alt"></i></button></td>
+								<td> <button class="btn btn-danger" (click)="EliminarHorarioEspecial(items)"><i
+											class="fas fa-trash-alt"></i></button></td>
 
 							</tr>
 
 						</tbody>
 					</table>
 				</div>
-				
+
 
 			</div>
 			<div class="col-12"></div>
 			<div class="col-4">
-				<button class="btn btn-success btn-block" (click)="ConfigurarHorarioEspecialM()">Agregar Horario Especial</button>
+				<button class="btn btn-success btn-block" (click)="ConfigurarHorarioEspecialM()">Agregar Horario
+					Especial</button>
 			</div>
 			<div class="col-4">
 				<button class="btn btn-info btn-block" (click)="salir()">Volver</button>
@@ -825,19 +874,19 @@
 
 				</select>
 			</div>
-		
+
 			<div class="col-12"></div>
 			<div class="form-group col-12">
-				
-				 
-				
+
+
+
 				<div *ngIf="resulterror" class="col-12 alert alert-danger">
 					{{errorhorario}}
 				</div>
 				<div *ngIf="resultcrear" class="col-12 alert alert-success">
 					Se ha creado el horario de la sucursal correctamente!
 				</div>
-				
+
 			</div>
 			<div class="col-4">
 				<button class="btn btn-success btn-block" (click)="GenerarHorarioEspecial()">Guardar Cambios</button>
@@ -848,7 +897,148 @@
 		</div>
 
 	</div>
+	<div *ngIf="gestionGuardiasP">
 
+		<div class="col-12">
+			<h2>Gestion de guardias</h2>
+			<div class="card-body table-responsive p-0">
+				<table class="table table-striped table-valign-middle" id="modificarusuario">
+					<thead>
+						<tr>
+							<th>nombre</th>
+							<th>apellido</th>
+							<th>identificacion</th>
+							<th>email</th>
+							<th>constraseña</th>
+							<th>Opciones</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let items of guardiaslist">
+							<td>{{items.nombre}}</td>
+							<td>{{items.apellido}}</td>
+							<td>{{items.identification}}</td>
+							<td>{{items.email}}</td>
+							<td>{{items.estado}}</td>
+							<td> <button class="btn btn-danger" (click)="EliminarGuardia(items)"><i
+										class="fas fa-trash-alt"></i></button></td>
 
+						</tr>
+
+					</tbody>
+				</table>
+			</div>
+
+			<div class="row">
+			<div class="col-4"><button class="btn btn-info btn-block" (click)="salir()">Salir</button></div>
+				
+			<div class="col-4">
+				<button type="button" (click)="CrearGuardia()" class="btn btn-success btn-block">Crear Guardia</button>
+			</div>
+		</div>
+
+		</div>
+	</div>
+	<div *ngIf="panelcrearGuardia">
+		<form [formGroup]="registroGForm" (ngSubmit)="RegistrarGuardia()">
+			<div class="row">
+				<div class="col-12">
+					<h2>Crear Nuevo Guardia</h2>
+				</div>
+				<div class="form-group col-4">
+					<label for="name" class="col-form-label">Nombres</label>
+					<input type="text" class="form-control" placeholder="nombres" formControlName="name"
+						[(ngModel)]="registroG.nombre">
+					<div *ngIf="name_feed.invalid && (name_feed.dirty || name_feed.touched)"
+						class="alert alert-danger">
+						<div *ngIf="name_feed.errors.required" class="email-feedback">Necesitamos tu nombre</div>
+						<div *ngIf="name_feed.errors.pattern" class="email-feedback">Un nombre extraño</div>
+						<div *ngIf="name_feed.errors?.minlength" class="email-feedback">Nombre demasiado corto</div>
+						<div *ngIf="name_feed.errors?.maxlength" class="email-feedback">Nombre demasiado largo</div>
+					</div>
+				</div>
+				<div class="form-group col-4">
+					<label for="name" class="col-form-label">Apellidos</label>
+					<input type="text" class="form-control" placeholder="Paterno y materno"
+						formControlName="lastname" [(ngModel)]="registroG.apellidos">
+					<div *ngIf="lastname_feed.invalid && (lastname_feed.dirty || lastname_feed.touched)"
+						class="alert alert-danger">
+						<div *ngIf="lastname_feed.errors.required" class="email-feedback">Necesitamos tus apellidos
+						</div>
+						<div *ngIf="lastname_feed.errors.pattern" class="email-feedback">Un apellido extraño</div>
+						<div *ngIf="lastname_feed.errors?.minlength" class="email-feedback">Apellido demasiado corto
+						</div>
+						<div *ngIf="lastname_feed.errors?.maxlength" class="email-feedback">Apellido demasiado largo
+						</div>
+					</div>
+				</div>
+				<div class="form-group col-4">
+					<label for="name" class="col-form-label">Identificacion</label>
+					<input type="text" class="form-control" placeholder="999999999" formControlName="rut"
+						[(ngModel)]="registroG.rut">
+					<div *ngIf="rut_feed.invalid && (rut_feed.dirty || rut_feed.touched)"
+						class="alert alert-danger">
+						<div *ngIf="rut_feed.errors.required" class="rut-feedback">Identificacion requerida</div>
+					</div>
+				</div>
+				<div class="form-group col-4">
+					<label for="name" class="col-form-label">Correo Electronico</label>
+					<input type="text" class="form-control" placeholder="example@gmail.com" formControlName="email"
+						[(ngModel)]="registroG.email">
+					<div *ngIf="email_feed.invalid && (email_feed.dirty || email_feed.touched)"
+						class="alert alert-danger">
+						<div *ngIf="email_feed.errors.required" class="email-feedback">Necesitamos tu email</div>
+						<div *ngIf="email_feed.errors.email" class="email-feedback">Direccion de email no es valido
+						</div>
+					</div>
+					<div *ngIf="newemail" class="alert alert-danger">
+						El email ya se encuentra registrado
+					</div>
+				</div>
+				<div class="form-group col-4">
+					<label for="name" class="col-form-label">Contraseña</label>
+					<input type="password" class="form-control" placeholder="Contraseña" formControlName="password"
+						[(ngModel)]="registroG.pwd" (change)="checkpass()">
+					<div *ngIf="password_feed.invalid && (password_feed.dirty || password_feed.touched)"
+						class="alert alert-danger">
+						<div *ngIf="password_feed.errors.required" class="email-feedback">Ingrese una contraseña
+						</div>
+						<div *ngIf="password_feed.errors?.minlength" class="email-feedback">Ingrese una contraseña
+							mas larga</div>
+						<div *ngIf="password_feed.errors?.maxlength" class="email-feedback">Su contraseña es muy
+							larga</div>
+					</div>
+				</div>
+				<div class="form-group col-4">
+					<label for="name" class="col-form-label">Reingresar Contraseña</label>
+					<input type="password" class="form-control" placeholder="Contraseña" formControlName="password2"
+						[(ngModel)]="registroG.pwd2" (change)="checkpass()">
+					<div *ngIf="password2_feed.invalid && (password2_feed.dirty || password2_feed.touched)"
+						class="alert alert-danger">
+						<div *ngIf="password2_feed.errors.required" class="email-feedback">Ingrese una contraseña
+						</div>
+						<div *ngIf="password2_feed.errors?.minlength" class="email-feedback">Ingrese una contraseña
+							mas larga</div>
+						<div *ngIf="password2_feed.errors?.maxlength" class="email-feedback">Su contraseña es muy
+							larga</div>
+					</div>
+				</div>
+				<div *ngIf="badpassword" class="alert alert-danger col-12">verifique que las contraseñas sean
+					inguales</div>
+				<div *ngIf="emailcheckfail" class="alert alert-danger col-12">el correo electronico ingresado ya se encuentra registrado</div>
+				<div *ngIf="resultado" class="alert alert-success col-12">el usuario fue creado correctamente!</div>
+				<div class="col-12"></div>
+				<div class="col-4">
+					<button type="submit" class="btn btn-primary btn-block" [disabled]="!registroGForm.valid">Crear
+						nuevo usuario</button>
+				</div>
+				<div class="col-4">
+					<button type="button" (click)="salir()" class="btn btn-primary btn-block">Salir sin
+						crear</button>
+				</div>
+
+			</div>
+		</form>
+	</div>
 
 </div>

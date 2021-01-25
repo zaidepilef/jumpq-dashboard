@@ -254,9 +254,10 @@ export class DashboardComponent implements OnInit {
     this.jumpservice.linkjumpq(data).subscribe(
       res => {
         this.an_response = res;
-        
+        console.info(this.an_response);
         if(this.an_response.status == "OK"){
           this.linkJumpq = this.an_response.link.linkjump;
+          this.url = "https://jumpnodeapi.azurewebsites.net/imaga/"+this.an_response.link.logo_image;
           this.nolink=true;
           this.nolinkalert=false;
         }else{

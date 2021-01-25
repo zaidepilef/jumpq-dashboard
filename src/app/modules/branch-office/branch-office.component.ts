@@ -62,11 +62,43 @@ export class BranchOfficeComponent implements OnInit {
   confid : any;
   Sconfiguracion: boolean = false;
   loadingpanel: boolean;
+  gestionGuardiasP: boolean;
+  guardiaslist: Array<any> = [];
+  registroGForm: FormGroup;
+  badpassword: boolean;
+  resultado: boolean;
+  emailcheckfail: boolean;
+  resetG: any ={
+    nombre: "",
+    apellidos: "",
+    rut: "",
+    pwd: "",
+    pwd2: "",
+    email: "",
+    tipo: 4,
+    registroEForm: {}
+  };;
   get nombre_feed() { return this.registroEForm.get('nombre'); }
   get direccion_feed() { return this.registroEForm.get('direccion'); }
   get direccion2_feed() { return this.registroEForm.get('direccion2'); }
   get urlmap_feed() { return this.registroEForm.get('urlmap'); }
   get mail_feed() { return this.registroEForm.get('mail'); }
+  registroG: any = {
+    nombre: "",
+    apellidos: "",
+    rut: "",
+    pwd: "",
+    pwd2: "",
+    email: "",
+    tipo: 4,
+    registroEForm: {}
+  };
+  get name_feed() { return this.registroGForm.get('name'); }
+  get lastname_feed() { return this.registroGForm.get('lastname'); }
+  get rut_feed() { return this.registroGForm.get('rut'); }
+  get email_feed() { return this.registroGForm.get('email'); }
+  get password_feed() { return this.registroGForm.get('password'); }
+  get password2_feed() { return this.registroGForm.get('password2'); }
 
   registroEForm: FormGroup;
   an_request: any;
@@ -126,6 +158,8 @@ export class BranchOfficeComponent implements OnInit {
   formato: any;
   resultadomodifcar: boolean = false;
   resultcrear: boolean;
+
+  panelcrearGuardia : boolean = false;
   constructor(private _sanitizationService: DomSanitizer, private formBuilder: FormBuilder, private jumpservice: JumpqService, private loggin: AuthService) { }
 
 
@@ -217,6 +251,8 @@ export class BranchOfficeComponent implements OnInit {
     this.mapanovalido = false;
     this.HorarioEspeciallista=false;
     this.ConfigurarHorarioEspecial = false;
+    this.gestionGuardiasP = false;
+    this.panelcrearGuardia = false;
   }
 
   panelModfSucursal() {
@@ -1179,6 +1215,116 @@ export class BranchOfficeComponent implements OnInit {
       );
     }
     
+  }
+
+
+
+  panelGuardias(){
+    this.panelPrincipal=false;
+    this.gestionGuardiasP = true;
+
+    this.an_request ={
+      company : this.User.company
+    }
+    this.jumpservice.buscarGuardias(this.an_request).subscribe(
+      res => {
+        this.an_response = res;
+        console.info(this.an_response);
+        this.guardiaslist = this.an_response.guardia
+    }
+
+      , err => console.error(err)
+    );
+
+  }
+  formcheckusuario(){
+    this.registroGForm = this.formBuilder.group(
+      {
+        name: ['', [Validators.pattern(/^[a-zA-Z ]+$/), Validators.required, Validators.maxLength(32), Validators.minLength(4)]],
+        lastname: ['', [Validators.pattern(/^[a-zA-Z ]+$/), Validators.required, Validators.maxLength(32), Validators.minLength(4)]],
+        rut: ['', [Validators.required]],
+        email: ['', [Validators.required, Validators.email]],
+        password: ['', [Validators.required, Validators.maxLength(32), Validators.minLength(8)]],
+        password2: ['', [Validators.required, Validators.maxLength(32), Validators.minLength(8)]]
+      }
+    );
+  }
+  checkpass() {
+    if (this.registroG.pwd != "" && this.registroG.pwd2 != "") {
+     
+
+      if (this.registroG.pwd == this.registroG.pwd2) {
+        this.badpassword = false;
+      } else {
+        this.badpassword = true;
+      }
+
+    }
+  }
+  CrearGuardia(){
+    this.gestionGuardiasP = false;
+    this.panelcrearGuardia = true;
+    this.formcheckusuario();
+  }
+
+  RegistrarGuardia() {
+    this.emailcheckfail = false;
+    
+
+    this.an_request = {
+      nombre: this.registroG.nombre,
+      apellidos: this.registroG.apellidos,
+      rut: this.registroG.rut,
+      pwd: this.registroG.pwd,
+      type: this.registroG.tipo,
+      status: 1,
+      email: this.registroG.email,
+      company: this.User.company
+    }
+   
+    if (this.badpassword == false) {
+      this.jumpservice.postnuevoguardia(this.an_request).subscribe(
+        res => {
+          this.an_response = res;
+      
+          if (this.an_response.status == "OK") {
+
+            this.resultado = true;
+            this.registro = this.resetG;
+            this.formcheckusuario();
+          } if (this.an_response.status == "NOOK") {
+            this.emailcheckfail = true;
+          }
+        },
+        err => console.warn('err : ', err)
+
+      );
+
+    }
+
+
+  }
+
+  EliminarGuardia(event : any){
+    console.info(event);
+    if (confirm("¿Esta seguro que desea esta cuenta?")) {
+
+      this.an_request ={
+        user:event.user_id,
+        email:event.email,
+        
+      }
+      console.info(this.an_request);
+      this.jumpservice.eliminarGuardia(this.an_request).subscribe(
+        res => {
+          this.an_response = res;
+          this.panelGuardias();
+      }
+  
+        , err => console.error(err)
+      );
+
+    }
   }
 
 

@@ -283,7 +283,16 @@ export class JumpqService {
 		return this.httpClient.post(`${environment.API_URL}/branchSettings/crearjumpqlink`,data);
 	}	  
 
+	public buscarGuardias(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/user/buscarGuardias`,data);
+	}	  
 
+	public postnuevoguardia(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/user/nuevoguardia`,data);
+	  }
+	  public eliminarGuardia(data : any) {
+		return this.httpClient.post(`${environment.API_URL}/user/EliminarGuardia`,data);
+	  }
 
 	public pruebaimg(data:any,file:File) {
 		const fd = new FormData();
